@@ -6,16 +6,27 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.TextUtil;
 
-public class Attachement
+public class Attachment
 {
     public string Name { get; set; }
     public string Content { get; set; }
     public bool IsInline { get; set; } = false;
 
-    public Attachement(string name, string content, bool isInline)
+    public Attachment(string name, string content, bool isInline)
     {
         Name = name;
         Content = content;
         IsInline = isInline;
+    }
+
+    public string ToPlainText()
+    {
+        string sep = IsInline ? "\n" : "";
+        return $"{Name}: {sep}{Content}";
+    }
+
+    public override string ToString()
+    {
+        return $"Attachment(Name=\"{Name}\", Content=\"{Content}\", IsInline=\"{IsInline}\")";
     }
 }

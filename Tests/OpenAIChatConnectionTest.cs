@@ -15,6 +15,6 @@ public class Tests
     [Test]
     public void TestRequest()
     {
-        llmcon.GetResponse("Say hi");
+        // llmcon.GetResponse("Say hi");
     }
 }

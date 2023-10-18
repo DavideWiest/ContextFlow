@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Application;
-
-public class FailStrategy
+namespace ContextFlow.Infrastructure.Formatter
 {
-
+    internal class Formatter
+    {
+    }
 }
