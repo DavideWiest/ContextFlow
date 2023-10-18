@@ -1,22 +1,14 @@
 ﻿namespace ContextFlow.Domain;
 
-using Serilog.Core;
+using ContextFlow.Infrastructure.Logging;
 
 public abstract class LLMConnection
 {
 
-    protected abstract string? CallAPI(string input, LLMConfig conf, Logger log);
+    protected abstract PartialRequestResult CallAPI(string input, LLMConfig conf, CFLogger log);
 
-    public string? GetResponse(string input, LLMConfig conf, Logger log)
+    public PartialRequestResult GetResponse(string input, LLMConfig conf, CFLogger log)
     {
-        string? response = null;
-        try
-        {
-            response = CallAPI(input, conf, log);
-        } catch (Exception e)
-        {
-            log.Error(e.Message);
-        }
-        return response;
+        return CallAPI(input, conf, log);
     }
 }

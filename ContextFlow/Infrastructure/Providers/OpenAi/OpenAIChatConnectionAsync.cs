@@ -3,6 +3,7 @@
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
 using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Logging;
 using Serilog.Core;
 
 public class OpenAIChatConnectionAsync : LLMConnectionAsync
@@ -19,9 +20,7 @@ public class OpenAIChatConnectionAsync : LLMConnectionAsync
         // tries to use the environment variable OPENAI_API_KEY
         api = new();
     }
-
-    // should not be public 
-    protected override async Task<string?> CallAPIAsync(string input, LLMConfig conf, Logger log)
+    protected override async Task<PartialRequestResult> CallAPIAsync(string input, LLMConfig conf, CFLogger log)
     {
         var chat = api.Chat.CreateConversation();
 
@@ -29,6 +28,6 @@ public class OpenAIChatConnectionAsync : LLMConnectionAsync
         chat.AppendUserInput(input);
         var output = await chat.GetResponseFromChatbotAsync();
 
-        return output;
+        return new PartialRequestResult(output, FinishReason.Stop);
     }
 }

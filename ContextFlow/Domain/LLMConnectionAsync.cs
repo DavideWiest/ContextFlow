@@ -1,22 +1,13 @@
 ﻿namespace ContextFlow.Domain;
 
-using Serilog.Core;
-
+using ContextFlow.Infrastructure.Logging;
 public abstract class LLMConnectionAsync
 {
 
-    protected abstract Task<string?> CallAPIAsync(string input, LLMConfig conf, Logger log);
+    protected abstract Task<PartialRequestResult> CallAPIAsync(string input, LLMConfig conf, CFLogger log);
 
-    public async Task<string?> GetResponseAsync(string input, LLMConfig conf, Logger log)
+    public async Task<PartialRequestResult> GetResponseAsync(string input, LLMConfig conf, CFLogger log)
     {
-        string? response = null;
-        try
-        {
-            response = await CallAPIAsync(input, conf, log);
-        } catch (Exception e)
-        {
-            log.Error(e.Message);
-        }
-        return response;
+        return await CallAPIAsync(input, conf, log);
     }
 }

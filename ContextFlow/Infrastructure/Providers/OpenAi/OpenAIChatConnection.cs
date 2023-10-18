@@ -3,6 +3,7 @@
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
 using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Logging;
 using Serilog.Core;
 
 public class OpenAIChatConnection : LLMConnection
@@ -20,8 +21,7 @@ public class OpenAIChatConnection : LLMConnection
         api = new();
     }
 
-    // should not be public 
-    protected override string? CallAPI(string input, LLMConfig conf, Logger log)
+    protected override PartialRequestResult CallAPI(string input, LLMConfig conf, CFLogger log)
     {
         var chat = api.Chat.CreateConversation();
 
@@ -29,6 +29,6 @@ public class OpenAIChatConnection : LLMConnection
         chat.AppendUserInput(input);
         var output = chat.GetResponseFromChatbotAsync().GetAwaiter().GetResult();
 
-        return output;
+        return new PartialRequestResult(output, FinishReason.Stop);
     }
 }

@@ -19,13 +19,13 @@ public class FailStrategyRetryNewSettings : FailStrategy
 {
     public LLMConfig LConf { get; }
     public RequestConfig RConf { get; }
-    public FailStrategy(LLMConfig lconf, RequestConfig rconf)
+    public FailStrategyRetryNewSettings(LLMConfig lconf, RequestConfig rconf)
     {
         LConf = lconf;
         RConf = rconf;
     }
 }
 
-public class FailStrategyRaiseException : FailStrategy
+public class FailStrategyThrowException : FailStrategy
 { 
 }

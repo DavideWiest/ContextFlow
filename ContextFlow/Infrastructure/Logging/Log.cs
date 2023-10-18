@@ -1,12 +1,11 @@
-﻿using DocGenApi.Modules.Logging;
-
-namespace DocGenApi.Modules.Logging;
+﻿
+namespace ContextFlow.Infrastructure.Logging;
 using Serilog;
-using Serilog.Events;
 
-public static class Log
+
+public class CFDefaultLogger : CFLogger
 {
-    private static readonly ILogger SLogger = new LoggerConfiguration()
+    private readonly ILogger SLogger = new LoggerConfiguration()
 #if DEBUG
     .MinimumLevel.Debug()
 #endif
@@ -14,32 +13,27 @@ public static class Log
     .CreateLogger();
 
 
-    public static void Verbose(string messageTemplate, params object[] propertyValues)
-    {
-        SLogger.Verbose(messageTemplate, propertyValues);
-    }
-
-    public static void Debug(string messageTemplate, params object[] propertyValues)
+    public override void Debug(string messageTemplate, params object[] propertyValues)
     {
         SLogger.Debug(messageTemplate, propertyValues);
     }
 
-    public static void Information(string messageTemplate, params object[] propertyValues)
+    public override void Information(string messageTemplate, params object[] propertyValues)
     {
         SLogger.Information(messageTemplate, propertyValues);
     }
 
-    public static void Warning(string messageTemplate, params object[] propertyValues)
+    public override void Warning(string messageTemplate, params object[] propertyValues)
     {
         SLogger.Warning(messageTemplate, propertyValues);
     }
 
-    public static void Error(string messageTemplate, params object[] propertyValues)
+    public override void Error(string messageTemplate, params object[] propertyValues)
     {
         SLogger.Error(messageTemplate, propertyValues);
     }
 
-    public static void Fatal(string messageTemplate, params object[] propertyValues)
+    public override void Fatal(string messageTemplate, params object[] propertyValues)
     {
         SLogger.Fatal(messageTemplate, propertyValues);
     }
