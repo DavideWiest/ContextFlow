@@ -2,11 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Infrastructure.Formatter
+using SmartFormat;
+
+namespace ContextFlow.Infrastructure.Formatter;
+
+
+
+internal class SmartFormatterFmtr: Formatter
 {
-    internal class Formatter
+    SmartFormatter formatter = Smart.CreateDefaultSmartFormat();
+
+    public override string Format(string str, Dictionary<string, object> data)
     {
+        return formatter.Format(str, data);
+    }
+
+    public override List<string> GetUndefinedPlaceholderValues(string str, Dictionary<string, object> formatParams)
+    {
+        var placeholderMatches = Regex.Matches(str, @"\{([^{}\s]+)\}");
+        var unreplacedPlaceholders = new List<string>();
+
+        foreach (Match match in placeholderMatches)
+        {
+            string placeholder = match.Groups[1].Value;
+
+            // Check if the placeholder exists in the formatParams
+            if (formatParams[placeholder] == null)
+            {
+                unreplacedPlaceholders.Add(placeholder);
+            }
+        }
+
+        return unreplacedPlaceholders;
     }
 }

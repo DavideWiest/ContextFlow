@@ -2,7 +2,7 @@ namespace Tests;
 
 using ContextFlow.Infrastructure.Providers.OpenAI;
 
-public class Tests
+public class OpenAIChatConnectionTest
 {
 
     private OpenAIChatConnection llmcon = new();
@@ -16,5 +16,6 @@ public class Tests
     public void TestRequest()
     {
         // llmcon.GetResponse("Say hi");
+        Assert.Pass();
     }
 }

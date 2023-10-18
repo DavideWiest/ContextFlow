@@ -21,12 +21,21 @@ public class Attachment
 
     public string ToPlainText()
     {
-        string sep = IsInline ? "\n" : "";
+        string sep = !IsInline ? "\n" : "";
         return $"{Name}: {sep}{Content}";
     }
 
     public override string ToString()
     {
         return $"Attachment(Name=\"{Name}\", Content=\"{Content}\", IsInline=\"{IsInline}\")";
+    }
+
+    /// <summary>
+    /// Shallow copy using ICloneable
+    /// </summary>
+    /// <returns>The copied object. Use type-casting to convert it to a prompt</returns>
+    public Attachment Clone()
+    {
+        return (Attachment)MemberwiseClone();
     }
 }

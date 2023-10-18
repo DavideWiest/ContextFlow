@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.TextUtil;
 
-internal class OutputFormatOptions
+public static class OverflowTextSplitter
 {
+    public static List<string> SplitText(string text)
+    {
 
+    }
 }

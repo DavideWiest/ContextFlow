@@ -1,12 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Tests;
 
-namespace Tests
+using ContextFlow.Application;
+using ContextFlow.Infrastructure.Providers.OpenAI;
+
+public class PromptText
 {
-    internal class PromptTest
+
+    private OpenAIChatConnection llmcon = new();
+
+    private Prompt baseTestPrompt = new("Test test");
+
+    [SetUp]
+    public void Setup()
     {
+
+    }
+
+    [Test]
+    public void TestPromptAction()
+    {
+        Assert.AreEqual("Test test", baseTestPrompt.ToPlainText());
+    }
+
+    [Test]
+    public void TestPromptAttachments()
+    {
+        var prompt = baseTestPrompt
+            .Clone()
+            .UsingAttachment("Test attachment", "-> Test attachment content")
+            .UsingAttachmentInline("Attachment 2", "Inline");
+        Assert.AreEqual("Test test\n\nTest attachment: \n-> Test attachment content\n\nAttachment 2: Inline", prompt.ToPlainText());
+    }
+
+    [Test]
+    public void TestCloning()
+    {
+        Prompt prompt = new Prompt("Test prompt").Clone();
+        Assert.AreEqual(prompt.GetType(), typeof(Prompt));
     }
 }
