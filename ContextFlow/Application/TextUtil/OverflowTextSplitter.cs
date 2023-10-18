@@ -1,4 +1,5 @@
-﻿using Microsoft.DeepDev;
+﻿using ContextFlow.Domain;
+using Microsoft.DeepDev;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace ContextFlow.Application.TextUtil;
 
 public static class OverflowTextSplitter
 {
-    public static List<string> SplitText(string text, ITokenizer tokenizer)
+    public static List<string> SplitText(string text, LLMTokenizer tokenizer)
     {
-        return text.Split("\n\n")
+        return text.Split("\n\n").ToList();
     }
 }

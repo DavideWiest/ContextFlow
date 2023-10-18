@@ -17,7 +17,7 @@ public class LLMRequest
 {
     private CFLogger log = new CFDefaultLogger();
     private Prompt Prompt;
-    private CFConverter outputConverter;
+    private CFConverter? outputConverter = null;
     private bool outputIsString = true;
     //private Type outputType = typeof(String);
 

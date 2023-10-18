@@ -100,7 +100,7 @@ public class Prompt
     public void SetValue(string placeholder, dynamic value)
     {
         CheckConverterExists();
-        FormatParameters[placeholder] = promptConverter.FromDynamic(content);
+        FormatParameters[placeholder] = promptConverter.FromDynamic(value);
     }
 
     public Prompt UsingAttachment(string name, dynamic content)

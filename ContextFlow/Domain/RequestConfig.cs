@@ -15,7 +15,7 @@ public class RequestConfig
     public bool PassAsStringIfNoConverterDefined = false;
     public bool SplitTextAndRetryOnOverflow = true;
     private bool CheckNumTokensBeforeRequest = false;
-    public LLMTokenizer Tokenizer;
+    public LLMTokenizer? Tokenizer = null;
 
     public RequestConfig(FailStrategy failStrategy) {
         FailStrategy = failStrategy;
