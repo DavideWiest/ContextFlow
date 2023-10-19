@@ -14,7 +14,7 @@ public class Prompt
 {
 
     protected string PromptAction;
-    protected CFConverter promptConverter = new DefaultConverter(true);
+    //protected CFConverter promptConverter = new DefaultConverter(true);
 
     public List<Attachment> Attachments = new();
 
@@ -23,16 +23,16 @@ public class Prompt
         PromptAction = action;
     }
 
-    public Prompt UsingConverter(CFConverter converter)
-    {
-        SetConverter(converter);
-        return this;
-    }
+    //public Prompt UsingConverter(CFConverter converter)
+    //{
+    //    SetConverter(converter);
+    //    return this;
+    //}
 
-    public void SetConverter(CFConverter converter)
-    {
-        promptConverter = converter;
-    }
+    //public void SetConverter(CFConverter converter)
+    //{
+    //    promptConverter = converter;
+    //}
 
     public Prompt UsingAttachment(string name, string content)
     {
@@ -56,27 +56,27 @@ public class Prompt
         Attachments.Add(new Attachment(name, content, true));
     }
 
-    public Prompt UsingAttachment(string name, dynamic content)
-    {
-        AddAttachment(name, content);
-        return this;
-    }
+    //public Prompt UsingAttachment(string name, dynamic content)
+    //{
+    //    AddAttachment(name, content);
+    //    return this;
+    //}
 
-    public void AddAttachment(string name, dynamic content)
-    {
-        Attachments.Add(new Attachment(name, promptConverter.FromDynamic(content), false));
-    }
+    //public void AddAttachment(string name, dynamic content)
+    //{
+    //    Attachments.Add(new Attachment(name, promptConverter.ToString(content), false));
+    //}
 
-    public Prompt UsingAttachmentInline(string name, dynamic content)
-    {
-        AddAttachmentInline(name, content);
-        return this;
-    }
+    //public Prompt UsingAttachmentInline(string name, dynamic content)
+    //{
+    //    AddAttachmentInline(name, content);
+    //    return this;
+    //}
 
-    public void AddAttachmentInline(string name, dynamic content)
-    {
-        Attachments.Add(new Attachment(name, promptConverter.FromDynamic(content), true));
-    }
+    //public void AddAttachmentInline(string name, dynamic content)
+    //{
+    //    Attachments.Add(new Attachment(name, promptConverter.ToString(content), true));
+    //}
 
     public Prompt UsingOutputDescription(string description)
     {
@@ -115,11 +115,11 @@ public class Prompt
         return (Prompt)MemberwiseClone();
     }
 
-    protected void ThrowExceptionIfNoConverter()
-    {
-        if (promptConverter == null)
-        {
-            throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter or SetConverter to fix it.");
-        }
-    }
+    //protected void ThrowExceptionIfNoConverter()
+    //{
+    //    if (promptConverter == null)
+    //    {
+    //        throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter or SetConverter to fix it.");
+    //    }
+    //}
 }

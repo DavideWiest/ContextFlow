@@ -5,9 +5,9 @@ using ContextFlow.Infrastructure.Logging;
 public abstract class LLMConnection
 {
 
-    protected abstract PartialRequestResult CallAPI(string input, LLMConfig conf, CFLogger log);
+    protected abstract RequestResult CallAPI(string input, LLMConfig conf, CFLogger log);
 
-    public PartialRequestResult GetResponse(string input, LLMConfig conf, CFLogger log)
+    public RequestResult GetResponse(string input, LLMConfig conf, CFLogger log)
     {
         return CallAPI(input, conf, log);
     }

@@ -1,4 +1,6 @@
 ﻿using ContextFlow.Application;
+using ContextFlow.Application.TextUtil;
+using ContextFlow.Infrastructure.Logging;
 using Microsoft.DeepDev;
 using System;
 using System.Collections.Generic;
@@ -10,13 +12,13 @@ namespace ContextFlow.Domain;
 
 public class RequestConfig
 {
-    protected FailStrategy FailStrategy = new FailStrategyThrowException();
+    public FailStrategy FailStrategy = new FailStrategyThrowException();
+    public CFLogger log = new CFDefaultLogger();
+    public CFConverter outputConverter = new DefaultConverter(true);
 
-    public bool PassAsStringIfNoConverterDefined = false;
     public bool SplitTextAndRetryOnOverflow = true;
     protected bool CheckNumTokensBeforeRequest = false;
-
-    public bool ParseOutputToDynamic = true;
+    protected bool ParseOutputToDynamic = true;
 
     public LLMTokenizer? Tokenizer = null;
 
@@ -30,15 +32,17 @@ public class RequestConfig
         return this;
     }
 
-    public void ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
+    public RequestConfig ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
     {
         CheckNumTokensBeforeRequest = true;
         Tokenizer = tokenizer;
+        return this;
     }
 
-    public void DeactivateCheckNumTokensBeforeRequest()
+    public RequestConfig DeactivateCheckNumTokensBeforeRequest()
     {
         CheckNumTokensBeforeRequest = false;
+        return this;
     }
 
     public bool GetCheckNumTokensBeforeRequest()
@@ -46,9 +50,43 @@ public class RequestConfig
         return CheckNumTokensBeforeRequest;
     }
 
-    public RequestConfig UsingOutputIsString(bool isString)
+    public RequestConfig UsingLogger(CFLogger log)
     {
-        ParseOutputToDynamic = isString;
+        SetLogger(log);
         return this;
+    }
+
+    public void SetLogger(CFLogger log)
+    {
+        this.log = log;
+    }
+
+    public RequestConfig UsingOutputConverter(CFConverter converter)
+    {
+        SetOutputConverter(converter);
+        return this;
+    }
+
+    public void SetOutputConverter(CFConverter converter)
+    {
+        outputConverter = converter;
+    }
+
+    public RequestConfig ActivateParseOutputToDynamic(CFConverter converter)
+    {
+        ParseOutputToDynamic = true;
+        UsingOutputConverter(converter);
+        return this;
+    }
+
+    public RequestConfig DeactivateParseOutputToDynamic()
+    {
+        ParseOutputToDynamic = true;
+        return this;
+    }
+
+    public bool GetParseOutputToDynamic()
+    {
+        return ParseOutputToDynamic;
     }
 }

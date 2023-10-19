@@ -86,7 +86,7 @@ public class FormattablePrompt : Prompt
 
     public void SetValue(string placeholder, dynamic value)
     {
-        FormatParameters[placeholder] = promptConverter.FromDynamic(value);
+        FormatParameters[placeholder] = promptConverter.ToString(value);
     }
 
     public override string ToString()

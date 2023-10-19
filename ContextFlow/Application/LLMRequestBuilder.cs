@@ -11,37 +11,11 @@ namespace ContextFlow.Application;
 
 public class LLMRequestBuilder
 {
-    protected CFLogger log = new CFDefaultLogger();
-    protected CFConverter outputConverter = new DefaultConverter(true);
 
     protected Prompt? Prompt;
     protected LLMConfig? LLMConfig;
     protected LLMConnection? LLMConnection;
     protected RequestConfig? RequestConfig;
-
-    public LLMRequestBuilder UsingLogger(CFLogger log)
-    {
-        SetLogger(log);
-        return this;
-    }
-
-    public void SetLogger(CFLogger log)
-    {
-        this.log = log;
-    }
-
-    public LLMRequestBuilder UsingOutputConverter(CFConverter converter)
-    {
-        SetOutputConverter(converter);
-        return this;
-    }
-
-    public void SetOutputConverter(CFConverter converter)
-    {
-        outputConverter = converter;
-    }
-
-
 
     public LLMRequestBuilder UsingPrompt(Prompt prompt)
     {
@@ -56,7 +30,7 @@ public class LLMRequestBuilder
 
     public LLMRequestBuilder SetLLMConfig(LLMConfig config)
     {
-        this.LLMConfig = config;
+        LLMConfig = config;
         return this;
     }
 
@@ -68,7 +42,7 @@ public class LLMRequestBuilder
 
     public LLMRequestBuilder SetLLMConnection(LLMConnection connection)
     {
-        this.LLMConnection = connection;
+        LLMConnection = connection;
         return this;
     }
 
@@ -80,7 +54,7 @@ public class LLMRequestBuilder
 
     public LLMRequestBuilder SetRequestConfig(RequestConfig config)
     {
-        this.RequestConfig = config;
+        RequestConfig = config;
         return this;
     }
 
@@ -95,11 +69,10 @@ public class LLMRequestBuilder
         List<string> missingElements = new();
         if (!ConfigurationIsComplete(out missingElements))
         {
-            throw new InvalidOperationException("Cannot build logger yet. Missing elements to configure (Use Set... or Using... Methods: " + String.Join(", ", missingElements);
+            throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + String.Join(", ", missingElements);
         }
 
-        var request = new LLMRequest(Prompt, LLMConfig, LLMConnection, RequestConfig);
-        
+        var request = new LLMRequest(Prompt!, LLMConfig!, LLMConnection!, RequestConfig!);
 
         return request;
     }

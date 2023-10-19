@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.TextUtil;
 
-public abstract class CFConverter
+public abstract class CFConverter<T>
 {
-    public abstract string FromDynamic(dynamic obj);
-    public abstract dynamic ToDynamic(string obj);
+    public abstract string ToString(T obj);
+    public abstract T FromString(string obj);
 }

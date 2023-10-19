@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.TextUtil;
 
-public class DefaultConverter: CFConverter
+public class DefaultConverter: CFConverter<dynamic>
 {
     private bool NewLineSpacing = true;
     public DefaultConverter(bool newLineSpacing) {
         NewLineSpacing = newLineSpacing;
     }
-    public override string FromDynamic(dynamic obj)
+    public override string ToString(dynamic obj)
     {
         string nlSpacing = NewLineSpacing ? "\n" : "";
         StringBuilder sb = new StringBuilder();
@@ -25,7 +25,7 @@ public class DefaultConverter: CFConverter
                 sb.Append(nlSpacing);
                 sb.Append("# " + kv.Key.ToString());
                 sb.Append(nlSpacing);
-                sb.Append(FromDynamic(kv.Value));
+                sb.Append(ToString(kv.Value));
                 sb.Append(nlSpacing);
             }
         } else if (obj is IEnumerable)
@@ -42,7 +42,7 @@ public class DefaultConverter: CFConverter
         return sb.ToString();
     }
 
-    public override dynamic ToDynamic(string str)
+    public override dynamic FromString(string str)
     {
         var lines = str.Split('\n');
         var stack = new Stack<dynamic>();
