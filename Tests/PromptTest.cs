@@ -42,8 +42,30 @@ public class PromptText
     [Test]
     public void TestFormatter()
     {
-        var prompt = new Prompt("{placeholder}").UsingValue("placeholder", "hi").ToPlainText();
-        Assert.AreEqual(prompt, "hi");
+        var promptstr = new FormattablePrompt("{placeholder}").UsingValue("placeholder", "hi").ToPlainText();
+        Assert.AreEqual("hi", promptstr);
+    }
+
+    [Test]
+    public void TestFormatterValidation()
+    {
+        var isvalid = new FormattablePrompt("{placeholder}", false).IsValid();
+        Assert.AreEqual(false, isvalid);
+    }
+
+    [Test]
+    public void TestSetOutputDescription()
+    {
+        var promptstr = new Prompt("A").UsingOutputDescription("OutputDescription").ToPlainText();
+        Assert.AreEqual("A\n\nOutput format: OutputDescription", promptstr);
+    }
+
+    [Test]
+    public void TestOutputDescription()
+    {
+        var promptstr = new Prompt("A").UsingOutputDescription("OutputDescription").UsingOutputDescription("new description").ToPlainText();
+
+        Assert.AreEqual("A\n\nOutput format: new description", promptstr);
     }
 
 

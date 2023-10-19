@@ -30,7 +30,7 @@ internal class SmartFormatterFmtr: Formatter
             string placeholder = match.Groups[1].Value;
 
             // Check if the placeholder exists in the formatParams
-            if (formatParams[placeholder] == null)
+            if (!formatParams.ContainsKey(placeholder))
             {
                 unreplacedPlaceholders.Add(placeholder);
             }

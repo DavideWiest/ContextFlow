@@ -19,7 +19,7 @@ public class PartialRequestResult
 {
     public string RawOutput;
     public FinishReason FinishReason;
-    public object? AdditionalData = null;
+    public dynamic? AdditionalData = null;
 
     public PartialRequestResult(string rawOutput, FinishReason finishReason)
     {
@@ -27,7 +27,7 @@ public class PartialRequestResult
         FinishReason = finishReason;
     }
 
-    public PartialRequestResult(string rawOutput, FinishReason finishReason, object additionalData)
+    public PartialRequestResult(string rawOutput, FinishReason finishReason, dynamic additionalData)
     {
         RawOutput = rawOutput;
         FinishReason = finishReason;

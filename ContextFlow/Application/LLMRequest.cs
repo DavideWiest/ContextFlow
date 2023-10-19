@@ -7,61 +7,28 @@ using System.Threading.Tasks;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Application.TextUtil;
-using Serilog;
-using Serilog.Core;
-using OpenAI_API.Moderation;
 
 namespace ContextFlow.Application;
 
 public class LLMRequest
 {
-    private CFLogger log = new CFDefaultLogger();
-    private Prompt Prompt;
-    private CFConverter? outputConverter = null;
-    //private Type outputType = typeof(String);
+    protected CFLogger log = new CFDefaultLogger();
+    protected CFConverter outputConverter = new DefaultConverter(true);
 
-    LLMConfig LLMConfig;
-    LLMConnection LLMConnection;
-    RequestConfig RequestConfig;
-
-    public LLMRequest(LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf)
+    protected Prompt Prompt;
+    protected LLMConfig LLMConfig;
+    protected LLMConnection LLMConnection;
+    protected RequestConfig RequestConfig;
+    
+    public LLMRequest(Prompt prompt, LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf)
     {
+        Prompt = prompt;
         LLMConfig = llmconf;
         LLMConnection = llmcon;
         RequestConfig = requestconf;
     }
 
-    public LLMRequest UsingLogger(CFLogger log)
-    {
-        SetLogger(log); 
-        return this;
-    }
 
-    public void SetLogger(CFLogger log) {
-        this.log = log;
-    }
-
-    public LLMRequest UsingPrompt(Prompt prompt)
-    {
-        SetPrompt(prompt);
-        return this;
-    }
-
-    public void SetPrompt(Prompt prompt)
-    {
-        Prompt = prompt;
-    }
-
-    public LLMRequest UsingOutputConverter(CFConverter converter)
-    {
-        SetOutputConverter(converter);
-        return this;
-    }
-
-    public void SetOutputConverter(CFConverter converter)
-    {
-        outputConverter = converter;
-    }
 
     public bool CheckPromptTokens(LLMTokenizer tokenizer, bool throwExcIfExceeding)
     {
@@ -88,10 +55,7 @@ public class LLMRequest
         {
             try
             {
-                CheckConverterExists();
-
                 parsedOutput = outputConverter.ToDynamic(partialresult.RawOutput);
-
             } catch (InvalidOperationException e)
             {
                 if (RequestConfig.PassAsStringIfNoConverterDefined)
@@ -114,7 +78,7 @@ public class LLMRequest
         return new RequestResult(partialresult, parsedOutput);
     }
 
-    private void CheckPromptExists()
+    protected void CheckPromptExists()
     {
         if (Prompt == null)
         {
@@ -122,7 +86,7 @@ public class LLMRequest
             throw new InvalidOperationException("Cannot complete a request without a prompt. Use UsingPrompt or SetPrompt first.");
         }
     }
-    private void CheckConverterExists()
+    protected void CheckConverterExists()
     {
         if (outputConverter == null)
         {

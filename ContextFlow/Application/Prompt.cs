@@ -96,7 +96,7 @@ public class Prompt
         }
     }
 
-    public string ToPlainText()
+    public virtual string ToPlainText()
     {
         return PromptAction + (Attachments.Count > 0 ? "\n\n" : "") + string.Join("\n\n", Attachments.Select(a => a.ToPlainText()));
     }
@@ -115,7 +115,7 @@ public class Prompt
         return (Prompt)MemberwiseClone();
     }
 
-    protected void CheckConverterExists()
+    protected void ThrowExceptionIfNoConverter()
     {
         if (promptConverter == null)
         {

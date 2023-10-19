@@ -20,17 +20,13 @@ public class FormattablePrompt : Prompt
 
     private Formatter Formatter;
 
-    public FormattablePrompt(string action) : base(action)
+    public FormattablePrompt(string action, bool throwExceptionOnUnfilled = true) : base(action)
     {
-        Formatter = new SmartFormatterFmtr();
-    }
-    public FormattablePrompt(string action, bool thowExceptionOnUnfilled) : base(action)
-    {
-        ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
+        ThowExceptionOnUnfilled = throwExceptionOnUnfilled;
         Formatter = new SmartFormatterFmtr();
     }
 
-    public FormattablePrompt(string action, bool thowExceptionOnUnfilled, Formatter formatter) : base(action)
+    public FormattablePrompt(string action, Formatter formatter, bool thowExceptionOnUnfilled = true) : base(action)
     {
         ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
         Formatter = formatter;
@@ -47,16 +43,35 @@ public class FormattablePrompt : Prompt
         FormatParameters[placeholder] = value;
     }
 
-    public string ToPlainTextFormatted()
+    public override string ToPlainText()
     {
-        string plainText = Formatter.Format(ToPlainText(), FormatParameters);
+        string plainText = Formatter.Format(ToPlainTextUnformatted(), FormatParameters);
 
         return plainText;
     }
 
+    public string ToPlainTextUnformatted()
+    {
+        return PromptAction + (Attachments.Count > 0 ? "\n\n" : "") + string.Join("\n\n", Attachments.Select(a => a.ToPlainText()));
+    }
+
+    public bool IsValid()
+    {
+        List<string> undefinedPlaceholderValues;
+        return IsValid(out undefinedPlaceholderValues);
+    }
+
+    public bool IsValid(out List<string> undefinedPlaceholderValues)
+    {
+        undefinedPlaceholderValues = Formatter.GetUndefinedPlaceholderValues(ToPlainTextUnformatted(), FormatParameters);
+        return undefinedPlaceholderValues.Count == 0;
+    }
+
     public void Validate()
     {
-        List<string> undefinedPlaceholderValues = Formatter.GetUndefinedPlaceholderValues(ToPlainText(), FormatParameters);
+        List<string> undefinedPlaceholderValues;
+        IsValid(out undefinedPlaceholderValues);
+
         if (undefinedPlaceholderValues.Count > 0 && ThowExceptionOnUnfilled)
         {
             throw new FormatException("Prompt is invalid: Not all placeholders can be replaced with their corresponding value. Use the UsingValue- or SetValue-methods to set the values. Undefined values for the placeholders: " + string.Join(", ", undefinedPlaceholderValues));
