@@ -10,13 +10,13 @@ namespace ContextFlow.Application.TextUtil;
 
 public class DefaultConverter: CFConverter
 {
-    private bool Spacing = true;
-    public DefaultConverter(bool spacing) {
-        Spacing = spacing;
+    private bool NewLineSpacing = true;
+    public DefaultConverter(bool newLineSpacing) {
+        NewLineSpacing = newLineSpacing;
     }
     public override string FromDynamic(dynamic obj)
     {
-        string nlSpacing = Spacing ? "\n" : "";
+        string nlSpacing = NewLineSpacing ? "\n" : "";
         StringBuilder sb = new StringBuilder();
         if (obj is IDictionary)
         {

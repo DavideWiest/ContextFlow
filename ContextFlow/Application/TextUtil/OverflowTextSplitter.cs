@@ -12,6 +12,6 @@ public static class OverflowTextSplitter
 {
     public static List<string> SplitText(string text, LLMTokenizer tokenizer)
     {
-        return text.Split("\n\n").ToList();
+        return text.Split(new string[] { "\n\n" }, StringSplitOptions.None).ToList();
     }
 }

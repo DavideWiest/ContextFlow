@@ -38,4 +38,13 @@ public class PromptText
         Prompt prompt = new Prompt("Test prompt").Clone();
         Assert.AreEqual(prompt.GetType(), typeof(Prompt));
     }
+
+    [Test]
+    public void TestFormatter()
+    {
+        var prompt = new Prompt("{placeholder}").UsingValue("placeholder", "hi").ToPlainText();
+        Assert.AreEqual(prompt, "hi");
+    }
+
+
 }

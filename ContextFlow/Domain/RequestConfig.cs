@@ -10,15 +10,24 @@ namespace ContextFlow.Domain;
 
 public class RequestConfig
 {
-    private FailStrategy FailStrategy;
+    protected FailStrategy FailStrategy = new FailStrategyThrowException();
 
     public bool PassAsStringIfNoConverterDefined = false;
     public bool SplitTextAndRetryOnOverflow = true;
-    private bool CheckNumTokensBeforeRequest = false;
+    protected bool CheckNumTokensBeforeRequest = false;
+
+    public bool ParseOutputToDynamic = true;
+
     public LLMTokenizer? Tokenizer = null;
 
     public RequestConfig(FailStrategy failStrategy) {
         FailStrategy = failStrategy;
+    }
+
+    public RequestConfig UsingFailStrategy(FailStrategy failStrategy)
+    {
+        FailStrategy = failStrategy;
+        return this;
     }
 
     public void ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
@@ -37,4 +46,9 @@ public class RequestConfig
         return CheckNumTokensBeforeRequest;
     }
 
+    public RequestConfig UsingOutputIsString(bool isString)
+    {
+        ParseOutputToDynamic = isString;
+        return this;
+    }
 }

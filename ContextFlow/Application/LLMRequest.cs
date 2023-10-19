@@ -18,7 +18,6 @@ public class LLMRequest
     private CFLogger log = new CFDefaultLogger();
     private Prompt Prompt;
     private CFConverter? outputConverter = null;
-    private bool outputIsString = true;
     //private Type outputType = typeof(String);
 
     LLMConfig LLMConfig;
@@ -63,17 +62,6 @@ public class LLMRequest
     {
         outputConverter = converter;
     }
-    public LLMRequest UsingOutputisString(bool isString)
-    {
-        SetOutputType(isString);
-        return this;
-    }
-
-    public void SetOutputType(bool isString)
-    {
-        outputIsString = isString;
-    }
-
 
     public bool CheckPromptTokens(LLMTokenizer tokenizer, bool throwExcIfExceeding)
     {
@@ -96,7 +84,7 @@ public class LLMRequest
         log.Debug("\n--- RAW OUTPUT ---\n" + partialresult.RawOutput + "\n--- RAW OUTPUT ---\n");
 
         dynamic? parsedOutput = null;
-        if (!outputIsString)
+        if (!RequestConfig.ParseOutputToDynamic)
         {
             try
             {
@@ -118,7 +106,7 @@ public class LLMRequest
         }
 
         // if the preceding if statement didnt work, or was not triggered, in which in both cases it is null
-        if (outputIsString || (parsedOutput == null && RequestConfig.PassAsStringIfNoConverterDefined))
+        if (RequestConfig.ParseOutputToDynamic || (parsedOutput == null && RequestConfig.PassAsStringIfNoConverterDefined))
         {
             parsedOutput = partialresult.RawOutput;
         }
