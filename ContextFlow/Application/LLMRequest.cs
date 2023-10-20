@@ -14,7 +14,6 @@ namespace ContextFlow.Application;
 public class LLMRequest
 {
     protected CFLogger log = new CFDefaultLogger();
-    protected CFConverter outputConverter = new DynamicConverterOld(true);
 
     protected Prompt Prompt;
     protected LLMConfig LLMConfig;
@@ -32,41 +31,22 @@ public class LLMRequest
 
     public bool CheckPromptTokens(LLMTokenizer tokenizer, bool throwExcIfExceeding)
     {
-        return tokenizer.CheckTokenNumPasses(Prompt.ToPlainText(), LLMConfig.MaxTokensInput, throwExcIfExceeding);
+        return tokenizer.CheckTokenNumPasses(Prompt.ToPlainText(), LLMConfig.MaxInputTokens, throwExcIfExceeding);
     }
 
     public RequestResult Complete()
     {
-        RequestConfig.log.Debug("\n--- PROMPT ---\n" + Prompt.ToPlainText() + "\n--- PROMPT ---\n");
+        RequestConfig.Logger.Debug("\n--- PROMPT ---\n" + Prompt.ToPlainText() + "\n--- PROMPT ---\n");
 
-        CheckPromptExists();
-
-        if (RequestConfig.GetCheckNumTokensBeforeRequest())
+        if (RequestConfig.CheckNumTokensBeforeRequest)
         {
             CheckPromptTokens(RequestConfig.Tokenizer!, true);
         }
 
         RequestResult result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, log);
 
-        RequestConfig.log.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
+        RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
 
         return result;
-    }
-
-    protected void CheckPromptExists()
-    {
-        if (Prompt == null)
-        {
-            RequestConfig.log.Error("Cannot complete a request without a prompt. Use UsingPrompt first.");
-            throw new InvalidOperationException("Cannot complete a request without a prompt. Use UsingPrompt first.");
-        }
-    }
-    protected void CheckConverterExists()
-    {
-        if (outputConverter == null)
-        {
-            RequestConfig.log.Error("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter to fix it.");
-            throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter to fix it.");
-        }
     }
 }

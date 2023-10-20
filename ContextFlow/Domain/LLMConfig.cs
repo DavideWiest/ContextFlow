@@ -9,17 +9,16 @@ public class LLMConfig
 {
     public string ModelName;
     public string SystemMessage = "You are a helpful assistant.";
-    public int MaxLength = 512;
-    public int MaxTokensInput = 256;
+    public int MaxTotalTokens = 1024;
+    public int MaxInputTokens = 512;
     public double Temperature = 0.3;
     public double TopP = 1;
     public double FrequencyPentaly = 0;
     public double PresencePenalty = 0;
 
-    public LLMConfig(string modelName, int maxTokensInput)
+    public LLMConfig(string modelName)
     {
         ModelName = modelName;
-        MaxTokensInput = maxTokensInput;
     }
 
     public LLMConfig UsingSystemMessage(string message)
@@ -34,9 +33,15 @@ public class LLMConfig
         return this;
     }
 
-    public LLMConfig UsingMaxLength(int maxlength)
+    public LLMConfig UsingMaxLength(int maxLength)
     {
-        MaxLength = maxlength;
+        MaxTotalTokens = maxLength;
+        return this;
+    }
+
+    public LLMConfig UsingMaxInputLength(int maxInputLength)
+    {
+        MaxTotalTokens = maxInputLength;
         return this;
     }
 

@@ -12,7 +12,8 @@ namespace ContextFlow.Domain;
 public enum FinishReason
 {
     Overflow,
-    Stop
+    Stop,
+    Unknown
 }
 
 /// <summary>
@@ -44,9 +45,9 @@ public class RequestResult
         AdditionalData = result.AdditionalData;
     }
 
-    public ParsedRequestResult<T> Parse<T>(CFConverter converter)
+    public ParsedRequestResult<T> Parse<T>(CFConverter<T> converter, dynamic? data = null)
     {
-        ParsedRequestResult<T> parsedResult = converter.FromString(RawOutput);
-        return parsedResult
+        ParsedRequestResult<T> parsedResult = converter.FromString(RawOutput, data);
+        return parsedResult;
     }
 }

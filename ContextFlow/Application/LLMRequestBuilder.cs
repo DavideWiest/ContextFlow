@@ -43,18 +43,21 @@ public class LLMRequestBuilder
 
     public LLMRequest Build()
     {
+        Validate();
+
+        return new LLMRequest(Prompt!, LLMConfig!, LLMConnection!, RequestConfig!);
+    }
+
+    protected void Validate()
+    {
         List<string> missingElements = new();
         if (!ConfigurationIsComplete(out missingElements))
         {
-            throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + String.Join(", ", missingElements);
+            throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + String.Join(", ", missingElements));
         }
-
-        var request = new LLMRequest(Prompt!, LLMConfig!, LLMConnection!, RequestConfig!);
-
-        return request;
     }
 
-    protected bool ConfigurationIsComplete(out List<string> missingElements)
+    public bool ConfigurationIsComplete(out List<string> missingElements)
     {
         var missingElementsDict = new Dictionary<string, bool>();
         missingElementsDict["Prompt"] = Prompt == null;

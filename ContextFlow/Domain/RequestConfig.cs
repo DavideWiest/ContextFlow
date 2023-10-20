@@ -13,12 +13,11 @@ namespace ContextFlow.Domain;
 public class RequestConfig
 {
     public FailStrategy FailStrategy = new FailStrategyThrowException();
-    public CFLogger log = new CFDefaultLogger();
-    public CFConverter<dynamic> outputConverter = new StandardConverter<dynamic>();
+    public CFLogger Logger = new CFDefaultLogger();
 
     public bool SplitTextAndRetryOnOverflow = true;
-    protected bool CheckNumTokensBeforeRequest = false;
-    protected bool ParseOutputToDynamic = true;
+
+    public bool CheckNumTokensBeforeRequest { get; private set; } = false;
 
     public LLMTokenizer? Tokenizer = null;
 
@@ -45,38 +44,16 @@ public class RequestConfig
         return this;
     }
 
-    public bool GetCheckNumTokensBeforeRequest()
-    {
-        return CheckNumTokensBeforeRequest;
-    }
-
     public RequestConfig UsingLogger(CFLogger log)
     {
-        this.log = log;
+        Logger = log;
         return this;
     }
 
-    public RequestConfig UsingOutputConverter(CFConverter converter)
+    public RequestConfig UsingSplitTextAndRetryOnOverflow(bool splitTextAndRetryOnOverflow)
     {
-        outputConverter = converter;
+        SplitTextAndRetryOnOverflow = splitTextAndRetryOnOverflow;
         return this;
     }
 
-    public RequestConfig ActivateParseOutputToDynamic(CFConverter converter)
-    {
-        ParseOutputToDynamic = true;
-        UsingOutputConverter(converter);
-        return this;
-    }
-
-    public RequestConfig DeactivateParseOutputToDynamic()
-    {
-        ParseOutputToDynamic = true;
-        return this;
-    }
-
-    public bool GetParseOutputToDynamic()
-    {
-        return ParseOutputToDynamic;
-    }
 }
