@@ -11,7 +11,7 @@ namespace ContextFlow.Application.TextUtil;
 /// <summary>
 /// A basic converter for dynamic content. 
 /// Important: When converting to string, it will handle all properties of an object, which can lead to a lot of clutter.
-/// It converts Dictionaries and Enumerables to a unordered list, if their values are strings. 
+/// It converts Dictionaries and Enumerables to a unordered list, if their keys and values are strings. 
 /// Objects are recursively divided into a section for each property, represented by markdown-headings.
 /// </summary>
 /// <typeparam name="T">The given type that the converter handles - Must be instantiatable with 0 parameters</typeparam>
@@ -20,7 +20,7 @@ public class StandardConverter<T> : CFConverter<T> where T : new()
     public override string FromObject(T obj, dynamic? additionalData)
     {
         int depth = 0;
-        if (additionalData == null)
+        if (additionalData != null)
         {
             depth = additionalData;
         }
@@ -35,53 +35,73 @@ public class StandardConverter<T> : CFConverter<T> where T : new()
 
         StringBuilder result = new StringBuilder();
 
-        foreach (var property in properties)
+        object? value = obj;
+
+        if (value is object)
         {
-            result.Append(new string('#', depth) + " ")
-                  .Append(property.Name)
-                  .Append("\n");
-
-            object? value = property.GetValue(obj);
-
-            if (value == null) { continue; }
-
-            if (value is object)
+            if (value is Dictionary<string, string>)
             {
-                if (value is Dictionary<object, string>)
+                result = ParseDictionary((Dictionary<string, string>)value, result);
+            }
+            else if (value is IEnumerable)
+            {
+                if (((IEnumerable)value).AsQueryable().GetEnumerator().Current is string)
                 {
-                    foreach(var kvp in ((Dictionary<object, string>)value))
-                    {
-                        result.Append("- ")
-                            .Append(kvp.Key.ToString())
-                            .Append(": ")
-                            .Append(kvp.Value)
-                            .Append("\n");
-                    }
-                } else if (value is IEnumerable) {
-                    if (((IEnumerable)value).AsQueryable().GetEnumerator().Current is string)
-                    {
-                        foreach(object v in  ((IEnumerable)value))
-                        {
-                            result.Append("- ")
-                                .Append(v)
-                                .Append("\n");
-                        }
-                    } else
-                    {
-                        result.Append(new StandardConverter<object>().FromObject(value, depth + 1));
-                    }
-                } else 
+                    result = ParseEnumerable((IEnumerable)value, result);
+                }
+                else
                 {
+                    result.Append(new string('#', depth))
+                        .Append(" ")
+                        .Append(nameof(obj))
+                        .Append("\n");
                     result.Append(new StandardConverter<object>().FromObject(value, depth + 1));
                 }
             }
             else
             {
-                result.Append(value.ToString());
+                result.Append(new string('#', depth))
+                    .Append(" ")
+                    .Append(nameof(obj))
+                    .Append("\n");
+                result.Append(new StandardConverter<object>().FromObject(value, depth + 1));
             }
+        }
+        else
+        {
+            result.Append(value.ToString());
+        }
+
+        foreach (var property in properties)
+        {
+            result.Append(new StandardConverter<object>().FromObject(property.GetValue(obj), depth+1));
         }
 
         return result.ToString();
+    }
+
+    public StringBuilder ParseDictionary(Dictionary<string, string> value, StringBuilder result)
+    {
+        foreach (var kvp in ((Dictionary<string, string>)value))
+        {
+            result.Append("- ")
+                .Append(kvp.Key)
+                .Append(": ")
+                .Append(kvp.Value)
+                .Append("\n");
+        }
+        return result;
+    }
+
+    public StringBuilder ParseEnumerable(IEnumerable value, StringBuilder result)
+    {
+        foreach (object v in value)
+        {
+            result.Append("- ")
+                .Append(v)
+                .Append("\n");
+        }
+        return result;
     }
 
     public override T FromString(string input, dynamic? additionalData)

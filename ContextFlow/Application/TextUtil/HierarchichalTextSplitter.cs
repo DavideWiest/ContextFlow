@@ -46,7 +46,7 @@ public class HierarchichalTextSplitter: TextSplitter
 
         List<string> substrs = new();
 
-        var splittedinputList = SplitTextInMiddle(input, splitIdentifierIdx);
+        var splittedinputList = SplitWithCurrentSplitIdentifier(input, splitIdentifierIdx);
 
         foreach (string str in splittedinputList)
         {
@@ -62,7 +62,7 @@ public class HierarchichalTextSplitter: TextSplitter
         return substrs;
     }
 
-    protected List<string> SplitTextInMiddle(string input, int splitIdentifierIdx)
+    protected List<string> SplitWithCurrentSplitIdentifier(string input, int splitIdentifierIdx)
     {
         if (SplitIdentifierHierarchy[splitIdentifierIdx] == "")
         {
@@ -74,6 +74,11 @@ public class HierarchichalTextSplitter: TextSplitter
 
         int middleIndex = FindClosestSubStrToMiddle(splittableInput, splitIdentifierIdx);
 
+        if (middleIndex == -1)
+        {
+            return new() { input };
+        }
+
         string substr1 = (inputStartsWithIdentifier && IdentifiersToAddToBeginnings.Contains(SplitIdentifierHierarchy[splitIdentifierIdx])
             ? SplitIdentifierHierarchy[splitIdentifierIdx] : "") + input.Substring(0, middleIndex);
 
@@ -81,8 +86,20 @@ public class HierarchichalTextSplitter: TextSplitter
             (IdentifiersToAddToBeginnings.Contains(SplitIdentifierHierarchy[splitIdentifierIdx])
             ? SplitIdentifierHierarchy[splitIdentifierIdx] : "")
             + input.Substring(middleIndex + SplitIdentifierHierarchy[splitIdentifierIdx].Length);
+        List<string> output = new List<string>();
 
-        return new List<string>() { substr1, substr2 };
+        if (Measure(substr1) <= MaxStringTokens)
+        {
+            output.Add(substr1);
+        } else { output.AddRange(SplitWithCurrentSplitIdentifier(substr1, splitIdentifierIdx)); }
+
+        if (Measure(substr2) <= MaxStringTokens)
+        {
+            output.Add(substr2);
+        }
+        else { output.AddRange(SplitWithCurrentSplitIdentifier(substr2, splitIdentifierIdx)); }
+
+        return output;
     }
 
     protected int FindClosestSubStrToMiddle(string input, int splitIdentifierIdx)

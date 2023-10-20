@@ -15,8 +15,6 @@ public class Tests
             """;
     int expectedTokens = 59;
 
-    string openAiApiKey = "";
-
     [SetUp]
     public void Setup()
     {
@@ -24,13 +22,13 @@ public class Tests
     }
 
     [Test]
-    public async Task CountTokens_Gpt3_5_Turbo()
+    public void CountTokens_Gpt3_5_Turbo()
     {
         int ntokens = new OpenAITokenizer("gpt-3.5-turbo-16k-0613").CountTokens(tokenTestString);
         Assert.AreEqual(expectedTokens, ntokens);
     }
     [Test]
-    public async Task CountTokens_2_Gpt4()
+    public void CountTokens_2_Gpt4()
     {
         int ntokens = new OpenAITokenizer("gpt-4").CountTokens(tokenTestString);
         Assert.AreEqual(expectedTokens, ntokens);

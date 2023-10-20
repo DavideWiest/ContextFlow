@@ -17,9 +17,11 @@ public class LLMConfig
     public double PresencePenalty = 0;
     public int NumOutputs = 1;
 
-    public LLMConfig(string modelName)
+    public LLMConfig(string modelName, int maxTotalTokens = 1024, int maxInputTokens = 512)
     {
         ModelName = modelName;
+        MaxTotalTokens = maxTotalTokens;
+        MaxInputTokens = maxInputTokens;
     }
 
     public LLMConfig UsingSystemMessage(string message)

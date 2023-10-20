@@ -3,7 +3,7 @@
 using ContextFlow.Application;
 using ContextFlow.Infrastructure.Providers.OpenAI;
 
-public class PromptText
+public class PromptTest
 {
 
     private OpenAIChatConnection llmcon = new();
