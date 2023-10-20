@@ -14,7 +14,6 @@ public class Prompt
 {
 
     protected string PromptAction;
-    //protected CFConverter promptConverter = new DefaultConverter(true);
 
     public List<Attachment> Attachments = new();
 
@@ -22,17 +21,6 @@ public class Prompt
     {
         PromptAction = action;
     }
-
-    //public Prompt UsingConverter(CFConverter converter)
-    //{
-    //    SetConverter(converter);
-    //    return this;
-    //}
-
-    //public void SetConverter(CFConverter converter)
-    //{
-    //    promptConverter = converter;
-    //}
 
     public Prompt UsingAttachment(string name, string content)
     {
@@ -56,27 +44,17 @@ public class Prompt
         Attachments.Add(new Attachment(name, content, true));
     }
 
-    //public Prompt UsingAttachment(string name, dynamic content)
-    //{
-    //    AddAttachment(name, content);
-    //    return this;
-    //}
+    public Prompt UsingAttachment<T>(string name, T content, CFConverter<T> converter, dynamic? converterData = null)
+    {
+        Attachments.Add(new Attachment(name, converter.FromObject(content, converterData), false));
+        return this;
+    }
 
-    //public void AddAttachment(string name, dynamic content)
-    //{
-    //    Attachments.Add(new Attachment(name, promptConverter.ToString(content), false));
-    //}
-
-    //public Prompt UsingAttachmentInline(string name, dynamic content)
-    //{
-    //    AddAttachmentInline(name, content);
-    //    return this;
-    //}
-
-    //public void AddAttachmentInline(string name, dynamic content)
-    //{
-    //    Attachments.Add(new Attachment(name, promptConverter.ToString(content), true));
-    //}
+    public Prompt UsingAttachmentInline<T>(string name, T content, CFConverter<T> converter, dynamic? converterData = null)
+    {
+        Attachments.Add(new Attachment(name, converter.FromObject(content, converterData), true));
+        return this;
+    }
 
     public Prompt UsingOutputDescription(string description)
     {

@@ -32,15 +32,10 @@ public class FormattablePrompt : Prompt
         Formatter = formatter;
     }
 
-    public Prompt UsingValue(string placeholder, string value)
-    {
-        SetValue(placeholder, value);
-        return this;
-    }
-
-    public void SetValue(string placeholder, string value)
+    public FormattablePrompt UsingValue(string placeholder, string value)
     {
         FormatParameters[placeholder] = value;
+        return this;
     }
 
     public override string ToPlainText()
@@ -74,19 +69,8 @@ public class FormattablePrompt : Prompt
 
         if (undefinedPlaceholderValues.Count > 0 && ThowExceptionOnUnfilled)
         {
-            throw new FormatException("Prompt is invalid: Not all placeholders can be replaced with their corresponding value. Use the UsingValue- or SetValue-methods to set the values. Undefined values for the placeholders: " + string.Join(", ", undefinedPlaceholderValues));
+            throw new FormatException("Prompt is invalid: Not all placeholders can be replaced with their corresponding value. Use the UsingValue-method to set the values. Undefined values for the placeholders: " + string.Join(", ", undefinedPlaceholderValues));
         }
-    }
-
-    public Prompt UsingValue(string placeholder, dynamic value)
-    {
-        SetValue(placeholder, value);
-        return this;
-    }
-
-    public void SetValue(string placeholder, dynamic value)
-    {
-        FormatParameters[placeholder] = promptConverter.ToString(value);
     }
 
     public override string ToString()

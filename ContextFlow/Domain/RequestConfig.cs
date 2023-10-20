@@ -14,7 +14,7 @@ public class RequestConfig
 {
     public FailStrategy FailStrategy = new FailStrategyThrowException();
     public CFLogger log = new CFDefaultLogger();
-    public CFConverter outputConverter = new DefaultConverter(true);
+    public CFConverter<dynamic> outputConverter = new StandardConverter<dynamic>();
 
     public bool SplitTextAndRetryOnOverflow = true;
     protected bool CheckNumTokensBeforeRequest = false;
@@ -52,24 +52,14 @@ public class RequestConfig
 
     public RequestConfig UsingLogger(CFLogger log)
     {
-        SetLogger(log);
-        return this;
-    }
-
-    public void SetLogger(CFLogger log)
-    {
         this.log = log;
+        return this;
     }
 
     public RequestConfig UsingOutputConverter(CFConverter converter)
     {
-        SetOutputConverter(converter);
-        return this;
-    }
-
-    public void SetOutputConverter(CFConverter converter)
-    {
         outputConverter = converter;
+        return this;
     }
 
     public RequestConfig ActivateParseOutputToDynamic(CFConverter converter)

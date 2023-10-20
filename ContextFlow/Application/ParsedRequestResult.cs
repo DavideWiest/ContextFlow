@@ -14,7 +14,7 @@ public class ParsedRequestResult<T>: RequestResult
 {
     public T ParsedOutput;
 
-    public ParsedRequestResult(RequestResult requestresult, dynamic parsedOutput) : base(requestresult)
+    public ParsedRequestResult(RequestResult requestresult, T parsedOutput) : base(requestresult)
     {
         ParsedOutput = parsedOutput;
     }

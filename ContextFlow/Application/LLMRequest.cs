@@ -14,7 +14,7 @@ namespace ContextFlow.Application;
 public class LLMRequest
 {
     protected CFLogger log = new CFDefaultLogger();
-    protected CFConverter outputConverter = new DefaultConverter(true);
+    protected CFConverter outputConverter = new DynamicConverterOld(true);
 
     protected Prompt Prompt;
     protected LLMConfig LLMConfig;
@@ -57,16 +57,16 @@ public class LLMRequest
     {
         if (Prompt == null)
         {
-            RequestConfig.log.Error("Cannot complete a request without a prompt. Use UsingPrompt or SetPrompt first.");
-            throw new InvalidOperationException("Cannot complete a request without a prompt. Use UsingPrompt or SetPrompt first.");
+            RequestConfig.log.Error("Cannot complete a request without a prompt. Use UsingPrompt first.");
+            throw new InvalidOperationException("Cannot complete a request without a prompt. Use UsingPrompt first.");
         }
     }
     protected void CheckConverterExists()
     {
         if (outputConverter == null)
         {
-            RequestConfig.log.Error("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter or SetConverter to fix it.");
-            throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter or SetConverter to fix it.");
+            RequestConfig.log.Error("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter to fix it.");
+            throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter to fix it.");
         }
     }
 }

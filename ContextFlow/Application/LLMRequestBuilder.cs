@@ -19,48 +19,25 @@ public class LLMRequestBuilder
 
     public LLMRequestBuilder UsingPrompt(Prompt prompt)
     {
-        SetPrompt(prompt);
-        return this;
-    }
-
-    public void SetPrompt(Prompt prompt)
-    {
         Prompt = prompt;
-    }
-
-    public LLMRequestBuilder SetLLMConfig(LLMConfig config)
-    {
-        LLMConfig = config;
         return this;
     }
 
     public LLMRequestBuilder UsingLLMConfig(LLMConfig config)
     {
-        SetLLMConfig(config);
-        return this;
-    }
-
-    public LLMRequestBuilder SetLLMConnection(LLMConnection connection)
-    {
-        LLMConnection = connection;
+        LLMConfig = config;
         return this;
     }
 
     public LLMRequestBuilder UsingLLMConnection(LLMConnection connection)
     {
-        SetLLMConnection(connection);
-        return this;
-    }
-
-    public LLMRequestBuilder SetRequestConfig(RequestConfig config)
-    {
-        RequestConfig = config;
+        LLMConnection = connection;
         return this;
     }
 
     public LLMRequestBuilder UsingRequestConfig(RequestConfig config)
     {
-        SetRequestConfig(config);
+        RequestConfig = config;
         return this;
     }
 

@@ -8,6 +8,6 @@ namespace ContextFlow.Application.TextUtil;
 
 public abstract class CFConverter<T>
 {
-    public abstract string ToString(T obj);
-    public abstract T FromString(string obj);
+    public abstract string FromObject(T obj, dynamic? data);
+    public abstract T FromString(string obj, dynamic? data);
 }
