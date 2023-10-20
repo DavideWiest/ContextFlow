@@ -18,6 +18,14 @@ public class LLMRequestBuilder
     protected LLMConnection? LLMConnection;
     protected RequestConfig? RequestConfig;
 
+    public LLMRequestBuilder(LLMRequest request)
+    {
+        Prompt = request.Prompt;
+        LLMConfig = request.LLMConfig;
+        LLMConnection = request.LLMConnection;
+        RequestConfig = request.RequestConfig;
+    }
+
     public LLMRequestBuilder UsingPrompt(Prompt prompt)
     {
         Prompt = prompt;

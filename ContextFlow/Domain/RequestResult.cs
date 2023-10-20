@@ -21,9 +21,9 @@ public enum FinishReason
 /// </summary>
 public class RequestResult
 {
-    public string RawOutput;
-    public FinishReason FinishReason;
-    public dynamic? AdditionalData = null;
+    public string RawOutput { get; }
+    public FinishReason FinishReason { get; }
+    public dynamic? AdditionalData { get; }  = null;
 
     public RequestResult(string rawOutput, FinishReason finishReason)
     {

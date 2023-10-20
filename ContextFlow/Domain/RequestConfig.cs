@@ -13,11 +13,11 @@ namespace ContextFlow.Domain;
 public class RequestConfig
 {
     public FailStrategy FailStrategy = new FailStrategyThrowException();
-    public CFLogger Logger = new CFDefaultLogger();
+    public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
+    public CFLogger Logger = new CFSerilogLogger();
 
     public bool SplitTextAndRetryOnOverflow = true;
-
-    public bool CheckNumTokensBeforeRequest { get; private set; } = false;
+    public bool ValidateNumInputTokensBeforeRequest { get; private set; } = true;
 
     public LLMTokenizer? Tokenizer = null;
 
@@ -31,16 +31,22 @@ public class RequestConfig
         return this;
     }
 
+    public RequestConfig UsingOverflowStrategy(OverflowStrategy overflowStrategy)
+    {
+        OverflowStrategy = overflowStrategy;
+        return this;
+    }
+
     public RequestConfig ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
     {
-        CheckNumTokensBeforeRequest = true;
+        ValidateNumInputTokensBeforeRequest = true;
         Tokenizer = tokenizer;
         return this;
     }
 
     public RequestConfig DeactivateCheckNumTokensBeforeRequest()
     {
-        CheckNumTokensBeforeRequest = false;
+        ValidateNumInputTokensBeforeRequest = false;
         return this;
     }
 

@@ -52,8 +52,8 @@ public class FormattablePrompt : Prompt
 
     public bool IsValid()
     {
-        List<string> undefinedPlaceholderValues;
-        return IsValid(out undefinedPlaceholderValues);
+        List<string> _;
+        return IsValid(out _);
     }
 
     public bool IsValid(out List<string> undefinedPlaceholderValues)

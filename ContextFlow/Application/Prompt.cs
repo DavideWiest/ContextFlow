@@ -85,19 +85,11 @@ public class Prompt
     }
 
     /// <summary>
-    /// Shallow copy using ICloneable
+    /// Shallow copy using memberwise-clone
     /// </summary>
     /// <returns>The copied object. Use type-casting to convert it to a prompt</returns>
     public Prompt Clone()
     {
         return (Prompt)MemberwiseClone();
     }
-
-    //protected void ThrowExceptionIfNoConverter()
-    //{
-    //    if (promptConverter == null)
-    //    {
-    //        throw new InvalidOperationException("Can't convert dynamic content to string when there is not converter defined. Use UsingConverter or SetConverter to fix it.");
-    //    }
-    //}
 }

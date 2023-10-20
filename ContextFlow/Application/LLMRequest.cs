@@ -14,12 +14,12 @@ namespace ContextFlow.Application;
 
 public class LLMRequest
 {
-    protected CFLogger log = new CFDefaultLogger();
+    protected CFLogger log = new CFSerilogLogger();
 
-    protected Prompt Prompt;
-    protected LLMConfig LLMConfig;
-    protected LLMConnection LLMConnection;
-    protected RequestConfig RequestConfig;
+    public Prompt Prompt { get; }
+    public LLMConfig LLMConfig {get; }
+    public LLMConnection LLMConnection {get; }
+    public RequestConfig RequestConfig {get; }
     
     public LLMRequest(Prompt prompt, LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf)
     {
@@ -29,18 +29,13 @@ public class LLMRequest
         RequestConfig = requestconf;
     }
 
-    public bool CheckPromptTokens(LLMTokenizer tokenizer, bool throwExcIfExceeding)
-    {
-        return tokenizer.CheckTokenNumPasses(Prompt.ToPlainText(), LLMConfig.MaxInputTokens, throwExcIfExceeding);
-    }
-
     public RequestResult Complete()
     {
         RequestConfig.Logger.Debug("\n--- PROMPT ---\n" + Prompt.ToPlainText() + "\n--- PROMPT ---\n");
 
-        if (RequestConfig.CheckNumTokensBeforeRequest)
+        if (RequestConfig.ValidateNumInputTokensBeforeRequest)
         {
-            CheckPromptTokens(RequestConfig.Tokenizer!, true);
+            RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
         RequestResult result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, log);

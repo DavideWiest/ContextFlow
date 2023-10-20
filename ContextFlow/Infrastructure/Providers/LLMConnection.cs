@@ -11,6 +11,13 @@ public abstract class LLMConnection
 
     public RequestResult GetResponse(string input, LLMConfig conf, CFLogger log)
     {
-        return CallAPI(input, conf, log);
+        try
+        {
+            return CallAPI(input, conf, log);
+        } catch (Exception e)
+        {
+            log.Error($"Failed to get the output from the LLM. Exception: {e.GetType()}: {e.Message}");
+            throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType()}: {e.Message}");
+        }
     }
 }

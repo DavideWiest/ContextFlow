@@ -3,7 +3,7 @@ namespace ContextFlow.Infrastructure.Logging;
 using Serilog;
 
 
-public class CFDefaultLogger : CFLogger
+public class CFSerilogLogger : CFLogger
 {
     private readonly ILogger SLogger = new LoggerConfiguration()
 #if DEBUG

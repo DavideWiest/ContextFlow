@@ -26,10 +26,7 @@ public class OpenAICompletionConnection : LLMConnectionAsync
         try
         {
             var result = await OpenAIUtil.GetCompletionResult(api, input, conf, log);
-            string output = result.Completions[0].ToString();
-            FinishReason finish = OpenAIUtil.ToCFFinishReason(result.Completions[0].FinishReason);
-
-            return new RequestResult(output, FinishReason.Stop);
+            return OpenAIUtil.CompletionResultToRequestResult(result);
         }
         catch (Exception e)
         {
