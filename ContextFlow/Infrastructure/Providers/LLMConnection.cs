@@ -1,4 +1,6 @@
-﻿namespace ContextFlow.Domain;
+﻿using ContextFlow.Domain;
+
+namespace ContextFlow.Infrastructure.Providers;
 
 using ContextFlow.Infrastructure.Logging;
 

@@ -4,36 +4,29 @@ namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
+using ContextFlow.Infrastructure.Providers;
 
-public class OpenAICompletionConnection : LLMConnection
+public class OpenAICompletionConnectionAsync : LLMConnection
 {
-    OpenAIAPI api = default!;
+    OpenAIAPI api;
 
-    public OpenAICompletionConnection(string apiKey)
+    public OpenAICompletionConnectionAsync(string apiKey)
     {
         api = new(apiKey);
     }
 
-    public OpenAICompletionConnection()
+    public OpenAICompletionConnectionAsync()
     {
-        // tries to use the environment variable OPENAI_API_KEY
+        // uses default, env ("OPENAI_API_KEY"), or config file
         api = new();
     }
 
     protected override RequestResult CallAPI(string input, LLMConfig conf, CFLogger log)
     {
-        var chat = api.Chat.CreateChatCompletionAsync(new OpenAI_API.Chat.ChatRequest()
-        {
-
-        }).GetAwaiter().GetResult();
-
-        chat.AppendSystemMessage(conf.SystemMessage);
-        chat.AppendUserInput(input);
-
         try
         {
-
-            return new RequestResult(output, FinishReason.Stop);
+            var result = OpenAIUtil.GetCompletionResult(api, input, conf, log).GetAwaiter().GetResult();
+            return OpenAIUtil.CompletionResultToRequestResult(result);
         }
         catch (Exception e)
         {

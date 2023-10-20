@@ -8,6 +8,7 @@ using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Application.TextUtil;
 using OpenAI_API.Moderation;
+using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application;
 
@@ -27,7 +28,6 @@ public class LLMRequest
         LLMConnection = llmcon;
         RequestConfig = requestconf;
     }
-
 
     public bool CheckPromptTokens(LLMTokenizer tokenizer, bool throwExcIfExceeding)
     {

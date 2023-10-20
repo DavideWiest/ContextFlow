@@ -4,14 +4,11 @@ namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
-using OpenAI_API.Chat;
-using OpenAI_API.Models;
-using Serilog.Core;
-using SmartFormat.Core.Output;
+using ContextFlow.Infrastructure.Providers;
 
 public class OpenAIChatConnection : LLMConnection
 {
-    OpenAIAPI api = default!;
+    OpenAIAPI api;
 
     public OpenAIChatConnection(string apiKey)
     {
@@ -20,7 +17,7 @@ public class OpenAIChatConnection : LLMConnection
 
     public OpenAIChatConnection()
     {
-        // tries to use the environment variable OPENAI_API_KEY
+        // uses default, env ("OPENAI_API_KEY"), or config file
         api = new();
     }
 
@@ -28,11 +25,8 @@ public class OpenAIChatConnection : LLMConnection
     {
         try
         {
-            var result = GetChatResult(input, conf, log).GetAwaiter().GetResult();
-            string output = result.Choices[0].ToString();
-            FinishReason finish = toCFFinishReason(result.Choices[0].FinishReason);
-            
-            return new RequestResult(output, FinishReason.Stop);
+            var result = OpenAIUtil.GetChatResult(api, input, conf, log).GetAwaiter().GetResult();
+            return OpenAIUtil.ChatResultToRequestResult(result);
         }
         catch (Exception e)
         {
@@ -41,32 +35,4 @@ public class OpenAIChatConnection : LLMConnection
         }
     }
 
-    protected async Task<ChatResult> GetChatResult(string input, LLMConfig conf, CFLogger log)
-    {
-        var chatRequest = new ChatRequest()
-        {
-            Model = new Model(conf.ModelName),
-            Temperature = conf.Temperature,
-            MaxTokens = conf.MaxTotalTokens,
-            Messages = new ChatMessage[]
-            {
-                new ChatMessage(ChatMessageRole.System, conf.SystemMessage),
-                new ChatMessage(ChatMessageRole.User, input)
-            }
-        };
-        return await api.Chat.CreateChatCompletionAsync(chatRequest);
-    }
-
-    protected FinishReason toCFFinishReason(string finishReasonResponse)
-    {
-        switch(finishReasonResponse)
-        {
-            case "stop":
-                return FinishReason.Stop;
-            case "length":
-                return FinishReason.Overflow;
-            default:
-                return FinishReason.Unknown;
-        }
-    }
 }

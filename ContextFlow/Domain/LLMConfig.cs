@@ -13,8 +13,9 @@ public class LLMConfig
     public int MaxInputTokens = 512;
     public double Temperature = 0.3;
     public double TopP = 1;
-    public double FrequencyPentaly = 0;
+    public double FrequencyPenalty = 0;
     public double PresencePenalty = 0;
+    public int NumOutputs = 1;
 
     public LLMConfig(string modelName)
     {
@@ -53,13 +54,18 @@ public class LLMConfig
 
     public LLMConfig UsingFrequencyPenalty(double frequencypenalty)
     {
-        FrequencyPentaly = frequencypenalty;
+        FrequencyPenalty = frequencypenalty;
         return this;
     }
 
     public LLMConfig UsingPresencePenalty(double presencepenalty)
     {
         PresencePenalty = presencepenalty;
+        return this;
+    }
+    public LLMConfig UsingNumOutputs(int numOutputs)
+    {
+        NumOutputs = numOutputs;
         return this;
     }
 }

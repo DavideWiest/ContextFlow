@@ -6,18 +6,18 @@ using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 
-public class OpenAIChatConnectionAsync : LLMConnectionAsync
+public class OpenAICompletionConnection : LLMConnectionAsync
 {
     OpenAIAPI api;
 
-    public OpenAIChatConnectionAsync(string apiKey)
+    public OpenAICompletionConnection(string apiKey)
     {
         api = new(apiKey);
     }
 
-    public OpenAIChatConnectionAsync()
+    public OpenAICompletionConnection()
     {
-        // tries to use the environment variable OPENAI_API_KEY
+        // uses default, env ("OPENAI_API_KEY"), or config file
         api = new();
     }
 
@@ -25,8 +25,11 @@ public class OpenAIChatConnectionAsync : LLMConnectionAsync
     {
         try
         {
-            var result = await OpenAIUtil.GetChatResult(api, input, conf, log);
-            return OpenAIUtil.ChatResultToRequestResult(result);
+            var result = await OpenAIUtil.GetCompletionResult(api, input, conf, log);
+            string output = result.Completions[0].ToString();
+            FinishReason finish = OpenAIUtil.ToCFFinishReason(result.Completions[0].FinishReason);
+
+            return new RequestResult(output, FinishReason.Stop);
         }
         catch (Exception e)
         {
