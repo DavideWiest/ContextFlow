@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Infrastructure.Formatter;
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Prompting;
 
 public class Prompt
 {

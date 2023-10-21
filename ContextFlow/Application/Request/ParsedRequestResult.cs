@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContextFlow.Domain;
+﻿
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Request;
 
 /// <summary>
 /// The result from the LLM API, parsed.

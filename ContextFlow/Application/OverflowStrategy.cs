@@ -1,16 +1,12 @@
-﻿using ContextFlow.Application.TextUtil;
+﻿using ContextFlow.Application.Request;
+using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application;
 
-public abstract class OverflowStrategy
+public abstract class OverflowStrategy : FailStrategy<TokenOverflowException>
 {
-    public abstract RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e);
+    public abstract override RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e);
 }
 
 public class OverflowStrategySplitText : OverflowStrategy

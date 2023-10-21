@@ -2,7 +2,7 @@
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
-using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Providers;
 
 public class OpenAITokenizer : LLMTokenizer
 {

@@ -1,6 +1,6 @@
 ﻿namespace Tests;
 
-using ContextFlow.Application;
+using ContextFlow.Application.Prompting;
 using ContextFlow.Infrastructure.Providers.OpenAI;
 
 public class PromptTest
@@ -19,7 +19,7 @@ public class PromptTest
     [Test]
     public void TestPromptAction()
     {
-        Assert.AreEqual("Test test", baseTestPrompt.ToPlainText());
+        Assert.That(baseTestPrompt.ToPlainText(), Is.EqualTo("Test test"));
     }
 
     [Test]
@@ -29,35 +29,35 @@ public class PromptTest
             .Clone()
             .UsingAttachment("Test attachment", "-> Test attachment content")
             .UsingAttachmentInline("Attachment 2", "Inline");
-        Assert.AreEqual("Test test\n\nTest attachment: \n-> Test attachment content\n\nAttachment 2: Inline", prompt.ToPlainText());
+        Assert.That(prompt.ToPlainText(), Is.EqualTo("Test test\n\nTest attachment: \n-> Test attachment content\n\nAttachment 2: Inline"));
     }
 
     [Test]
     public void TestCloning()
     {
         Prompt prompt = new Prompt("Test prompt").Clone();
-        Assert.AreEqual(prompt.GetType(), typeof(Prompt));
+        Assert.That(typeof(Prompt), Is.EqualTo(prompt.GetType()));
     }
 
     [Test]
     public void TestFormatter()
     {
         var promptstr = new FormattablePrompt("{placeholder}").UsingValue("placeholder", "hi").ToPlainText();
-        Assert.AreEqual("hi", promptstr);
+        Assert.That(promptstr, Is.EqualTo("hi"));
     }
 
     [Test]
     public void TestFormatterValidation()
     {
         var isvalid = new FormattablePrompt("{placeholder}", false).IsValid();
-        Assert.AreEqual(false, isvalid);
+        Assert.That(isvalid, Is.EqualTo(false));
     }
 
     [Test]
     public void TestSetOutputDescription()
     {
         var promptstr = new Prompt("A").UsingOutputDescription("OutputDescription").ToPlainText();
-        Assert.AreEqual("A\n\nOutput format: OutputDescription", promptstr);
+        Assert.That(promptstr, Is.EqualTo("A\n\nOutput format: OutputDescription"));
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class PromptTest
     {
         var promptstr = new Prompt("A").UsingOutputDescription("OutputDescription").UsingOutputDescription("new description").ToPlainText();
 
-        Assert.AreEqual("A\n\nOutput format: new description", promptstr);
+        Assert.That(promptstr, Is.EqualTo("A\n\nOutput format: new description"));
     }
 
 

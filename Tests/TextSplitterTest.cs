@@ -25,25 +25,34 @@ public class TextSplitterTest
         var splitter = new FunctionTextSplitter(x => x.Split(" ").ToList());
         var outputlist = splitter.Split("Test test Test");
 
-        Assert.AreEqual(3, outputlist.Count);
-        Assert.AreEqual("Test", outputlist[0]);
+        Assert.That(outputlist.Count, Is.EqualTo(3));
+        Assert.That(outputlist[0], Is.EqualTo("Test"));
     }
 
     [Test]
     public void TestHierarchicalSplitter()
     {
         var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 5, new() {" "}, new());
-        var outputlist = splitter.Split("Test test Test");
+        var outputlist = splitter.Split("Test test test");
 
-        Assert.AreEqual(2, outputlist.Count);
+        Assert.That(outputlist.Count, Is.EqualTo(2));
     }
 
     [Test]
     public void TestHierarchicalSplitterSplitting()
     {
         var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 12, new() { " " }, new());
-        var outputlist = splitter.Split("Test test Test test test test");
+        var outputlist = splitter.Split("Test test test test test test");
 
-        Assert.AreNotEqual("Test", outputlist[0]);
+        Assert.That(outputlist[0], Is.Not.EqualTo("Test"));
+    }
+
+    [Test]
+    public void TestHierarchicalSplitterHierarchy()
+    {
+        var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 8, new() { "\n", " " }, new());
+        var outputlist = splitter.Split("Test test test\nTest test test");
+
+        Assert.That(outputlist[1], Is.EqualTo(outputlist[0]));
     }
 }

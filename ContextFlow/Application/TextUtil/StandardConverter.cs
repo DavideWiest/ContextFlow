@@ -113,7 +113,7 @@ public class StandardConverter<T> : CFConverter<T> where T : new()
         foreach (string line in lines)
         {
             int depth = line.Count(c => c == '#');
-            string propertyName = line.TrimStart('#');
+            string propertyName = line.TrimStart('#').Trim();
 
             PropertyInfo? property = type.GetProperty(propertyName);
 

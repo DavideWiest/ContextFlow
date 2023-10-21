@@ -5,6 +5,7 @@ using OpenAI_API.Models;
 using OpenAI_API;
 using OpenAI_API.Completions;
 using Serilog;
+using ContextFlow.Application.Request;
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 

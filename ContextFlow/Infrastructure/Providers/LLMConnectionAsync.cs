@@ -2,6 +2,7 @@
 
 namespace ContextFlow.Infrastructure.Providers;
 
+using ContextFlow.Application.Request;
 using ContextFlow.Infrastructure.Logging;
 public abstract class LLMConnectionAsync
 {

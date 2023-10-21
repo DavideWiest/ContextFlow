@@ -17,7 +17,7 @@ public class TextMergerTest
         var splitter = new FunctionTextMerger(x => String.Join(", ", x));
         var output = splitter.Merge(new() { "Test", "test", "test"});
 
-        Assert.AreEqual("Test, test, test", output);
+        Assert.That(output, Is.EqualTo("Test, test, test"));
     }
 
     [Test]

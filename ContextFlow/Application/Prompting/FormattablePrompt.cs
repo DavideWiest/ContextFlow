@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Prompting;
 
 public class FormattablePrompt : Prompt
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Application.TextUtil;
+namespace ContextFlow.Application.Prompting;
 
 public class Attachment
 {

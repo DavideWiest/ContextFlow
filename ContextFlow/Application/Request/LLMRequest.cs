@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Logging;
-using ContextFlow.Application.TextUtil;
-using OpenAI_API.Moderation;
+﻿using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
+using ContextFlow.Application.Prompting;
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Request;
 
 public class LLMRequest
 {
-    protected CFLogger log = new CFSerilogLogger();
-
     public Prompt Prompt { get; }
-    public LLMConfig LLMConfig {get; }
-    public LLMConnection LLMConnection {get; }
-    public RequestConfig RequestConfig {get; }
-    
+    public LLMConfig LLMConfig { get; }
+    public LLMConnection LLMConnection { get; }
+    public RequestConfig RequestConfig { get; }
+
     public LLMRequest(Prompt prompt, LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf)
     {
         Prompt = prompt;
@@ -31,14 +21,14 @@ public class LLMRequest
 
     public RequestResult Complete()
     {
-        RequestConfig.Logger.Debug("\n--- PROMPT ---\n" + Prompt.ToPlainText() + "\n--- PROMPT ---\n");
+        RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 
         if (RequestConfig.ValidateNumInputTokensBeforeRequest)
         {
             RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
-        RequestResult result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, log);
+        RequestResult result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
 

@@ -1,6 +1,6 @@
 ﻿namespace ContextFlow.Application.TextUtil;
 
-using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Providers;
 
 public class HierarchichalTextSplitter: TextSplitter
 {

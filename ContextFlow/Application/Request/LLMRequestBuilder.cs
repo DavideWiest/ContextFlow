@@ -1,14 +1,8 @@
-﻿using ContextFlow.Application.TextUtil;
-using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Logging;
+﻿using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ContextFlow.Application.Prompting;
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Request;
 
 public class LLMRequestBuilder
 {
@@ -62,7 +56,7 @@ public class LLMRequestBuilder
         List<string> missingElements = new();
         if (!ConfigurationIsComplete(out missingElements))
         {
-            throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + String.Join(", ", missingElements));
+            throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + string.Join(", ", missingElements));
         }
     }
 

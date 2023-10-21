@@ -1,19 +1,12 @@
-﻿using ContextFlow.Application;
-using ContextFlow.Application.TextUtil;
-using ContextFlow.Infrastructure.Logging;
-using Microsoft.DeepDev;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ContextFlow.Infrastructure.Logging;
+using ContextFlow.Infrastructure.Providers;
 
-namespace ContextFlow.Domain;
+namespace ContextFlow.Application.Request;
 
 public class RequestConfig
 {
-    public FailStrategy FailStrategy = new FailStrategyThrowException();
-    public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
+    public List<IFailStrategy> FailStrategies = new() { new FailStrategyThrowException() };
+    //public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
     public CFLogger Logger = new CFSerilogLogger();
 
     public bool SplitTextAndRetryOnOverflow = true;
@@ -21,19 +14,15 @@ public class RequestConfig
 
     public LLMTokenizer? Tokenizer = null;
 
-    public RequestConfig(FailStrategy failStrategy) {
-        FailStrategy = failStrategy;
-    }
-
-    public RequestConfig UsingFailStrategy(FailStrategy failStrategy)
+    public RequestConfig UsingFailStrategy(IFailStrategy failStrategy)
     {
-        FailStrategy = failStrategy;
+        FailStrategies.Add(failStrategy);
         return this;
     }
 
     public RequestConfig UsingOverflowStrategy(OverflowStrategy overflowStrategy)
     {
-        OverflowStrategy = overflowStrategy;
+        FailStrategies.Add(overflowStrategy);
         return this;
     }
 

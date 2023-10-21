@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Domain;
+namespace ContextFlow.Application.Request;
 
 public enum FinishReason
 {

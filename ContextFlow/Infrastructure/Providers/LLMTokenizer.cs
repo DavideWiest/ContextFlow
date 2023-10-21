@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContextFlow.Domain;
+namespace ContextFlow.Infrastructure.Providers;
 
 public abstract class LLMTokenizer
 {

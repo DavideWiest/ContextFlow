@@ -18,6 +18,6 @@ public class OpenAIChatConnectionTest
     public void TestRequest()
     {
         string output = llmcon.GetResponse("say \"Hi\"", new LLMConfig("gpt-3.5-turbo-16k"), new CFSerilogLogger()).RawOutput;
-        Assert.AreEqual("Hi", output);
+        Assert.That(output, Is.EqualTo("Hi"));
     }
 }
