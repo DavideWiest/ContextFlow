@@ -45,7 +45,6 @@ public class LLMRequest
             result = possibleResult;
         }
 
-
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
 
         return result;

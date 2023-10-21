@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ContextFlow.Application.TextUtil;
+
+/// <summary>
+/// Merger that can be used in an overflowstrategy, which merges first-level sections together, using the given identifiers (the substring, e.g. a heading)
+/// If a section occurs multiple times in a single sting, they will be merged together as usual.
+/// The key of the sectionIdentifiersWithJoinStrings-attribute is the string which connects the sections
+/// 
+/// example usage:
+/// var merger = new SimpleSectionMerger(new() { { "A: ", "\n" }, { "B: ", " - " } }}
+/// string output = merger.Merge(new() { "A: apple apple B: banana banana", "B: pineapple A: strawberry B: avocado" })
+// "A: apple apple\nstrayberry B: banana banana - pineapple - avocado"
+/// </summary>
+public class SimpleSectionMerger : TextMerger
+{
+    private readonly Dictionary<string, string> SectionIdentifiersWithJoinStrings;
+    private readonly string StartIdentifier = "$§-=?&";
+    private readonly string EndIdentifier = "&%=!-";
+    public SimpleSectionMerger(Dictionary<string, string> sectionIdentifiersWithJoinStrings)
+    {
+        SectionIdentifiersWithJoinStrings = sectionIdentifiersWithJoinStrings;
+    }
+
+    public override string Merge(List<string> inputs)
+    {
+        Dictionary<string, List<string>> groupedSections = new();
+
+        
+
+        foreach (var input in inputs)
+        {
+            // Find all existing sections using their identifiers
+            foreach (var identifier in SectionIdentifiersWithJoinStrings.Keys)
+            {
+                foreach (var section in input.Replace(identifier, StartIdentifier + identifier + EndIdentifier).Split(StartIdentifier))
+                {
+                    groupedSections[section.Split(EndIdentifier)[0]].Add(section.Split(EndIdentifier)[1]);
+                }
+            }
+        }
+
+        // Merge sections inside groupedSections together
+        var mergedSections = groupedSections.Select(pair =>
+        {
+            var key = pair.Key;
+            var sectionContents = string.Join(SectionIdentifiersWithJoinStrings[key], pair.Value);
+            return $"{key}{sectionContents}";
+        });
+
+        // Convert the resulting sections into a single string
+        return string.Join(" ", mergedSections);
+    }
+}
