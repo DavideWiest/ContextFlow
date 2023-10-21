@@ -15,8 +15,10 @@ public abstract class FailStrategy<TException> : IFailStrategy where TException 
     {
         if (e is TException typedException)
         {
+            request.RequestConfig.Logger.Information($"{GetType()} handling the Exception {e.GetType()}.");
             return ExecuteStrategy(request, typedException);
         }
+        request.RequestConfig.Logger.Debug($"{GetType()} not handling the Exception {e.GetType()} - Not of the specified type");
         return null;
     }
 
@@ -41,6 +43,8 @@ public class FailStrategyRetrySameSettings : FailStrategy<LLMException>
 
     public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
     {
+        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy (Retry-count={RetryCount})");
+
         FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries ?
                 new FailStrategyRetrySameSettings(RetryCount + 1, MaxRetries)
                 : new FailStrategyThrowException();
@@ -81,6 +85,8 @@ public class FailStrategyRetryNewSettings : FailStrategy<LLMException>
 
     public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
     {
+        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy (Retry-count={RetryCount})");
+
         FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries - 1 ?
                 new FailStrategyRetryNewSettings(RetryCount + 1, MaxRetries, LLMConf, RequestConf, Prompt)
                 : new FailStrategyThrowException();

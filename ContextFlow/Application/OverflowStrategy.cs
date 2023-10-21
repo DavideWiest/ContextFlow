@@ -24,13 +24,19 @@ public class OverflowStrategySplitText : OverflowStrategy
 
     public override RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e)
     {
+        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
+
         var attachment = request.Prompt.Attachments.FirstOrDefault(a => a.Name == SplitAttachmentName);
         if (attachment == null)
         {
+            request.RequestConfig.Logger.Error($"Attachment with the name {SplitAttachmentName} does not exist. Unable to split it up.");
             throw new InvalidOperationException($"Attachment with the name {SplitAttachmentName} does not exist. Unable to split it up.");
         }
+
         var attachmentContentFragments = Splitter.Split(attachment.Content);
-        
+
+        request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + String.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
+
         List<RequestResult> results = new List<RequestResult>();
         foreach ( var fragment in attachmentContentFragments )
         {
