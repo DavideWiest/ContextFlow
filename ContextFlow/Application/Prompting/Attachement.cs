@@ -27,9 +27,9 @@ public class Attachment
 
     public string ToPlainText()
     {
-        string sep = !IsInline ? "\n" : "";
         string namestr = Name != null && Name != string.Empty && Name != "" ? Name + ": " : string.Empty;
-        return $"{namestr}{sep}{Content}\n";
+        string sep = !IsInline && namestr != null ? "\n" : "";
+        return $"{namestr}{sep}{Content}";
     }
 
     public override string ToString()

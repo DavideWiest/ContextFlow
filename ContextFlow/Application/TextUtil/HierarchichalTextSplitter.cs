@@ -93,15 +93,10 @@ public class HierarchichalTextSplitter: TextSplitter
 
         List<string> output = new List<string>();
 
-        if (Measure(substr1) <= MaxStringTokens)
-        {
-            output.Add(substr1);
-        } else { output.AddRange(SplitWithCurrentSplitIdentifier(substr1, splitIdentifierIdx)); }
+        if (Measure(substr1) <= MaxStringTokens) { output.Add(substr1); } 
+        else { output.AddRange(SplitWithCurrentSplitIdentifier(substr1, splitIdentifierIdx)); }
 
-        if (Measure(substr2) <= MaxStringTokens)
-        {
-            output.Add(substr2);
-        }
+        if (Measure(substr2) <= MaxStringTokens) { output.Add(substr2); }
         else { output.AddRange(SplitWithCurrentSplitIdentifier(substr2, splitIdentifierIdx)); }
 
         return output;

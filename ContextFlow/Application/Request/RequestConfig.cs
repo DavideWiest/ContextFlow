@@ -9,7 +9,6 @@ public class RequestConfig
     //public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
     public CFLogger Logger = new CFSerilogLogger();
 
-    public bool SplitTextAndRetryOnOverflow = true;
     public bool ValidateNumInputTokensBeforeRequest { get; private set; } = true;
 
     public LLMTokenizer? Tokenizer = null;
@@ -42,12 +41,6 @@ public class RequestConfig
     public RequestConfig UsingLogger(CFLogger log)
     {
         Logger = log;
-        return this;
-    }
-
-    public RequestConfig UsingSplitTextAndRetryOnOverflow(bool splitTextAndRetryOnOverflow)
-    {
-        SplitTextAndRetryOnOverflow = splitTextAndRetryOnOverflow;
         return this;
     }
 
