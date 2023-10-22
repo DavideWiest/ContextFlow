@@ -9,7 +9,7 @@ namespace ContextFlow.Application.Prompting;
 
 public static class PromptTemplates
 {
-    public static Prompt Aggregate(List<string> texts)
+    public static Prompt Aggregate(IEnumerable<string> texts)
     {
         return new Prompt(ActionDescriptions.Aggregate);
     }

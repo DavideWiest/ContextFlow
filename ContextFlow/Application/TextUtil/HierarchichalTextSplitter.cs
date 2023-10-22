@@ -10,15 +10,19 @@ public class HierarchichalTextSplitter: TextSplitter
     private readonly int MaxStringTokens;
     private LLMTokenizer Tokenizer;
 
-    public HierarchichalTextSplitter(LLMTokenizer tokenizer, int maxStringTokens, List<string> splitIdentifierHierarchy, List<string> identifiersToAddToBeginnings)
+    public HierarchichalTextSplitter(LLMTokenizer tokenizer, int maxStringTokens, IEnumerable<string> splitIdentifierHierarchy, IEnumerable<string> identifiersToAddToBeginnings)
     {
         Tokenizer = tokenizer;
-        if (splitIdentifierHierarchy.Count == 0)
+        SplitIdentifierHierarchy = new();
+        SplitIdentifierHierarchy.AddRange(splitIdentifierHierarchy);
+
+        if (SplitIdentifierHierarchy.ToList().Count == 0)
         {
             throw new InvalidDataException("SplitIdentifierHierarchy must have at least one value");
         }
-        SplitIdentifierHierarchy = splitIdentifierHierarchy;
-        IdentifiersToAddToBeginnings = identifiersToAddToBeginnings;
+
+        IdentifiersToAddToBeginnings = new();
+        IdentifiersToAddToBeginnings.AddRange(identifiersToAddToBeginnings);
         MaxStringTokens = maxStringTokens;
     }
 
@@ -86,6 +90,7 @@ public class HierarchichalTextSplitter: TextSplitter
             (IdentifiersToAddToBeginnings.Contains(SplitIdentifierHierarchy[splitIdentifierIdx])
             ? SplitIdentifierHierarchy[splitIdentifierIdx] : "")
             + input.Substring(middleIndex + SplitIdentifierHierarchy[splitIdentifierIdx].Length);
+
         List<string> output = new List<string>();
 
         if (Measure(substr1) <= MaxStringTokens)

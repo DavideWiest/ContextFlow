@@ -21,7 +21,7 @@ public class Prompt
     {
         PromptAction = action;
     }
-    public Prompt UsingAttachments(List<Attachment> attachments)
+    public Prompt UsingAttachments(IEnumerable<Attachment> attachments)
     {
         Attachments.AddRange(attachments);
         return this;

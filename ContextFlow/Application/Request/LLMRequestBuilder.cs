@@ -53,14 +53,14 @@ public class LLMRequestBuilder
 
     protected void Validate()
     {
-        List<string> missingElements = new();
+        IEnumerable<string> missingElements;
         if (!ConfigurationIsComplete(out missingElements))
         {
             throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + string.Join(", ", missingElements));
         }
     }
 
-    public bool ConfigurationIsComplete(out List<string> missingElements)
+    public bool ConfigurationIsComplete(out IEnumerable<string> missingElements)
     {
         var missingElementsDict = new Dictionary<string, bool>();
         missingElementsDict["Prompt"] = Prompt == null;
@@ -68,7 +68,7 @@ public class LLMRequestBuilder
         missingElementsDict["LLMConnection"] = LLMConnection == null;
         missingElementsDict["RequestConfig"] = RequestConfig == null;
 
-        missingElements = missingElementsDict.Keys.Where(k => missingElementsDict[k]).ToList();
-        return missingElements.Count == 0;
+        missingElements = missingElementsDict.Keys.Where(k => missingElementsDict[k]);
+        return missingElements.ToList().Count == 0;
     }
 }

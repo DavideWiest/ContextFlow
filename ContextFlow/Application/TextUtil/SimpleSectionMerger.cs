@@ -27,7 +27,7 @@ public class SimpleSectionMerger : TextMerger
         SectionIdentifiersWithJoinStrings = sectionIdentifiersWithJoinStrings;
     }
 
-    public override string Merge(List<string> inputs)
+    public override string Merge(IEnumerable<string> inputs)
     {
         Dictionary<string, List<string>> groupedSections = new();
 

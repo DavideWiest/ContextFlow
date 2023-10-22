@@ -20,7 +20,7 @@ internal class SmartFormatterFmtr: Formatter
         return formatter.Format(str, data);
     }
 
-    public override List<string> GetUndefinedPlaceholderValues(string str, Dictionary<string, object> formatParams)
+    public override List<string> GetUndefinedPlaceholderValues(string str, Dictionary<string, object> placeholderValues)
     {
         var placeholderMatches = Regex.Matches(str, @"\{([^{}\s]+)\}");
         var unreplacedPlaceholders = new List<string>();
@@ -29,8 +29,8 @@ internal class SmartFormatterFmtr: Formatter
         {
             string placeholder = match.Groups[1].Value;
 
-            // Check if the placeholder exists in the formatParams
-            if (!formatParams.ContainsKey(placeholder))
+            // Check if the placeholder exists in the placeholderValues
+            if (!placeholderValues.ContainsKey(placeholder))
             {
                 unreplacedPlaceholders.Add(placeholder);
             }
