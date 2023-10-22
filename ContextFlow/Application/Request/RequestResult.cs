@@ -45,9 +45,9 @@ public class RequestResult
         AdditionalData = result.AdditionalData;
     }
 
-    public ParsedRequestResult<T> Parse<T>(CFConverter<T> converter, dynamic? data = null)
+    public ParsedRequestResult<T> Parse<T>(ToObjectConverter<T> converter)
     {
-        ParsedRequestResult<T> parsedResult = converter.FromString(RawOutput, data);
+        ParsedRequestResult<T> parsedResult = new(this, converter.Convert(RawOutput));
         return parsedResult;
     }
 }

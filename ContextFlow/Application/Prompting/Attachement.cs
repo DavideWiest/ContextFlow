@@ -8,13 +8,19 @@ namespace ContextFlow.Application.Prompting;
 
 public class Attachment
 {
-    public string Name { get; set; }
+    public string? Name { get; set; } = null;
     public string Content { get; set; }
     public bool IsInline { get; set; } = false;
 
-    public Attachment(string name, string content, bool isInline)
+    public Attachment(string? name, string content, bool isInline)
     {
         Name = name;
+        Content = content;
+        IsInline = isInline;
+    }
+
+    public Attachment(string content, bool isInline)
+    {
         Content = content;
         IsInline = isInline;
     }
@@ -22,7 +28,8 @@ public class Attachment
     public string ToPlainText()
     {
         string sep = !IsInline ? "\n" : "";
-        return $"{Name}: {sep}{Content}";
+        string namestr = Name != null && Name != string.Empty && Name != "" ? Name + ": " : string.Empty;
+        return $"{namestr}{sep}{Content}\n";
     }
 
     public override string ToString()

@@ -31,17 +31,26 @@ public class SimpleSectionMerger : TextMerger
     {
         Dictionary<string, List<string>> groupedSections = new();
 
-        
 
         foreach (var input in inputs)
         {
-            // Find all existing sections using their identifiers
+            string taggedInput = input;
+
             foreach (var identifier in SectionIdentifiersWithJoinStrings.Keys)
             {
-                foreach (var section in input.Replace(identifier, StartIdentifier + identifier + EndIdentifier).Split(StartIdentifier))
-                {
-                    groupedSections[section.Split(EndIdentifier)[0]].Add(section.Split(EndIdentifier)[1]);
-                }
+                taggedInput = taggedInput.Replace(identifier, StartIdentifier + identifier + EndIdentifier);
+            }
+
+            // Find all existing sections using their identifiers
+            foreach (var section in taggedInput.Split(StartIdentifier))
+            {
+                if (!SectionIdentifiersWithJoinStrings.Keys.Any(section.StartsWith))
+                    continue;
+
+                if (!groupedSections.ContainsKey(section.Split(EndIdentifier)[0]))
+                    groupedSections[section.Split(EndIdentifier)[0]] = new List<string>();
+
+                groupedSections[section.Split(EndIdentifier)[0]].Add(section.Split(EndIdentifier)[1].Trim());
             }
         }
 

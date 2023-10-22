@@ -23,6 +23,15 @@ public class TextMergerTest
     [Test]
     public void TestSectionMerger()
     {
-        Assert.Pass();
+        // Arrange
+        var merger = new SimpleSectionMerger(new() { { "A: ", "\n" }, { "B: ", " - " } });
+        var inputs = new List<string> { "A: apple apple B: banana banana", "B: pineapple A: strawberry B: avocado" };
+
+        // Act
+        string output = merger.Merge(inputs);
+
+        // Assert
+        string expectedOutput = "A: apple apple\nstrawberry B: banana banana - pineapple - avocado";
+        Assert.That(output, Is.EqualTo(expectedOutput));
     }
 }
