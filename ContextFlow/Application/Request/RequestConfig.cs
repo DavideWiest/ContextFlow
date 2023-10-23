@@ -1,4 +1,5 @@
-﻿using ContextFlow.Application.Strategy;
+﻿using ContextFlow.Application.State;
+using ContextFlow.Application.Strategy;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 
@@ -9,6 +10,8 @@ public class RequestConfig
     public List<IFailStrategy> FailStrategies { get; private set; } = new() { new LLMFailStrategyThrowException() };
     //public OverflowStrategy OverflowStrategy = new InputOverflowStrategyThrowException();
     public CFLogger Logger { get; private set; }  = new CFSerilogLogger();
+    public RequestLoader? RequestLoader { get; private set; }
+    public RequestSaver? RequestSaver { get; private set; }
 
     public bool ValidateNumInputTokensBeforeRequest { get; private set; } = false;
     public bool RaiseExceptionOnOutputOverflow { get; set; } = false;
@@ -58,4 +61,15 @@ public class RequestConfig
         return this;
     }
 
+    public RequestConfig UsingRequestSaver(RequestSaver requestSaver)
+    {
+        RequestSaver = stateSaver;
+        return this;
+    }
+
+    public RequestConfig UsingRequestLoader(RequestLoader requestLoader)
+    {
+        RequestLoader = stateLoader;
+        return this;
+    }
 }

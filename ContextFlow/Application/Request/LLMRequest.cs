@@ -2,6 +2,7 @@
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Application.Prompting;
 using OpenAI_API.Moderation;
+using ContextFlow.Application.State;
 
 namespace ContextFlow.Application.Request;
 
@@ -29,6 +30,29 @@ public class LLMRequest
             RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
+        RequestResult? result = TryLoadResult();
+
+        if (result == null)
+        {
+            result = GetResultFromLLM();
+        }
+
+        RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
+
+        return result;
+    }
+
+    private RequestResult? TryLoadResult()
+    {
+        if (RequestConfig.RequestLoader != null)
+        {
+            return RequestConfig.RequestLoader.LoadMatchIfExists(this);
+        }
+        return null;
+    }
+
+    private RequestResult GetResultFromLLM()
+    {
         RequestResult result;
         try
         {
@@ -36,7 +60,8 @@ public class LLMRequest
 
             if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
                 throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             RequestConfig.Logger.Error($"Caught Error {nameof(e)}: {e.Message}");
             RequestResult? possibleResult = UseFailStrategies(e);
@@ -47,9 +72,6 @@ public class LLMRequest
             }
             result = possibleResult;
         }
-
-        RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
-
         return result;
     }
 

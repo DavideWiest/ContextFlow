@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application.Prompting.Info;
+using ContextFlow.Infrastructure.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,4 @@ public static class PromptTemplates
     {
         return new Prompt(ActionDescriptions.Aggregate).UsingAttachments(texts.Select(t => new Attachment(t, false)));
     }
-
-
 }
