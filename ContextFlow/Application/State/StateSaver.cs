@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Domain;
+namespace ContextFlow.Application.State;
 
-public class TokenOverflowException : Exception
+public abstract class StateSaver
 {
+    public abstract void SaveState();
 }

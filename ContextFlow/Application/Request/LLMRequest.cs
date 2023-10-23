@@ -33,6 +33,9 @@ public class LLMRequest
         try
         {
             result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
+
+            if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
+                throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
         } catch (Exception e)
         {
             RequestConfig.Logger.Error($"Caught Error {nameof(e)}: {e.Message}");
@@ -61,5 +64,16 @@ public class LLMRequest
             }
         }
         return null;
+    }
+
+    public LLMRequest UsingOutputLimitAttachment(double tokenToWordRatio, double marginOfSafetyMul)
+    {
+        if (tokenToWordRatio < 0) { throw new InvalidDataException("tokenToWordRatio must be positive");  }
+        if (marginOfSafetyMul < 0 || marginOfSafetyMul > 1) { throw new InvalidDataException("marginOfSafetyMul must be between 0 and 1."); }
+
+        int availableTokenSpace = LLMConfig.MaxTotalTokens - LLMConfig.MaxInputTokens;
+        int availableWords = (int)Math.Round(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
+        Prompt.UsingAttachment("Output length", $"The output must be under {availableWords} words long");
+        return this;
     }
 }

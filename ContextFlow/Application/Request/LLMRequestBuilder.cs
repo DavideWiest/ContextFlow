@@ -6,7 +6,6 @@ namespace ContextFlow.Application.Request;
 
 public class LLMRequestBuilder
 {
-
     protected Prompt? Prompt;
     protected LLMConfig? LLMConfig;
     protected LLMConnection? LLMConnection;

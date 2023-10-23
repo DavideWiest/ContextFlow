@@ -17,4 +17,6 @@ public static class PromptTemplates
     {
         return new Prompt(ActionDescriptions.Aggregate).UsingAttachments(texts.Select(t => new Attachment(t, false)));
     }
+
+
 }

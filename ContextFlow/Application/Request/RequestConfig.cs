@@ -1,12 +1,13 @@
-﻿using ContextFlow.Infrastructure.Logging;
+﻿using ContextFlow.Application.Strategy;
+using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request;
 
 public class RequestConfig
 {
-    public List<IFailStrategy> FailStrategies { get; private set; } = new() { new FailStrategyThrowException() };
-    //public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
+    public List<IFailStrategy> FailStrategies { get; private set; } = new() { new LLMFailStrategyThrowException() };
+    //public OverflowStrategy OverflowStrategy = new InputOverflowStrategyThrowException();
     public CFLogger Logger { get; private set; }  = new CFSerilogLogger();
 
     public bool ValidateNumInputTokensBeforeRequest { get; private set; } = false;
@@ -26,7 +27,7 @@ public class RequestConfig
         return this;
     }
 
-    public RequestConfig UsingOverflowStrategy(OverflowStrategy overflowStrategy)
+    public RequestConfig UsingOverflowStrategy(InputOverflowStrategy overflowStrategy)
     {
         FailStrategies.Add(overflowStrategy);
         return this;

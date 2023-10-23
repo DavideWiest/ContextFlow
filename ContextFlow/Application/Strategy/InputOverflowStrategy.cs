@@ -2,27 +2,27 @@
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
 
-namespace ContextFlow.Application;
+namespace ContextFlow.Application.Strategy;
 
-public abstract class OverflowStrategy : FailStrategy<TokenOverflowException>
+public abstract class InputOverflowStrategy : FailStrategy<InputOverflowException>
 {
-    public abstract override RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e);
+    public abstract override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e);
 }
 
-public class OverflowStrategySplitText : OverflowStrategy
+public class InputOverflowStrategySplitText : InputOverflowStrategy
 {
     private TextSplitter Splitter;
     private TextMerger Merger;
     private string SplitAttachmentName;
 
-    public OverflowStrategySplitText(TextSplitter splitter, TextMerger merger, string splitAttachmentName)
+    public InputOverflowStrategySplitText(TextSplitter splitter, TextMerger merger, string splitAttachmentName)
     {
         Splitter = splitter;
         Merger = merger;
         SplitAttachmentName = splitAttachmentName;
     }
 
-    public override RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e)
+    public override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
 
@@ -35,10 +35,10 @@ public class OverflowStrategySplitText : OverflowStrategy
 
         var attachmentContentFragments = Splitter.Split(attachment.Content);
 
-        request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + String.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
+        request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + string.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
 
         List<RequestResult> results = new List<RequestResult>();
-        foreach ( var fragment in attachmentContentFragments )
+        foreach (var fragment in attachmentContentFragments)
         {
             results.Add(new LLMRequestBuilder(request)
             .UsingPrompt(request.Prompt.UsingAttachment(SplitAttachmentName, fragment))
@@ -49,9 +49,9 @@ public class OverflowStrategySplitText : OverflowStrategy
     }
 }
 
-public class OverflowStrategyThrowException : OverflowStrategy
+public class InputOverflowStrategyThrowException : InputOverflowStrategy
 {
-    public override RequestResult ExecuteStrategy(LLMRequest request, TokenOverflowException e)
+    public override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e)
     {
         throw e;
     }
