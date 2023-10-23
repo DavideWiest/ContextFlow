@@ -10,6 +10,7 @@ public class RequestConfig
     public CFLogger Logger { get; private set; }  = new CFSerilogLogger();
 
     public bool ValidateNumInputTokensBeforeRequest { get; private set; } = false;
+    public bool RaiseExceptionOnOutputOverflow { get; set; } = false;
 
     public LLMTokenizer? Tokenizer { get; private set; } = null;
 
@@ -41,6 +42,12 @@ public class RequestConfig
     public RequestConfig DeactivateCheckNumTokensBeforeRequest()
     {
         ValidateNumInputTokensBeforeRequest = false;
+        return this;
+    }
+
+    public RequestConfig UsingRaiseExceptionOnOutputOverflow(bool raiseExceptionOnOutputOverflow)
+    {
+        RaiseExceptionOnOutputOverflow = raiseExceptionOnOutputOverflow;
         return this;
     }
 

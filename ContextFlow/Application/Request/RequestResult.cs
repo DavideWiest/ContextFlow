@@ -51,13 +51,38 @@ public class RequestResult
         return parsedResult;
     }
 
+    public ParsedRequestResult<T> Parse<T>(Func<RequestResult, T> converter)
+    {
+        ParsedRequestResult<T> parsedResult = new(this, converter(this));
+        return parsedResult;
+    }
+
+    public virtual RequestResult SaveAndContinue(out RequestResult varToSaveTo)
+    {
+        varToSaveTo = this;
+        return this;
+    }
+
     public virtual RequestResult ThenLinear(Func<RequestResult, LLMRequest> funcForNextRequest)
     {
         return funcForNextRequest(this).Complete();
     }
 
+    public virtual RequestResult? ThenLinearCondititonal(Func<RequestResult, bool> condition, Func<RequestResult, LLMRequest> funcForNextRequest)
+    {
+        if (condition(this))
+            return funcForNextRequest(this).Complete();
+
+        return null;
+    }
+
     public virtual IEnumerable<RequestResult> ThenBranching(Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
     {
         return funcForNextRequest(this).Select(r => r.Complete());
+    }
+
+    public virtual IEnumerable<RequestResult> ThenBranchingConditional(Func<RequestResult, bool> condition, Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
+    {
+        return funcForNextRequest(this).Select(r => r.Complete()).Where(res => condition(res));
     }
 }
