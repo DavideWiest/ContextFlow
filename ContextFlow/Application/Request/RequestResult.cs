@@ -50,4 +50,14 @@ public class RequestResult
         ParsedRequestResult<T> parsedResult = new(this, converter.Convert(RawOutput));
         return parsedResult;
     }
+
+    public virtual RequestResult ThenLinear(Func<RequestResult, LLMRequest> funcForNextRequest)
+    {
+        return funcForNextRequest(this).Complete();
+    }
+
+    public virtual IEnumerable<RequestResult> ThenBranching(Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
+    {
+        return funcForNextRequest(this).Select(r => r.Complete());
+    }
 }
