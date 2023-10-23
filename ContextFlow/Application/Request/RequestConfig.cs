@@ -5,17 +5,23 @@ namespace ContextFlow.Application.Request;
 
 public class RequestConfig
 {
-    public List<IFailStrategy> FailStrategies = new() { new FailStrategyThrowException() };
+    public List<IFailStrategy> FailStrategies { get; private set; } = new() { new FailStrategyThrowException() };
     //public OverflowStrategy OverflowStrategy = new OverflowStrategyThrowException();
-    public CFLogger Logger = new CFSerilogLogger();
+    public CFLogger Logger { get; private set; }  = new CFSerilogLogger();
 
-    public bool ValidateNumInputTokensBeforeRequest { get; private set; } = true;
+    public bool ValidateNumInputTokensBeforeRequest { get; private set; } = false;
 
-    public LLMTokenizer? Tokenizer = null;
+    public LLMTokenizer? Tokenizer { get; private set; } = null;
 
     public RequestConfig UsingFailStrategy(IFailStrategy failStrategy)
     {
         FailStrategies.Add(failStrategy);
+        return this;
+    }
+
+    public RequestConfig UsingTokenizer(LLMTokenizer? tokenizer)
+    {
+        Tokenizer = tokenizer;
         return this;
     }
 

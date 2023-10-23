@@ -10,5 +10,4 @@ namespace ContextFlow.Application.Pipeline;
 public abstract class Pipeline
 { 
 
-
 }

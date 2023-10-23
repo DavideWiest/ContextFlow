@@ -14,8 +14,8 @@ public class TextMergerTest
     [Test]
     public void TestFunctionMerger()
     {
-        var splitter = new FunctionTextMerger(x => String.Join(", ", x));
-        var output = splitter.Merge(new() { "Test", "test", "test"});
+        var merger = new FunctionTextMerger(x => String.Join(", ", x));
+        var output = merger.Merge(new string[] { "Test", "test", "test" });
 
         Assert.That(output, Is.EqualTo("Test, test, test"));
     }
