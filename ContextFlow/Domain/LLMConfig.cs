@@ -70,4 +70,9 @@ public class LLMConfig
         NumOutputs = numOutputs;
         return this;
     }
+
+    public string ToString()
+    {
+
+    }
 }

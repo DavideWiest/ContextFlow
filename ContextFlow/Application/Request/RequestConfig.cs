@@ -63,13 +63,18 @@ public class RequestConfig
 
     public RequestConfig UsingRequestSaver(RequestSaver requestSaver)
     {
-        RequestSaver = stateSaver;
+        RequestSaver = requestSaver;
         return this;
     }
 
     public RequestConfig UsingRequestLoader(RequestLoader requestLoader)
     {
-        RequestLoader = stateLoader;
+        RequestLoader = requestLoader;
         return this;
+    }
+
+    public string ToString()
+    {
+
     }
 }
