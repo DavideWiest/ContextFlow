@@ -24,7 +24,7 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
 
     public override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e)
     {
-        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
+        request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
 
         var attachment = request.Prompt.Attachments.FirstOrDefault(a => a.Name == SplitAttachmentName);
         if (attachment == null)

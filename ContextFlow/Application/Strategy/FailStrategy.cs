@@ -15,10 +15,10 @@ public abstract class FailStrategy<TException> : IFailStrategy where TException 
     {
         if (e is TException typedException)
         {
-            request.RequestConfig.Logger.Information($"{GetType()} handling the Exception {e.GetType()}.");
+            request.RequestConfig.Logger.Information($"{GetType().Name} handling the Exception {e.GetType().Name}.");
             return ExecuteStrategy(request, typedException);
         }
-        request.RequestConfig.Logger.Debug($"{GetType()} not handling the Exception {e.GetType()} - Not of the specified type");
+        request.RequestConfig.Logger.Debug($"{GetType().Name} not handling the Exception {e.GetType().Name} - Not of the specified type");
         return null;
     }
 

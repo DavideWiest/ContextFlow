@@ -71,8 +71,8 @@ public class LLMConfig
         return this;
     }
 
-    public string ToString()
+    public override string ToString()
     {
-
+        return $"LLMConfig(ModelName=\"{ModelName}\", SystemMessage=\"{SystemMessage}\", MaxTotalTokens={MaxTotalTokens}, MaxInputTokens={MaxInputTokens}, Temperature={Temperature}, TopP={TopP}, FrequencyPenalty={FrequencyPenalty}, PresencePenalty={PresencePenalty}, NumOutputs={NumOutputs})";
     }
 }

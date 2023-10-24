@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ContextFlow.Application.Storing;
 
-namespace ContextFlow.Application.Storing;
+namespace ContextFlow.Application.Storage;
 
 public abstract class RequestSaver
 {

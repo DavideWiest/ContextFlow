@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ContextFlow.Application.Storing;
+namespace ContextFlow.Application.Storage;
 
 public class RequestHasher
 {

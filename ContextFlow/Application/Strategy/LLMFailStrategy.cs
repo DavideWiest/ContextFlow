@@ -26,11 +26,11 @@ public class LLMFailStrategyRetrySameSettings : FailStrategy<LLMException>
 
     public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
     {
-        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy (Retry-count={RetryCount})");
+        request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
         FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries ?
                 new LLMFailStrategyRetrySameSettings(RetryCount + 1, MaxRetries)
-                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType()} because the retry-limit was reached");
+                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
 
         return new LLMRequestBuilder(request)
             .UsingRequestConfig(request.RequestConfig.UsingFailStrategy(
@@ -68,11 +68,11 @@ public class LLMFailStrategyRetryNewSettings : FailStrategy<LLMException>
 
     public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
     {
-        request.RequestConfig.Logger.Debug($"{GetType()} executing its strategy (Retry-count={RetryCount})");
+        request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
         FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries - 1 ?
                 new LLMFailStrategyRetryNewSettings(RetryCount + 1, MaxRetries, LLMConf, RequestConf, Prompt)
-                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType()} because the retry-limit was reached");
+                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
 
         return new LLMRequestBuilder(request)
             .UsingRequestConfig(request.RequestConfig.UsingFailStrategy(

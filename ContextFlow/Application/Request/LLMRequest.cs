@@ -2,7 +2,7 @@
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Application.Prompting;
 using OpenAI_API.Moderation;
-using ContextFlow.Application.State;
+using ContextFlow.Application.Storage;
 
 namespace ContextFlow.Application.Request;
 

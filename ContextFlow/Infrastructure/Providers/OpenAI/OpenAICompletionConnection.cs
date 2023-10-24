@@ -31,8 +31,8 @@ public class OpenAICompletionConnectionAsync : LLMConnection
         }
         catch (Exception e)
         {
-            log.Error($"Failed to get the output from the LLM. Exception: {e.GetType()}: {e.Message}");
-            throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType()}: {e.Message}");
+            log.Error($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
+            throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
     }
 }
