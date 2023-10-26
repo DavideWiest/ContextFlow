@@ -1,11 +1,6 @@
 ﻿using ContextFlow.Application.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ContextFlow.Application.Storing;
+using Serilog.Core;
 
 namespace ContextFlow.Application.Storage;
 
@@ -28,16 +23,21 @@ public class JsonRequestSaver : RequestSaver
     public override void SaveRequest(LLMRequest request, RequestResult result)
     {
         // Generate a unique key for the saved data
-        string key = RequestHasher.GenerateKey(request);
+        (string key1, string key2) = RequestHasher.GenerateKeys(request);
+
+        request.RequestConfig.Logger.Information("Storing request with prompt-key {promptKey} and llmconfig-key {llmconfigKey}", key1, key2);
 
         // Create a dictionary with the request and response
-        var data = new Dictionary<string, Dictionary<string, object>>
+        var data = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>
         {
-            {
-                key, new Dictionary<string, object>
+            {key1, new Dictionary<string, Dictionary<string, object>>
                 {
-                    { "request", request },
-                    { "response", result }
+                    {key2, new Dictionary<string, object> 
+                        {
+                            { "request", request },
+                            { "response", result } 
+                        } 
+                    }
                 }
             }
         };
@@ -45,9 +45,18 @@ public class JsonRequestSaver : RequestSaver
         // Load existing data if the file already exists
         if (File.Exists(FileName))
         {
-            var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(File.ReadAllText(FileName));
-            existingData[key] = data[key]; // Merge or overwrite data with the same key
+            var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
+            if (!existingData.ContainsKey(key2))
+            {
+                existingData[key1] = new Dictionary<string, Dictionary<string, object>>();
+            } 
+
+            existingData[key1][key2] = data[key1][key2]; // Merge or overwrite data with the same key
+
             data = existingData;
+        } else
+        {
+            request.RequestConfig.Logger.Debug("File {fileName} does not seem to exist. Creating it now.", FileName);
         }
 
         // Serialize the data to JSON
