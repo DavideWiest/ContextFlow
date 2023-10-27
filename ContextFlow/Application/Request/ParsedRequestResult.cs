@@ -14,17 +14,17 @@ public class ParsedRequestResult<T>: RequestResult
         ParsedOutput = parsedOutput;
     }
 
-    public RequestResult ThenLinear(Func<ParsedRequestResult<T>, LLMRequest> funcForNextRequest)
+    public RequestResult Then(Func<ParsedRequestResult<T>, LLMRequest> funcForNextRequest)
     {
         return funcForNextRequest(this).Complete();
     }
 
-    public RequestResult? ThenLinearCondititonal(Func<ParsedRequestResult<T>, bool> condition, Func<ParsedRequestResult<T>, LLMRequest> funcForNextRequest)
+    public RequestResult ThenConditional(Func<ParsedRequestResult<T>, bool> condition, Func<ParsedRequestResult<T>, ParsedRequestResult<T>> funcForNextRequest)
     {
         if (condition(this))
-            return funcForNextRequest(this).Complete();
+            return funcForNextRequest(this);
 
-        return null;
+        return this;
     }
 
     public IEnumerable<RequestResult> ThenBranching(Func<ParsedRequestResult<T>, IEnumerable<LLMRequest>> funcForNextRequest)
@@ -32,8 +32,9 @@ public class ParsedRequestResult<T>: RequestResult
         return funcForNextRequest(this).Select(r => r.Complete());
     }
 
-    public IEnumerable<RequestResult> ThenBranchingConditional(Func<RequestResult, bool> condition, Func<ParsedRequestResult<T>, IEnumerable<LLMRequest>> funcForNextRequest)
+    public (IEnumerable<RequestResult> Passed, IEnumerable<RequestResult> Failed) ThenBranchingConditional(Func<RequestResult, bool> condition, Func<ParsedRequestResult<T>, IEnumerable<LLMRequest>> funcForNextRequest)
     {
-        return funcForNextRequest(this).Select(r => r.Complete()).Where(res => condition(res));
+        var results = funcForNextRequest(this).Select(result => result.Complete());
+        return Partition(results, condition);
     }
 }

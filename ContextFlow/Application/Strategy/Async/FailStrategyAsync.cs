@@ -10,12 +10,12 @@ namespace ContextFlow.Application.Strategy.Async;
 
 public interface IFailStrategyAsync
 {
-    public Task<RequestResult?> HandleExceptionAsync(LLMRequestAsync request, Exception e);
+    public Task<RequestResultAsync?> HandleExceptionAsync(LLMRequestAsync request, Exception e);
 }
 
 public abstract class FailStrategyAsync<TException> : IFailStrategyAsync where TException : Exception
 {
-    public async Task<RequestResult?> HandleExceptionAsync(LLMRequestAsync request, Exception e)
+    public async Task<RequestResultAsync?> HandleExceptionAsync(LLMRequestAsync request, Exception e)
     {
         if (e is TException typedException)
         {
@@ -26,5 +26,5 @@ public abstract class FailStrategyAsync<TException> : IFailStrategyAsync where T
         return null;
     }
 
-    public abstract Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, TException e);
+    public abstract Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, TException e);
 }

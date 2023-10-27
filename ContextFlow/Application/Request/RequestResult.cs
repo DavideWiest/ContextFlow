@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application;
+using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
 using OpenAI_API.Moderation;
@@ -10,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Request;
 
+public abstract class ResultAdditionalData
+{
+
+}
 
 /// <summary>
 /// The reponse of the LLM API, without the parsed version of the output
@@ -58,17 +63,17 @@ public class RequestResult
         return this;
     }
 
-    public virtual RequestResult ThenLinear(Func<RequestResult, LLMRequest> funcForNextRequest)
+    public virtual RequestResult Then(Func<RequestResult, LLMRequest> funcForNextRequest)
     {
         return funcForNextRequest(this).Complete();
     }
 
-    public virtual RequestResult? ThenLinearCondititonal(Func<RequestResult, bool> condition, Func<RequestResult, LLMRequest> funcForNextRequest)
+    public virtual RequestResult ThenConditional(Func<RequestResult, bool> condition, Func<RequestResult, LLMRequest> funcForNextRequest)
     {
         if (condition(this))
             return funcForNextRequest(this).Complete();
 
-        return null;
+        return this;
     }
 
     public virtual IEnumerable<RequestResult> ThenBranching(Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
@@ -76,13 +81,25 @@ public class RequestResult
         return funcForNextRequest(this).Select(r => r.Complete());
     }
 
-    public virtual IEnumerable<RequestResult> ThenBranchingConditional(Func<RequestResult, bool> condition, Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
+    public virtual (IEnumerable<RequestResult> Passed, IEnumerable<RequestResult> Failed) ThenBranchingConditional(Func<RequestResult, bool> condition, Func<RequestResult, IEnumerable<LLMRequest>> funcForNextRequest)
     {
-        return funcForNextRequest(this).Select(r => r.Complete()).Where(res => condition(res));
+        var results = funcForNextRequest(this).Select(result => result.Complete());
+        return Partition(results, condition);
     }
-}
 
-public abstract class ResultAdditionalData
-{
+    protected static (IEnumerable<T> Passed, IEnumerable<T> Failed) Partition<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    {
+        var trueList = new List<T>();
+        var falseList = new List<T>();
 
+        foreach (var item in source)
+        {
+            if (predicate(item))
+                trueList.Add(item);
+            else
+                falseList.Add(item);
+        }
+
+        return (trueList, falseList);
+    }
 }

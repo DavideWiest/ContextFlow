@@ -2,7 +2,7 @@
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI.Async;
 
-using ContextFlow.Application.Request;
+using ContextFlow.Application.Request.Async;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
@@ -22,12 +22,12 @@ public class OpenAICompletionConnection : LLMConnectionAsync
         api = new();
     }
 
-    protected override async Task<RequestResult> CallAPIAsync(string input, LLMConfig conf, CFLogger log)
+    protected override async Task<RequestResultAsync> CallAPIAsync(string input, LLMConfig conf, CFLogger log)
     {
         try
         {
             var result = await OpenAIUtil.GetCompletionResult(api, input, conf, log);
-            return OpenAIUtil.CompletionResultToRequestResult(result);
+            return OpenAIUtil.CompletionResultToRequestResultAsync(result);
         }
         catch (Exception e)
         {

@@ -21,27 +21,28 @@ public class RequestResultAsync : RequestResult
     {
     }
 
-    public async Task<RequestResult> ThenLinear(Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
+    public async Task<RequestResultAsync> Then(Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
     {
-        return funcForNextRequest(this).Complete();
+        return await funcForNextRequest(this).CompleteAsync();
     }
 
-    public async Task<RequestResultAsync?> ThenLinearCondititonal(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
+    public async Task<RequestResultAsync> ThenConditional(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
     {
         if (condition(this))
-            return funcForNextRequest(this).Complete();
+            return await funcForNextRequest(this).CompleteAsync();
 
-        return null;
+        return this;
     }
 
     public async Task<IEnumerable<RequestResultAsync>> ThenBranching(Func<RequestResultAsync, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
-        return funcForNextRequest(this).Select(r => r.Complete());
+        var nextRequests = funcForNextRequest(this);
+       return await Task.WhenAll(nextRequests.Select(async r => await r.CompleteAsync()));
     }
 
-    public async Task<IEnumerable<RequestResultAsync>> ThenBranchingConditional(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, IEnumerable<LLMRequestAsync>> funcForNextRequest)
+    public async Task<(IEnumerable<RequestResultAsync> Passed, IEnumerable<RequestResultAsync> Failed)> ThenBranchingConditionalAsync(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
-        return funcForNextRequest(this).Select(r => r.Complete()).Where(res => condition(res));
+        var results = await Task.WhenAll(funcForNextRequest(this).Select(async r => await r.CompleteAsync()));
+        return Partition(results, condition);
     }
-
 }

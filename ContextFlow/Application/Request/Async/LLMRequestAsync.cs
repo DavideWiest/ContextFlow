@@ -15,7 +15,7 @@ public class LLMRequestAsync : LLMRequestBase
         RequestConfig = requestConfig;
     }
 
-    public async Task<RequestResult> CompleteAsync()
+    public async Task<RequestResultAsync> CompleteAsync()
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 
@@ -24,7 +24,7 @@ public class LLMRequestAsync : LLMRequestBase
             RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
-        RequestResult? result = TryLoadResult();
+        RequestResultAsync? result = TryLoadResult();
 
         if (result == null)
         {
@@ -36,18 +36,18 @@ public class LLMRequestAsync : LLMRequestBase
         return result;
     }
 
-    private RequestResult? TryLoadResult()
+    private async Task<RequestResultAsync?> TryLoadResult()
     {
         if (RequestConfig.RequestLoaderAsync != null)
         {
-            return RequestConfig.RequestLoaderAsync.LoadMatchIfExistsAsync(this);
+            return await RequestConfig.RequestLoaderAsync.LoadMatchIfExistsAsync(this);
         }
         return null;
     }
 
-    private async Task<RequestResult> GetResultFromLLMAsync()
+    private async Task<RequestResultAsync> GetResultFromLLMAsync()
     {
-        RequestResult result;
+        RequestResultAsync result;
         try
         {
             result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
@@ -58,7 +58,7 @@ public class LLMRequestAsync : LLMRequestBase
         catch (Exception e)
         {
             RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResult? possibleResult = await UseFailStrategiesAsync(e);
+            RequestResultAsync? possibleResult = await UseFailStrategiesAsync(e);
             if (possibleResult == null)
             {
                 RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
@@ -69,7 +69,7 @@ public class LLMRequestAsync : LLMRequestBase
         return result;
     }
 
-    private async Task<RequestResult?> UseFailStrategiesAsync(Exception e)
+    private async Task<RequestResultAsync?> UseFailStrategiesAsync(Exception e)
     {
         foreach (var strategy in RequestConfig.FailStrategies)
         {
