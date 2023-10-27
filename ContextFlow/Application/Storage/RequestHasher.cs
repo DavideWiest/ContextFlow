@@ -6,7 +6,7 @@ namespace ContextFlow.Application.Storage;
 
 public class RequestHasher
 {
-    public Tuple<string, string> GenerateKeys(LLMRequest request)
+    public Tuple<string, string> GenerateKeys(LLMRequestBase request)
     {
         return Tuple.Create(GenerateHashKey(request.Prompt.ToPlainText()), GenerateHashKey(request.LLMConfig.ToString()));
     }

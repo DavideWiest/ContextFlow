@@ -1,9 +1,4 @@
 ﻿using ContextFlow.Infrastructure.Formatter;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Prompting;
 
@@ -31,7 +26,7 @@ public class FormattablePrompt : Prompt
         ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
         Formatter = formatter;
     }
-
+    
     public FormattablePrompt UsingValue(string placeholder, string value)
     {
         FormatParameters[placeholder] = value;

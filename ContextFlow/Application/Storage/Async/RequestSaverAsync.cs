@@ -1,25 +1,25 @@
-﻿using ContextFlow.Application.Request;
+﻿using ContextFlow.Application.Request.Async;
 using Newtonsoft.Json;
 
-namespace ContextFlow.Application.Storage;
+namespace ContextFlow.Application.Storage.Async;
 
-public abstract class RequestSaver
+public abstract class RequestSaverAsync
 {
-    public abstract void SaveRequest(LLMRequest request, RequestResult result);
+    public abstract Task SaveRequestAsync(LLMRequestAsync request, RequestResultAsync result);
 }
 
-public class JsonRequestSaver : RequestSaver
+public class JsonRequestSaverAsync : RequestSaverAsync
 {
     private readonly string FileName;
     private RequestHasher RequestHasher;
 
-    public JsonRequestSaver(string fileName)
+    public JsonRequestSaverAsync(string fileName)
     {
         FileName = fileName;
         RequestHasher = new RequestHasher();
     }
 
-    public override void SaveRequest(LLMRequest request, RequestResult result)
+    public override async Task SaveRequestAsync(LLMRequestAsync request, RequestResultAsync result)
     {
         // Generate a unique key for the saved data
         (string key1, string key2) = RequestHasher.GenerateKeys(request);
@@ -31,12 +31,12 @@ public class JsonRequestSaver : RequestSaver
         {
             {key1, new Dictionary<string, Dictionary<string, object>>
                 {
-                    {key2, new Dictionary<string, object> 
+                    {key2, new Dictionary<string, object>
                         {
                             { "request", request },
                             { "response", result },
                             { "timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
-                        } 
+                        }
                     }
                 }
             }
@@ -48,13 +48,14 @@ public class JsonRequestSaver : RequestSaver
             var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
             if (!existingData.ContainsKey(key2))
             {
-                existingData[key1] = new Dictionary<string, Dictionary<string, object>>();
-            } 
+                existingData[key1] = new Dictionary<string, Dictionary<string, object>();
+            }
 
             existingData[key1][key2] = data[key1][key2]; // Merge or overwrite data with the same key
 
             data = existingData;
-        } else
+        }
+        else
         {
             request.RequestConfig.Logger.Debug("File {fileName} does not seem to exist. Creating it now.", FileName);
         }
@@ -62,7 +63,7 @@ public class JsonRequestSaver : RequestSaver
         // Serialize the data to JSON
         string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
 
-        // Create or open the JSON file and write the data
-        File.WriteAllText(FileName, jsonData);
+        // Create or open the JSON file and write the data asynchronously
+        await File.WriteAllTextAsync(FileName, jsonData);
     }
 }

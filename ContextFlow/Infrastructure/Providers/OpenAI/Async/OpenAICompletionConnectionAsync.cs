@@ -1,6 +1,6 @@
 ﻿using OpenAI_API;
 
-namespace ContextFlow.Infrastructure.Providers.OpenAI;
+namespace ContextFlow.Infrastructure.Providers.OpenAI.Async;
 
 using ContextFlow.Application.Request;
 using ContextFlow.Domain;

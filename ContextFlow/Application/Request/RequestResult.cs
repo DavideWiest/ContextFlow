@@ -1,5 +1,6 @@
 ﻿using ContextFlow.Application;
 using ContextFlow.Application.TextUtil;
+using ContextFlow.Domain;
 using OpenAI_API.Moderation;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,6 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Request;
 
-public enum FinishReason
-{
-    Overflow,
-    Stop,
-    Unknown
-}
 
 /// <summary>
 /// The reponse of the LLM API, without the parsed version of the output
@@ -23,7 +18,7 @@ public class RequestResult
 {
     public string RawOutput { get; }
     public FinishReason FinishReason { get; }
-    public dynamic? AdditionalData { get; }  = null;
+    public ResultAdditionalData? AdditionalData { get; }  = null;
 
     public RequestResult(string rawOutput, FinishReason finishReason)
     {
@@ -31,7 +26,7 @@ public class RequestResult
         FinishReason = finishReason;
     }
 
-    public RequestResult(string rawOutput, FinishReason finishReason, dynamic additionalData)
+    public RequestResult(string rawOutput, FinishReason finishReason, ResultAdditionalData additionalData)
     {
         RawOutput = rawOutput;
         FinishReason = finishReason;
@@ -57,7 +52,7 @@ public class RequestResult
         return parsedResult;
     }
 
-    public virtual RequestResult SaveAndContinue(out RequestResult varToSaveTo)
+    public RequestResult SaveAndContinue(out RequestResult varToSaveTo)
     {
         varToSaveTo = this;
         return this;
@@ -85,4 +80,9 @@ public class RequestResult
     {
         return funcForNextRequest(this).Select(r => r.Complete()).Where(res => condition(res));
     }
+}
+
+public abstract class ResultAdditionalData
+{
+
 }

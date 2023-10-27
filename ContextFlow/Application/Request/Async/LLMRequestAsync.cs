@@ -1,21 +1,21 @@
-﻿using ContextFlow.Domain;
+﻿using ContextFlow.Application.Prompting;
+using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
-using ContextFlow.Application.Prompting;
 
-namespace ContextFlow.Application.Request;
+namespace ContextFlow.Application.Request.Async;
 
-public class LLMRequest : LLMRequestBase
+public class LLMRequestAsync : LLMRequestBase
 {
-    public LLMConnection LLMConnection { get; }
-    public RequestConfig RequestConfig { get; }
+    public LLMConnectionAsync LLMConnection { get; }
+    public RequestConfigAsync RequestConfig { get; }
 
-    public LLMRequest(Prompt prompt, LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf) : base(prompt, llmconf)
+    public LLMRequestAsync(Prompt prompt, LLMConfig llmconf, LLMConnectionAsync llmcon, RequestConfigAsync requestConfig) : base(prompt, llmconf)
     {
         LLMConnection = llmcon;
-        RequestConfig = requestconf;
+        RequestConfig = requestConfig;
     }
 
-    public RequestResult Complete()
+    public async Task<RequestResult> CompleteAsync()
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 
@@ -28,7 +28,7 @@ public class LLMRequest : LLMRequestBase
 
         if (result == null)
         {
-            result = GetResultFromLLM();
+            result = await GetResultFromLLMAsync();
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
@@ -38,19 +38,19 @@ public class LLMRequest : LLMRequestBase
 
     private RequestResult? TryLoadResult()
     {
-        if (RequestConfig.RequestLoader != null)
+        if (RequestConfig.RequestLoaderAsync != null)
         {
-            return RequestConfig.RequestLoader.LoadMatchIfExists(this);
+            return RequestConfig.RequestLoaderAsync.LoadMatchIfExistsAsync(this);
         }
         return null;
     }
 
-    private RequestResult GetResultFromLLM()
+    private async Task<RequestResult> GetResultFromLLMAsync()
     {
         RequestResult result;
         try
         {
-            result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
+            result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
             if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
                 throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
@@ -58,7 +58,7 @@ public class LLMRequest : LLMRequestBase
         catch (Exception e)
         {
             RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResult? possibleResult = UseFailStrategies(e);
+            RequestResult? possibleResult = await UseFailStrategiesAsync(e);
             if (possibleResult == null)
             {
                 RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
@@ -69,11 +69,11 @@ public class LLMRequest : LLMRequestBase
         return result;
     }
 
-    private RequestResult? UseFailStrategies(Exception e)
+    private async Task<RequestResult?> UseFailStrategiesAsync(Exception e)
     {
         foreach (var strategy in RequestConfig.FailStrategies)
         {
-            var result = strategy.HandleException(this, e);
+            var result = await strategy.HandleExceptionAsync(this, e);
             if (result != null)
             {
                 return result;
