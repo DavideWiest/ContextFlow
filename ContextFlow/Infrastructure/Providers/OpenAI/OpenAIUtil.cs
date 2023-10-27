@@ -29,14 +29,14 @@ internal static class OpenAIUtil
     {
         string output = result.Choices[0].ToString();
         FinishReason finish = ToCFFinishReason(result.Choices[0].FinishReason);
-        return new RequestResult(output, finish);
+        return new RequestResultAsync(output, finish);
     }
 
     public static RequestResultAsync CompletionResultToRequestResultAsync(CompletionResult result)
     {
         string output = result.Completions[0].ToString();
         FinishReason finish = ToCFFinishReason(result.Completions[0].FinishReason);
-        return new RequestResult(output, finish);
+        return new RequestResultAsync(output, finish);
     }
 
     public static async Task<ChatResult> GetChatResult(OpenAIAPI api, string input, LLMConfig conf, CFLogger log)

@@ -24,7 +24,7 @@ public class LLMRequestAsync : LLMRequestBase
             RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
-        RequestResultAsync? result = TryLoadResult();
+        RequestResultAsync? result = await TryLoadResult();
 
         if (result == null)
         {

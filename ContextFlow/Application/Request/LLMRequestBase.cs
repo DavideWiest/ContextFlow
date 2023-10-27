@@ -15,13 +15,13 @@ public abstract class LLMRequestBase
         LLMConfig = llmConfig;
     }
 
-    public Attachment OutputLimitAttachment(int maxInputTokens, int maxTotalTokens, double tokenToWordRatio, double marginOfSafetyMul) {
+    public LLMRequestBase UsingOutputLimitAttachment(double tokenToWordRatio, double marginOfSafetyMul) {
         if (tokenToWordRatio < 0) { throw new InvalidDataException("tokenToWordRatio must be positive");  }
         if (marginOfSafetyMul < 0 || marginOfSafetyMul > 1) { throw new InvalidDataException("marginOfSafetyMul must be in the range of 0 and 1."); }
 
-        int availableTokenSpace = maxTotalTokens - maxInputTokens;
+        int availableTokenSpace = LLMConfig.MaxTotalTokens - LLMConfig.MaxInputTokens;
         int availableWords = (int)Math.Round(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
-        var attachment = new Attachment("Output length", $"The output must be under {availableWords} words long", true);
-        return attachment;
+        Prompt.UsingAttachmentInline("Output length", $"The output must be under {availableWords} words long");
+        return this;
     }
 }

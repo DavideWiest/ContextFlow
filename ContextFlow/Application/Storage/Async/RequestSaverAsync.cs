@@ -48,7 +48,7 @@ public class JsonRequestSaverAsync : RequestSaverAsync
             var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
             if (!existingData.ContainsKey(key2))
             {
-                existingData[key1] = new Dictionary<string, Dictionary<string, object>();
+                existingData[key1] = new Dictionary<string, Dictionary<string, object>>();
             }
 
             existingData[key1][key2] = data[key1][key2]; // Merge or overwrite data with the same key

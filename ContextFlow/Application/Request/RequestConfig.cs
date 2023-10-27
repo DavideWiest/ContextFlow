@@ -5,7 +5,7 @@ namespace ContextFlow.Application.Request;
 
 public class RequestConfig : RequestConfigBase
 {
-    public List<IFailStrategy> FailStrategies { get; private set; };
+    public List<IFailStrategy> FailStrategies { get; private set; } = new();
     public RequestLoader? RequestLoader { get; private set; }
     public RequestSaver? RequestSaver { get; private set; }
 

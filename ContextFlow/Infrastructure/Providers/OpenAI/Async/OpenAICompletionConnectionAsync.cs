@@ -7,16 +7,16 @@ using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 
-public class OpenAICompletionConnection : LLMConnectionAsync
+public class OpenAICompletionConnectionAsync : LLMConnectionAsync
 {
     OpenAIAPI api;
 
-    public OpenAICompletionConnection(string apiKey)
+    public OpenAICompletionConnectionAsync(string apiKey)
     {
         api = new(apiKey);
     }
 
-    public OpenAICompletionConnection()
+    public OpenAICompletionConnectionAsync()
     {
         // uses default, env ("OPENAI_API_KEY"), or config file
         api = new();

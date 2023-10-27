@@ -87,7 +87,7 @@ public class RequestResult
         return Partition(results, condition);
     }
 
-    protected static (IEnumerable<T> Passed, IEnumerable<T> Failed) Partition<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    protected static (IEnumerable<T> Passed, IEnumerable<T> Failed) Partition<T>(IEnumerable<T> source, Func<T, bool> predicate)
     {
         var trueList = new List<T>();
         var falseList = new List<T>();
