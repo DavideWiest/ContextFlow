@@ -7,15 +7,15 @@ namespace ContextFlow.Domain;
 /// </summary>
 public class LLMConfig
 {
-    public string ModelName;
-    public string SystemMessage = "You are a helpful assistant.";
-    public int MaxTotalTokens = 1024;
-    public int MaxInputTokens = 512;
-    public double Temperature = 0.3;
-    public double TopP = 1;
-    public double FrequencyPenalty = 0;
-    public double PresencePenalty = 0;
-    public int NumOutputs = 1;
+    public string ModelName { get; private set; }
+    public string SystemMessage { get; private set; } = "You are a helpful assistant.";
+    public int MaxTotalTokens { get; private set; } = 1024;
+    public int MaxInputTokens { get; private set; } = 512;
+    public double Temperature { get; private set; } = 0.3;
+    public double TopP { get; private set; } = 1;
+    public double FrequencyPenalty { get; private set; } = 0;
+    public double PresencePenalty { get; private set; } = 0;
+    public int NumOutputs { get; private set; } = 1;
 
     public LLMConfig(string modelName, int maxTotalTokens = 1024, int maxInputTokens = 512)
     {
@@ -36,15 +36,21 @@ public class LLMConfig
         return this;
     }
 
-    public LLMConfig UsingMaxLength(int maxLength)
+    public LLMConfig UsingMaxTotalTokens(int maxTotalTokens)
     {
-        MaxTotalTokens = maxLength;
+        if (maxTotalTokens <= MaxInputTokens)
+            throw new InvalidDataException($"Maximum total tokens must be greater than maximum input tokens [MaxInputTokens={MaxInputTokens}, inputted maxTotalTokens={maxTotalTokens}]");
+        
+        MaxTotalTokens = maxTotalTokens;
         return this;
     }
 
-    public LLMConfig UsingMaxInputLength(int maxInputLength)
+    public LLMConfig UsingMaxInputTokens(int maxInputTokens)
     {
-        MaxTotalTokens = maxInputLength;
+        if (MaxTotalTokens <= maxInputTokens)
+            throw new InvalidDataException($"Maximum total tokens must be greater than maximum input tokens [MaxTotalTokens={MaxTotalTokens}, inputted maxInputTokens={maxInputTokens}]");
+
+        MaxTotalTokens = maxInputTokens;
         return this;
     }
 

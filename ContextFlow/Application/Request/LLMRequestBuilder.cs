@@ -14,6 +14,8 @@ public class LLMRequestBuilder
     protected RequestConfig? RequestConfig;
     protected RequestConfigAsync? RequestConfigAsync;
 
+    public LLMRequestBuilder() { }
+
     public LLMRequestBuilder(LLMRequest request)
     {
         Prompt = request.Prompt;

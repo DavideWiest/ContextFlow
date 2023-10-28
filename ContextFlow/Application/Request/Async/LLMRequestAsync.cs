@@ -24,11 +24,22 @@ public class LLMRequestAsync : LLMRequestBase
             RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
         }
 
-        RequestResultAsync? result = await TryLoadResult();
+        RequestResultAsync result;
 
-        if (result == null)
+        try
         {
-            result = await GetResultFromLLMAsync();
+            result = await TryLoadResult() ?? await GetResultFromLLMAsync();
+        }
+        catch (Exception e)
+        {
+            RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
+            RequestResultAsync? possibleResult = await UseFailStrategiesAsync(e);
+            if (possibleResult == null)
+            {
+                RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
+                throw;
+            }
+            result = possibleResult;
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
@@ -48,24 +59,13 @@ public class LLMRequestAsync : LLMRequestBase
     private async Task<RequestResultAsync> GetResultFromLLMAsync()
     {
         RequestResultAsync result;
-        try
-        {
-            result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
+        
+        result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
-            if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
-                throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
-        }
-        catch (Exception e)
-        {
-            RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResultAsync? possibleResult = await UseFailStrategiesAsync(e);
-            if (possibleResult == null)
-            {
-                RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
-                throw;
-            }
-            result = possibleResult;
-        }
+        if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
+            throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
+        
+        
         return result;
     }
 

@@ -1,4 +1,4 @@
-namespace Tests;
+namespace Tests.Infrastructure;
 
 using ContextFlow.Infrastructure.Providers.OpenAI;
 using ContextFlow.Domain;
@@ -8,11 +8,7 @@ public class OpenAIConnectionTest
 {
 
     private OpenAIChatConnection llmconChat = new();
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
+
 
     [Test]
     public void TestChatRequest()

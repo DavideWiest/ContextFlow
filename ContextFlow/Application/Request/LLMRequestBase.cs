@@ -20,7 +20,7 @@ public abstract class LLMRequestBase
         if (marginOfSafetyMul < 0 || marginOfSafetyMul > 1) { throw new InvalidDataException("marginOfSafetyMul must be in the range of 0 and 1."); }
 
         int availableTokenSpace = LLMConfig.MaxTotalTokens - LLMConfig.MaxInputTokens;
-        int availableWords = (int)Math.Round(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
+        int availableWords = (int)Math.Floor(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
         Prompt.UsingAttachmentInline("Output length", $"The output must be under {availableWords} words long");
         return this;
     }

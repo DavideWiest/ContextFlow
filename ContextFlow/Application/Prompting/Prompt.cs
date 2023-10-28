@@ -57,17 +57,23 @@ public class Prompt
         return this;
     }
 
-    public Prompt UsingOutputDescription(string description)
+    public Prompt UpsertingAttachment(Attachment attachment)
     {
-        var a = Attachments.FirstOrDefault(a => a.Name == "Output format");
+        var a = Attachments.FirstOrDefault(a => a.Name == attachment.Name);
         if (a != null)
         {
-            a.Content = description;
+            a.Content = attachment.Content;
         }
         else
         {
-            UsingAttachmentInline("Output format", description);
+            UsingAttachment(attachment);
         }
+        return this;
+    }
+
+    public Prompt UsingOutputDescription(string description)
+    {
+        UpsertingAttachment(new Attachment("Output format", description, true));
         return this;
     }
 

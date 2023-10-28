@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Strategy;
 
-public class LLMFailStrategyRetrySameSettings : FailStrategy<LLMException>
+public class LLMFailStrategyRetrySameSettings<TException> : FailStrategy<TException> where TException : Exception
 {
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
@@ -24,13 +24,13 @@ public class LLMFailStrategyRetrySameSettings : FailStrategy<LLMException>
         RetryCount = retryCount;
     }
 
-    public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
+    public override RequestResult ExecuteStrategy(LLMRequest request, TException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
-        FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries ?
-                new LLMFailStrategyRetrySameSettings(RetryCount + 1, MaxRetries)
-                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
+        FailStrategy<TException> nextFailStrategy = RetryCount < MaxRetries ?
+                new LLMFailStrategyRetrySameSettings<TException>(RetryCount + 1, MaxRetries)
+                : new LLMFailStrategyThrowException<TException>($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
 
         return new LLMRequestBuilder(request)
             .UsingRequestConfig(request.RequestConfig.UsingFailStrategy(
@@ -40,7 +40,7 @@ public class LLMFailStrategyRetrySameSettings : FailStrategy<LLMException>
     }
 }
 
-public class LLMFailStrategyRetryNewSettings : FailStrategy<LLMException>
+public class LLMFailStrategyRetryNewSettings<TException> : FailStrategy<TException> where TException : Exception
 {
     public LLMConfig? LLMConf { get; }
     public RequestConfig? RequestConf { get; }
@@ -48,15 +48,15 @@ public class LLMFailStrategyRetryNewSettings : FailStrategy<LLMException>
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
 
-    public LLMFailStrategyRetryNewSettings(int maxRetries = 3, LLMConfig? llmConf = null, RequestConfig? requestConf = null, Prompt? prompt = null)
+    public LLMFailStrategyRetryNewSettings(int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null)
     {
-        LLMConf = llmConf;
-        RequestConf = requestConf;
-        Prompt = prompt;
+        LLMConf = newLLMConf;
+        RequestConf = newRequestConf;
+        Prompt = newPrompt;
         MaxRetries = maxRetries;
     }
 
-    public LLMFailStrategyRetryNewSettings(int retryCount, int maxRetries = 3, LLMConfig? llmConf = null, RequestConfig? requestConf = null, Prompt? prompt = null) : this(maxRetries, llmConf, requestConf, prompt)
+    public LLMFailStrategyRetryNewSettings(int retryCount, int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null) : this(maxRetries, newLLMConf, newRequestConf, newPrompt)
     {
         RetryCount = retryCount;
 
@@ -66,15 +66,18 @@ public class LLMFailStrategyRetryNewSettings : FailStrategy<LLMException>
         }
     }
 
-    public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
+    public override RequestResult ExecuteStrategy(LLMRequest request, TException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
-        FailStrategy<LLMException> nextFailStrategy = RetryCount < MaxRetries - 1 ?
-                new LLMFailStrategyRetryNewSettings(RetryCount + 1, MaxRetries, LLMConf, RequestConf, Prompt)
-                : new LLMFailStrategyThrowException($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
+        FailStrategy<TException> nextFailStrategy = RetryCount < MaxRetries - 1 ?
+                new LLMFailStrategyRetryNewSettings<TException>(RetryCount + 1, MaxRetries, LLMConf, RequestConf, Prompt)
+                : new LLMFailStrategyThrowException<TException>($"An exception has occured and was not handeled by the configured {GetType().Name} because the retry-limit was reached");
 
         return new LLMRequestBuilder(request)
+            .UsingPrompt(Prompt ?? request.Prompt)
+            .UsingLLMConfig(LLMConf ?? request.LLMConfig)
+            .UsingRequestConfig(RequestConf ?? request.RequestConfig)
             .UsingRequestConfig(request.RequestConfig.UsingFailStrategy(
                 nextFailStrategy
             ))
@@ -82,7 +85,7 @@ public class LLMFailStrategyRetryNewSettings : FailStrategy<LLMException>
     }
 }
 
-public class LLMFailStrategyThrowException : FailStrategy<LLMException>
+public class LLMFailStrategyThrowException<TException> : FailStrategy<TException> where TException : Exception
 {
     private readonly string? InfoMessage = null;
 
@@ -92,7 +95,7 @@ public class LLMFailStrategyThrowException : FailStrategy<LLMException>
         InfoMessage = infoMessage;
     }
 
-    public override RequestResult ExecuteStrategy(LLMRequest request, LLMException e)
+    public override RequestResult ExecuteStrategy(LLMRequest request, TException e)
     {
         if (InfoMessage != null)
         {

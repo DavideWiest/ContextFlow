@@ -1,12 +1,12 @@
 ﻿using ContextFlow.Infrastructure.Providers.OpenAI;
 
-namespace Tests;
+namespace Tests.Infrastructure;
 
 public class Tests
 {
 
 
-    private string tokenTestString ="""
+    private string tokenTestString = """
             Many words map to one token, but some don't: indivisible.
 
             Unicode characters like emojis may be split into many tokens containing the underlying bytes: 🤚🏾
@@ -15,11 +15,6 @@ public class Tests
             """;
     int expectedTokens = 59;
 
-    [SetUp]
-    public void Setup()
-    {
-
-    }
 
     [Test]
     public void CountTokens_Gpt3_5_Turbo()

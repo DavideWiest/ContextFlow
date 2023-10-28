@@ -24,3 +24,4 @@ public abstract class FailStrategy<TException> : IFailStrategy where TException 
 
     public abstract RequestResult ExecuteStrategy(LLMRequest request, TException e);
 }
+

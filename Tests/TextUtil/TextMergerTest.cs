@@ -1,20 +1,14 @@
-﻿namespace Tests;
+﻿namespace Tests.TextUtil;
 
 using ContextFlow.Application.TextUtil;
 
 public class TextMergerTest
 {
 
-    [SetUp]
-    public void Setup()
-    {
-
-    }
-
     [Test]
     public void TestFunctionMerger()
     {
-        var merger = new FunctionTextMerger(x => String.Join(", ", x));
+        var merger = new FunctionTextMerger(x => string.Join(", ", x));
         var output = merger.Merge(new string[] { "Test", "test", "test" });
 
         Assert.That(output, Is.EqualTo("Test, test, test"));

@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application.Request;
+using ContextFlow.Application.Prompting;
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
 
@@ -41,7 +42,7 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
         foreach (var fragment in attachmentContentFragments)
         {
             results.Add(new LLMRequestBuilder(request)
-            .UsingPrompt(request.Prompt.UsingAttachment(SplitAttachmentName, fragment))
+            .UsingPrompt(request.Prompt.UpsertingAttachment(new Attachment(SplitAttachmentName, fragment, true)))
             .Build()
             .Complete());
         }

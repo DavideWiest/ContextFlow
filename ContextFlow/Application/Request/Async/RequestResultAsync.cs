@@ -1,4 +1,5 @@
-﻿using ContextFlow.Domain;
+﻿using ContextFlow.Application.TextUtil;
+using ContextFlow.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,18 @@ public class RequestResultAsync : RequestResult
 
     public RequestResultAsync(RequestResult result) : base(result)
     {
+    }
+
+    public ParsedRequestResultAsync<T> Parse<T>(ToObjectConverter<T> converter)
+    {
+        ParsedRequestResultAsync<T> parsedResult = new(this, converter.Convert(RawOutput));
+        return parsedResult;
+    }
+
+    public ParsedRequestResultAsync<T> Parse<T>(Func<RequestResultAsync, T> converter)
+    {
+        ParsedRequestResultAsync<T> parsedResult = new(this, converter(this));
+        return parsedResult;
     }
 
     public async Task<RequestResultAsync> Then(Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)

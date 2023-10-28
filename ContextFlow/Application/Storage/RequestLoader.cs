@@ -18,14 +18,13 @@ public abstract class RequestLoader
 public class JsonRequestLoader : RequestLoader
 {
     private string FileName;
-    private RequestHasher RequestHasher;
+    private RequestHasher RequestHasher = new RequestHasher();
     public bool ConsiderLLMConfig { get; set; }
 
-    public JsonRequestLoader(string fileName)
+    public JsonRequestLoader(string fileName, bool considerLLMConfig = true)
     {
         FileName = fileName;
-        RequestHasher = new RequestHasher();
-        ConsiderLLMConfig = false;
+        ConsiderLLMConfig = considerLLMConfig;
     }
 
     public override bool MatchExists(LLMRequest request)
@@ -50,7 +49,7 @@ public class JsonRequestLoader : RequestLoader
     }
 
     /// <summary>
-    /// works on the premise that a match exists in the given file. Use the method MatchExists to verify.
+    /// works on the premise that a match exists in the given file. Use the method MatchExists to verify. Alternatively, use LoadMatchIfExists
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>

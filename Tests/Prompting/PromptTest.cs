@@ -1,4 +1,4 @@
-﻿namespace Tests;
+﻿namespace Tests.Prompting;
 
 using ContextFlow.Application.Prompting;
 using ContextFlow.Infrastructure.Providers.OpenAI;
@@ -10,11 +10,6 @@ public class PromptTest
 
     private Prompt baseTestPrompt = new("Test test");
 
-    [SetUp]
-    public void Setup()
-    {
-
-    }
 
     [Test]
     public void TestPromptAction()
@@ -27,9 +22,9 @@ public class PromptTest
     {
         var prompt = baseTestPrompt
             .Clone()
-            .UsingAttachment("Test attachment", "-> Test attachment content")
+            .UsingAttachment("Test attachment", "-> Test attachment Content")
             .UsingAttachmentInline("Attachment 2", "Inline");
-        Assert.That(prompt.ToPlainText(), Is.EqualTo("Test test\n\nTest attachment: \n-> Test attachment content\n\nAttachment 2: Inline"));
+        Assert.That(prompt.ToPlainText(), Is.EqualTo("Test test\n\nTest attachment: \n-> Test attachment Content\n\nAttachment 2: Inline"));
     }
 
     [Test]

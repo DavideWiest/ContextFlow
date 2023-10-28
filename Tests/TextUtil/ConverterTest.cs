@@ -1,5 +1,4 @@
-﻿
-namespace Tests;
+﻿namespace Tests.TextUtil;
 
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
@@ -31,15 +30,10 @@ public class ConverterTest
         }
     }
 
-    [SetUp]
-    public void Setup()
+    [Test]
+    public void TestToStringFunctionConverter()
     {
-
-    }
-
-    [Test] public void TestToStringFunctionConverter()
-    {
-        string str = new ToStringFunctionConverter<List<string>>(x => String.Join(",", x))
+        string str = new ToStringFunctionConverter<List<string>>(x => string.Join(",", x))
             .Convert(new() { "a", "b", "c" });
 
         Assert.That(str, Is.EqualTo("a,b,c"));

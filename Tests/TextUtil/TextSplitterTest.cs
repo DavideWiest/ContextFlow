@@ -6,18 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests;
+namespace Tests.TextUtil;
 
 using ContextFlow.Application.TextUtil;
 
 public class TextSplitterTest
 {
-
-    [SetUp]
-    public void Setup()
-    {
-
-    }
 
     [Test]
     public void TestFunctionSplitter()
@@ -32,7 +26,7 @@ public class TextSplitterTest
     [Test]
     public void TestHierarchicalSplitter()
     {
-        var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 5, new string[] {" "}, new string[] {});
+        var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 5, new string[] { " " }, new string[] { });
         var outputlist = splitter.Split("Test test test");
 
         Assert.That(outputlist.Count, Is.EqualTo(2));
@@ -50,7 +44,7 @@ public class TextSplitterTest
     [Test]
     public void TestHierarchicalSplitterHierarchy()
     {
-        var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 8, new string[] { "\n", " " }, new string[] {});
+        var splitter = new HierarchichalTextSplitter(new OpenAITokenizer("gpt-3.5-turbo"), 8, new string[] { "\n", " " }, new string[] { });
         var outputlist = splitter.Split("Test test test\nTest test test");
 
         Assert.That(outputlist[1], Is.EqualTo(outputlist[0]));

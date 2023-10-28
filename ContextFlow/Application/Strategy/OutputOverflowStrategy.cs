@@ -10,11 +10,11 @@ public abstract class OutputOverflowStrategy : FailStrategy<OutputOverflowExcept
 
 public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategy
 {
-    private readonly int TokenToWordRatio = 3;
-    private readonly double MarginOfSafetyMul = 0.8;
+    private readonly int TokenToWordRatio;
+    private readonly double MarginOfSafetyMul;
 
     public OutputOverflowStrategyRestrictOutputLength() { }
-    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio, double marginOfSafetyMul)
+    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio=3, double marginOfSafetyMul=0.8)
     {
         TokenToWordRatio = tokenToWordRatio;
         MarginOfSafetyMul = marginOfSafetyMul;
