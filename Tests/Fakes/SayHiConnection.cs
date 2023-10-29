@@ -23,15 +23,6 @@ public class SayHiConnectionAsync : LLMConnectionAsync
     }
 }
 
-public class TriggerOverflowConnection : LLMConnection
-{
-    protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
-    {
-        var output = string.Concat(Enumerable.Repeat("Hi", config.MaxTotalTokens));
-        return new RequestResult(output, FinishReason.Overflow);
-    }
-}
-
 public class ThrowThenSayHiConnectionAfterN : LLMConnection
 {
     int i = 0;
@@ -63,6 +54,25 @@ public class ThrowOrSayHiUnderConditionConnection : LLMConnection
     }
 
     protected override RequestResultAsync CallAPI(string prompt, LLMConfig config, CFLogger logger)
+    {
+        if (ErrorCondition(prompt, config))
+        {
+            throw new LLMException("Standard exception of ThrowOrSayHiUnderConditionConnection");
+        }
+        return new RequestResultAsync("Hi", FinishReason.Stop);
+    }
+}
+
+public class ThrowOrSayHiUnderConditionConnectionAsync : LLMConnectionAsync
+{
+    Func<string, LLMConfig, bool> ErrorCondition;
+
+    public ThrowOrSayHiUnderConditionConnectionAsync(Func<string, LLMConfig, bool> errorCondition)
+    {
+        ErrorCondition = errorCondition;
+    }
+
+    protected override async Task<RequestResultAsync> CallAPIAsync(string prompt, LLMConfig config, CFLogger logger)
     {
         if (ErrorCondition(prompt, config))
         {
@@ -137,5 +147,13 @@ public class OutputOverFlowConnection : LLMConnection
     protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
     {
         return new RequestResult("Hi", FinishReason.Overflow);
+    }
+}
+
+public class OutputOverFlowConnectionAsync : LLMConnectionAsync
+{
+    protected override async Task<RequestResultAsync> CallAPIAsync(string prompt, LLMConfig config, CFLogger logger)
+    {
+        return new RequestResultAsync("Hi", FinishReason.Overflow);
     }
 }

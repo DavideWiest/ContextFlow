@@ -3,18 +3,18 @@ using ContextFlow.Domain;
 using System;
 namespace ContextFlow.Application.Strategy;
 
-public abstract class OutputOverflowStrategy : FailStrategy<OutputOverflowException>
+public abstract class OutputOverflowStrategyAsync : FailStrategy<OutputOverflowException>
 {
     public abstract override RequestResult ExecuteStrategy(LLMRequest request, OutputOverflowException e);
 }
 
-public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategy
+public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategyAsync
 {
     private readonly int TokenToWordRatio;
     private readonly double MarginOfSafetyMul;
 
     public OutputOverflowStrategyRestrictOutputLength() { }
-    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio=3, double marginOfSafetyMul=0.8)
+    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio=4, double marginOfSafetyMul=0.75)
     {
         TokenToWordRatio = tokenToWordRatio;
         MarginOfSafetyMul = marginOfSafetyMul;
@@ -30,7 +30,7 @@ public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategy
     }
 }
 
-public class OutputOverflowStrategyThrowException : OutputOverflowStrategy
+public class OutputOverflowStrategyThrowException : OutputOverflowStrategyAsync
 {
     public override RequestResult ExecuteStrategy(LLMRequest request, OutputOverflowException e)
     {

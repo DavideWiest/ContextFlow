@@ -39,7 +39,7 @@ public class TestRequestLoader
     {
         bool matchexists = await loaderAsync.MatchExistsAsync(SampleRequests.sampleRequestAsync);
         RequestResultAsync result = await loaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.CompleteAsync();
+        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
         Assert.That(matchexists, Is.True);
         Assert.That(result.RawOutput == comparisonResult.RawOutput && result.FinishReason == comparisonResult.FinishReason);
     }
@@ -49,7 +49,7 @@ public class TestRequestLoader
     {
         bool matchexists = await insensitiveLoaderAsync.MatchExistsAsync(SampleRequests.sampleRequestAsync);
         RequestResultAsync result = await insensitiveLoaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.CompleteAsync();
+        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
         Assert.That(matchexists, Is.True);
         Assert.That(result.RawOutput == comparisonResult.RawOutput && result.FinishReason == comparisonResult.FinishReason);
     }

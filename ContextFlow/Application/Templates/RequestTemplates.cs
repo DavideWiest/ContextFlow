@@ -6,8 +6,9 @@ namespace ContextFlow.Application.Templates;
 public static class RequestTemplates
 {
 
-    public static LLMRequest Translate(LLMConnection con)
+    public static LLMRequest Aggregate(IEnumerable<string> texts, LLMRequestBuilder preconfiguredBuilder)
     {
-
+        return preconfiguredBuilder
+            .Build();
     }
 }

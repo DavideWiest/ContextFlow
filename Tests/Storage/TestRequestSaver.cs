@@ -37,7 +37,7 @@ public class TestRequestSaver
     [Test]
     public async Task TestSaveRequestAsync()
     {
-        await saverAsync.SaveRequestAsync(SampleRequests.sampleRequestAsync, await SampleRequests.sampleRequestAsync.CompleteAsync());
+        await saverAsync.SaveRequestAsync(SampleRequests.sampleRequestAsync, await SampleRequests.sampleRequestAsync.Complete());
         Assert.That(
             File.ReadAllText(SampleRequests.sampleRequestCorrectResultFile).Split("timestamp")[0], 
             Is.EqualTo(File.ReadAllText(testFile1).Split("timestamp")[0]));

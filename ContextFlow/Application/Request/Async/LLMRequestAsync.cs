@@ -15,7 +15,7 @@ public class LLMRequestAsync : LLMRequestBase
         RequestConfig = requestConfig;
     }
 
-    public async Task<RequestResultAsync> CompleteAsync()
+    public async Task<RequestResultAsync> Complete()
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 

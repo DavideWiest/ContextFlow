@@ -18,7 +18,7 @@ public class ParsedRequestResultTest
     public async Task Setup()
     {
         result = SampleRequests.sampleRequest.Complete().Parse(x => new StringWrapper(x.RawOutput));
-        resultAsync = (await SampleRequests.sampleRequestAsync.CompleteAsync()).Parse(x => new StringWrapper(x.RawOutput));
+        resultAsync = (await SampleRequests.sampleRequestAsync.Complete()).Parse(x => new StringWrapper(x.RawOutput));
     }
 
     [Test]

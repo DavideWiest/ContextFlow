@@ -10,13 +10,12 @@ using Tests.Fakes;
 
 namespace Tests.Request;
 
-public class LLMRequestTest
+public class LLMRequestAsyncTest
 {
-    LLMConnection llmcon = new OpenAIChatConnection();
-    LLMConnection llmconHi = new SayHiConnection();
+    LLMConnectionAsync llmconAsync = new OpenAIChatConnectionAsync();
+    LLMConnectionAsync llmconHiAsync = new SayHiConnectionAsync();
     LLMConfig llmconfCompletions = new("gpt-3.5-turbo-16k");
-    RequestConfig requestconf = new();
-
+    RequestConfigAsync requestconfAsync = new();
 
     [SetUp]
     public void Setup()
@@ -26,32 +25,32 @@ public class LLMRequestTest
     }
 
     [Test]
-    public void TestHi()
+    public async Task TestAsyncHi()
     {
-        RequestResult res = new LLMRequest(new Prompt("Say \"Hi\"."), llmconfCompletions, llmconHi, requestconf).Complete();
+        RequestResultAsync res = await new LLMRequestAsync(new Prompt("Say \"Hi\"."), llmconfCompletions, llmconHiAsync, requestconfAsync).Complete();
         Assert.That(res.RawOutput.ToLower().StartsWith("hi"));
     }
 
     [Test]
-    public void TestPromptPipeline()
+    public async Task TestPromptPipelineAsync()
     {
         string input = "Hi Hi Hi";
         Prompt prompt = new Prompt("Say \"Hi\" 1 time less than the given input. Respond only with the \"Hi\"s as shown and nothing else.");
 
         foreach (int i in Enumerable.Range(0, 2))
         {
-            input = new LLMRequest(prompt.UpsertingAttachment(new Attachment("Input", input, false)), llmconfCompletions, llmcon, requestconf).Complete().RawOutput;
+            input = (await new LLMRequestAsync(prompt.UpsertingAttachment(new Attachment("Input", input, false)), llmconfCompletions, llmconAsync, requestconfAsync).Complete()).RawOutput;
         }
 
         Assert.That(input, Is.EqualTo("Hi"));
     }
 
     [Test]
-    public void TestThrowExceptionOnOutputOverflow()
+    public async Task TestThrowExceptionOnOutputOverflowAsync()
     {
         try
         {
-            new LLMRequest(new Prompt("test"), llmconfCompletions, new OutputOverFlowConnection(), new RequestConfig().UsingRaiseExceptionOnOutputOverflow(true)).Complete();
+            await new LLMRequestAsync(new Prompt("test"), llmconfCompletions, new OutputOverFlowConnectionAsync(), new RequestConfigAsync().UsingRaiseExceptionOnOutputOverflow(true)).Complete();
             Assert.Fail();
         } catch (OutputOverflowException)
         {

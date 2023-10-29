@@ -19,7 +19,7 @@ public class RequestResultTest
     public async Task Setup()
     {
         result = SampleRequests.sampleRequest.Complete();
-        resultAsync = await SampleRequests.sampleRequestAsync.CompleteAsync();
+        resultAsync = await SampleRequests.sampleRequestAsync.Complete();
     }
 
     [Test]

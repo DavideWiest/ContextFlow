@@ -36,13 +36,13 @@ public class RequestResultAsync : RequestResult
 
     public async Task<RequestResultAsync> Then(Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
     {
-        return await funcForNextRequest(this).CompleteAsync();
+        return await funcForNextRequest(this).Complete();
     }
 
     public async Task<RequestResultAsync> ThenConditional(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, LLMRequestAsync> funcForNextRequest)
     {
         if (condition(this))
-            return await funcForNextRequest(this).CompleteAsync();
+            return await funcForNextRequest(this).Complete();
 
         return this;
     }
@@ -50,12 +50,12 @@ public class RequestResultAsync : RequestResult
     public async Task<IEnumerable<RequestResultAsync>> ThenBranching(Func<RequestResultAsync, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
         var nextRequests = funcForNextRequest(this);
-       return await Task.WhenAll(nextRequests.Select(async r => await r.CompleteAsync()));
+       return await Task.WhenAll(nextRequests.Select(async r => await r.Complete()));
     }
 
     public async Task<(IEnumerable<RequestResultAsync> Passed, IEnumerable<RequestResultAsync> Failed)> ThenBranchingConditionalAsync(Func<RequestResultAsync, bool> condition, Func<RequestResultAsync, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
-        var results = await Task.WhenAll(funcForNextRequest(this).Select(async r => await r.CompleteAsync()));
+        var results = await Task.WhenAll(funcForNextRequest(this).Select(async r => await r.Complete()));
         return Partition(results, condition);
     }
 }

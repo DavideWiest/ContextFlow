@@ -16,12 +16,22 @@ public class LLMRequestBuilder
 
     public LLMRequestBuilder() { }
 
-    public LLMRequestBuilder(LLMRequest request)
+    public LLMRequestBuilder(LLMRequest request) : this(request.Prompt, request.LLMConfig)
     {
-        Prompt = request.Prompt;
-        LLMConfig = request.LLMConfig;
         LLMConnection = request.LLMConnection;
         RequestConfig = request.RequestConfig;
+    }
+
+    public LLMRequestBuilder(LLMRequestAsync request) : this(request.Prompt, request.LLMConfig)
+    {
+        LLMConnectionAsync = request.LLMConnection;
+        RequestConfigAsync = request.RequestConfig;
+    }
+
+    private LLMRequestBuilder(Prompt prompt, LLMConfig llmConfig)
+    {
+        Prompt = prompt;
+        LLMConfig = llmConfig;
     }
 
     public LLMRequestBuilder UsingPrompt(Prompt prompt)
