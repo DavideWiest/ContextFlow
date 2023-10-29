@@ -32,6 +32,9 @@ public class LLMConfig
 
     public LLMConfig UsingTemperature(double temperature)
     {
+        if (temperature <= 0)
+            throw new InvalidDataException($"Temperature must be a positive double [inputted temperature={temperature}]");
+
         Temperature = temperature;
         return this;
     }
@@ -61,23 +64,35 @@ public class LLMConfig
 
     public LLMConfig UsingTopP(double topp)
     {
+        if (topp <= 0)
+            throw new InvalidDataException($"Top p must be a positive double [inputted topp={topp}]");
+
         TopP = topp;
         return this;
     }
 
     public LLMConfig UsingFrequencyPenalty(double frequencypenalty)
     {
+        if (frequencypenalty <= 0)
+            throw new InvalidDataException($"Frequency penalty must be a positive double [inputted frequencypenalty={frequencypenalty}]");
+
         FrequencyPenalty = frequencypenalty;
         return this;
     }
 
     public LLMConfig UsingPresencePenalty(double presencepenalty)
     {
+        if (presencepenalty <= 0)
+            throw new InvalidDataException($"Presence penalty must be a positive double [inputted presencepenalty={presencepenalty}]");
+
         PresencePenalty = presencepenalty;
         return this;
     }
     public LLMConfig UsingNumOutputs(int numOutputs)
     {
+        if (numOutputs <= 0)
+            throw new InvalidDataException($"Number of outputs must be a positive integer [inputted numOutputs={numOutputs}]");
+
         NumOutputs = numOutputs;
         return this;
     }

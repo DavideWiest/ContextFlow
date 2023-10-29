@@ -1,9 +1,8 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
-using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Logging;
 using Tests.Fakes;
+using Tests.Fakes.Async;
 using Tests.Sample;
 
 namespace Tests.Request;

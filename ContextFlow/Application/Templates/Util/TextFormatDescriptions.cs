@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContextFlow.Application.Templates;
+namespace ContextFlow.Application.Templates.Util;
 
 public static class TextFormatDescriptions
 {

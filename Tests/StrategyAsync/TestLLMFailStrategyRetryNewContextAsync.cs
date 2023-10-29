@@ -4,6 +4,7 @@ using ContextFlow.Application.Strategy.Async;
 using ContextFlow.Domain;
 using ContextFlow.Application.Prompting;
 using Tests.Fakes;
+using Tests.Fakes.Async;
 using Tests.Sample;
 
 namespace Tests.Strategy;

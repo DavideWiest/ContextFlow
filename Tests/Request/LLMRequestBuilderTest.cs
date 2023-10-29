@@ -4,6 +4,7 @@ using ContextFlow.Application.Request.Async;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
 using Tests.Fakes;
+using Tests.Fakes.Async;
 using Tests.Util;
 
 namespace Tests.Request;

@@ -1,6 +1,7 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
 using Tests.Fakes;
+using Tests.Fakes.Async;
 using Tests.Util;
 using Tests.Sample;
 using ContextFlow.Application.Result;

@@ -4,9 +4,8 @@ using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
-using ContextFlow.Infrastructure.Providers.OpenAI;
 using ContextFlow.Infrastructure.Providers.OpenAI.Async;
-using Tests.Fakes;
+using Tests.Fakes.Async;
 
 namespace Tests.Request;
 
