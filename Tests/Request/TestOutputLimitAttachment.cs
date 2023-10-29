@@ -8,7 +8,7 @@ public class TestOutputLimitAttachment
 {
     LLMRequestBuilder requestBuilder = new LLMRequestBuilder()
                 .UsingPrompt(SampleRequests.sampleRequest.Prompt)
-                .UsingLLMConfig(new LLMConfig("model").UsingMaxTotalTokens(200).UsingMaxInputTokens(100))
+                .UsingLLMConfig(new LLMConfig("model").UsingMaxInputTokens(100).UsingMaxTotalTokens(200))
                 .UsingRequestConfig(SampleRequests.sampleRequest.RequestConfig)
                 .UsingLLMConnection(SampleRequests.sampleRequest.LLMConnection);
 

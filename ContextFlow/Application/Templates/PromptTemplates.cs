@@ -1,6 +1,6 @@
-﻿using ContextFlow.Application.Prompting.Info;
+﻿using ContextFlow.Application.Prompting;
 
-namespace ContextFlow.Application.Prompting;
+namespace ContextFlow.Application.Templates;
 
 public static class PromptTemplates
 {

@@ -1,5 +1,6 @@
 ﻿using ContextFlow.Application.Request.Async;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ContextFlow.Application.Storage.Async;
 
@@ -22,11 +23,11 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
     private RequestHasher RequestHasher;
     public bool ConsiderLLMConfig { get; set; }
 
-    public JsonRequestLoaderAsync(string fileName)
+    public JsonRequestLoaderAsync(string fileName, bool considerLLMConfig=true)
     {
         FileName = fileName;
         RequestHasher = new RequestHasher();
-        ConsiderLLMConfig = false;
+        ConsiderLLMConfig = considerLLMConfig;
     }
 
     public override async Task<bool> MatchExistsAsync(LLMRequestAsync request)
@@ -39,10 +40,9 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
 
         if (data == null)
             return false;
-
         if (data.ContainsKey(key1))
         {
-            if ((!ConsiderLLMConfig && data.Count > 0) || data.ContainsKey(key2))
+            if ((!ConsiderLLMConfig && data[key1].Count > 0) || data[key1].ContainsKey(key2))
             {
                 return true;
             }
@@ -58,7 +58,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
         request.RequestConfig.Logger.Information("Loading the match in {fileName}, with prompt-key {promptKey}, with llmconfig-key {llmconfigKey}", FileName, key1, key2);
 
         // Load data from the JSON file
-        var data = await LoadDataFromFileAsync();
+        var data = (await LoadDataFromFileAsync())!;
 
         string LLMConfigKey = ConsiderLLMConfig ? key2 : data[key1].Keys.First();
         if (!ConsiderLLMConfig)
@@ -66,7 +66,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
         // Data found for the given key
-        return (RequestResultAsync)data[key1][LLMConfigKey]["response"];
+        return ((JObject)data[key1][LLMConfigKey]["response"]).ToObject<WritableRequestResult>()!.ToRequestResultAsync();
     }
 
     private async Task<Dictionary<string, Dictionary<string, Dictionary<string, object>>>?> LoadDataFromFileAsync()

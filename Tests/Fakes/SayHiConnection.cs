@@ -19,7 +19,7 @@ public class SayHiConnectionAsync : LLMConnectionAsync
 {
     protected override async Task<RequestResultAsync> CallAPIAsync(string prompt, LLMConfig config, CFLogger logger)
     {
-        return new RequestResultAsync("hi", FinishReason.Stop);
+        return new RequestResultAsync("Hi", FinishReason.Stop);
     }
 }
 
@@ -27,7 +27,8 @@ public class TriggerOverflowConnection : LLMConnection
 {
     protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
     {
-        return new RequestResult("hi", FinishReason.Overflow);
+        var output = string.Concat(Enumerable.Repeat("Hi", config.MaxTotalTokens));
+        return new RequestResult(output, FinishReason.Overflow);
     }
 }
 
@@ -48,29 +49,26 @@ public class ThrowThenSayHiConnectionAfterN : LLMConnection
         {
             throw new LLMException("Standard exception of ThrowThenSayHiConnectionAfterN");
         }
-        var output = string.Concat(Enumerable.Repeat("hi", config.MaxTotalTokens));
-        return new RequestResultAsync(output, FinishReason.Stop);
+        return new RequestResultAsync("Hi", FinishReason.Stop);
     }
 }
 
-public class ThrowThenSayHiConnectionAfterEvent : LLMConnection
+public class ThrowOrSayHiUnderConditionConnection : LLMConnection
 {
-    Func<string, LLMConfig, bool> SayHiEvent;
-    int nThrow = 1;
+    Func<string, LLMConfig, bool> ErrorCondition;
 
-    public ThrowThenSayHiConnectionAfterEvent(Func<string, LLMConfig, bool> sayHiEvent)
+    public ThrowOrSayHiUnderConditionConnection(Func<string, LLMConfig, bool> errorCondition)
     {
-        SayHiEvent = sayHiEvent;
+        ErrorCondition = errorCondition;
     }
 
     protected override RequestResultAsync CallAPI(string prompt, LLMConfig config, CFLogger logger)
     {
-        if (SayHiEvent(prompt, config))
+        if (ErrorCondition(prompt, config))
         {
-            throw new LLMException("Standard exception of ThrowThenSayHiConnectionAfterEvent");
+            throw new LLMException("Standard exception of ThrowOrSayHiUnderConditionConnection");
         }
-        var output = string.Concat(Enumerable.Repeat("hi", config.MaxTotalTokens));
-        return new RequestResultAsync(output, FinishReason.Stop);
+        return new RequestResultAsync("Hi", FinishReason.Stop);
     }
 }
 
@@ -122,5 +120,22 @@ public class RepeatInputConnection : LLMConnection
     protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
     {
         return new RequestResult(prompt, FinishReason.Stop);
+    }
+}
+
+public class RepeatInputConnectionAsync : LLMConnectionAsync
+{
+
+    protected override async Task<RequestResultAsync> CallAPIAsync(string prompt, LLMConfig config, CFLogger logger)
+    {
+        return new RequestResultAsync(prompt, FinishReason.Stop);
+    }
+}
+
+public class OutputOverFlowConnection : LLMConnection
+{
+    protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
+    {
+        return new RequestResult("Hi", FinishReason.Overflow);
     }
 }

@@ -26,6 +26,7 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
     public override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
+        request.RequestConfig.Logger.Debug("However, InputOverflowExceptions may still occur if the rest of the prompt plus any one fragment of the attachment has too many tokens.");
 
         var attachment = request.Prompt.Attachments.FirstOrDefault(a => a.Name == SplitAttachmentName);
         if (attachment == null)
@@ -43,6 +44,7 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
         {
             results.Add(new LLMRequestBuilder(request)
             .UsingPrompt(request.Prompt.UpsertingAttachment(new Attachment(SplitAttachmentName, fragment, true)))
+            .UsingRequestConfig(request.RequestConfig.AddFailStrategyToTop(new FailStrategyThrowException<InputOverflowException>()))
             .Build()
             .Complete());
         }

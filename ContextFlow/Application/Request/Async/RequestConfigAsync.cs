@@ -3,15 +3,33 @@ using ContextFlow.Application.Strategy.Async;
 
 namespace ContextFlow.Application.Request.Async;
 
-public class RequestConfigAsync : RequestConfigBase
+public class RequestConfigAsync : RequestConfigBase<RequestConfigAsync>
 {
     public List<IFailStrategyAsync> FailStrategies { get; private set; } = new();
     public RequestLoaderAsync? RequestLoaderAsync { get; private set; }
     public RequestSaverAsync? RequestSaverAsync { get; private set; }
 
-    public RequestConfigAsync UsingFailStrategy(IFailStrategyAsync failStrategy)
+    public RequestConfigAsync AddFailStrategy(IFailStrategyAsync failStrategy)
     {
         FailStrategies.Add(failStrategy);
+        return this;
+    }
+
+    public RequestConfigAsync AddFailStrategyToTop(IFailStrategyAsync failStrategy)
+    {
+        FailStrategies.Insert(0, failStrategy);
+        return this;
+    }
+
+    public RequestConfigAsync ResetFailStrategies()
+    {
+        FailStrategies.Clear();
+        return this;
+    }
+
+    public RequestConfigAsync RemoveSelectedFailStrategies(Func<IFailStrategyAsync, bool> predicate)
+    {
+        FailStrategies = FailStrategies.Where(x => predicate(x)).ToList();
         return this;
     }
 
@@ -34,6 +52,6 @@ public class RequestConfigAsync : RequestConfigBase
         string requestSaver = RequestSaverAsync != null ? RequestSaverAsync.GetType().Name : "null";
         string tokenizer = Tokenizer != null ? Tokenizer.GetType().Name : "null";
 
-        return $"RequestConfigAsync(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, RaiseExceptionOnOutputOverflow={RaiseExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
+        return $"RequestConfigAsync(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, ThrowExceptionOnOutputOverflow={ThrowExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
     }
 }

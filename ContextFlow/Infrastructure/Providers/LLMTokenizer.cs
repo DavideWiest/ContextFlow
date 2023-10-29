@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ContextFlow.Domain;
+using System;
 
 namespace ContextFlow.Infrastructure.Providers;
 
@@ -11,12 +12,13 @@ public abstract class LLMTokenizer
     /// </summary>
     /// <param name="input"></param>
     /// <param name="tokenMax"></param>
-    /// <exception cref="InvalidDataException">Throws this exception if the token-limit is exceeded</exception>
+    /// <exception cref="InputOverflowException">Throws this exception if the token-limit is exceeded</exception>
     public void ValidateNumTokens(string input, int tokenMax)
     {
-        if (CountTokens(input) <= tokenMax)
+        int num = CountTokens(input);
+        if (num > tokenMax)
         {
-            throw new InvalidDataException("Input excees the given token limit");
+            throw new InputOverflowException($"Input exceeds the given token limit [limit={tokenMax}, actual={num}]");
         }
     }
 

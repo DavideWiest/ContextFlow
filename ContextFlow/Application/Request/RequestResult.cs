@@ -1,19 +1,13 @@
-﻿using ContextFlow.Application;
-using ContextFlow.Application.Request.Async;
-using ContextFlow.Application.TextUtil;
+﻿using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
-using OpenAI_API.Moderation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace ContextFlow.Application.Request;
 
+
 public abstract class ResultAdditionalData
 {
-
+    public abstract void LoadFromJObject(JObject jObject);
 }
 
 /// <summary>
@@ -95,9 +89,13 @@ public class RequestResult
         foreach (var item in source)
         {
             if (predicate(item))
+            {
                 trueList.Add(item);
+            }
             else
+            {
                 falseList.Add(item);
+            }
         }
 
         return (trueList, falseList);

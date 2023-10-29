@@ -38,19 +38,24 @@ public class LLMConfig
 
     public LLMConfig UsingMaxTotalTokens(int maxTotalTokens)
     {
+        if (maxTotalTokens <= 0)
+            throw new InvalidDataException($"Maximum total tokens must be a positive integer [inputted maxTotalTokens={maxTotalTokens}]");
         if (maxTotalTokens <= MaxInputTokens)
             throw new InvalidDataException($"Maximum total tokens must be greater than maximum input tokens [MaxInputTokens={MaxInputTokens}, inputted maxTotalTokens={maxTotalTokens}]");
-        
+
+
         MaxTotalTokens = maxTotalTokens;
         return this;
     }
 
     public LLMConfig UsingMaxInputTokens(int maxInputTokens)
     {
+        if (maxInputTokens <= 0)
+            throw new InvalidDataException($"Maximum input tokens must be a positive integer [inputted maxInputTokens={maxInputTokens}]");
         if (MaxTotalTokens <= maxInputTokens)
             throw new InvalidDataException($"Maximum total tokens must be greater than maximum input tokens [MaxTotalTokens={MaxTotalTokens}, inputted maxInputTokens={maxInputTokens}]");
 
-        MaxTotalTokens = maxInputTokens;
+        MaxInputTokens = maxInputTokens;
         return this;
     }
 

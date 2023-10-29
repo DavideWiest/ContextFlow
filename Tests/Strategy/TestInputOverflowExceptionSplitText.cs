@@ -15,14 +15,14 @@ public class TestInputOverflowExceptionSplitText
     LLMRequestBuilder requestBuilder = new LLMRequestBuilder()
                 .UsingLLMConfig(new LLMConfig("model").UsingMaxInputTokens(50))
                 .UsingRequestConfig(new RequestConfig()
-                    .ActivateCheckNumTokensBeforeRequest(new CountCharsTokenizer())
-                    .UsingFailStrategy(new InputOverflowStrategySplitText(new FunctionTextSplitter(x => x.Split("\n")), new SimpleSectionMerger(new() { { "BigAttachment: \n", "-" } }), "BigAttachment")))
+                    .AddFailStrategy(new InputOverflowStrategySplitText(new FunctionTextSplitter(x => x.Split("\n")), new SimpleSectionMerger(new() { { "BigAttachment: \n", "-" } }), "BigAttachment"))
+                    .ActivateCheckNumTokensBeforeRequest(new CountCharsTokenizer()))
                 .UsingLLMConnection(new RepeatInputConnection());
 
     [Test]
     public void TestStrategy()
     {
-        string content = new string('a', 50) + "\n" + new string('b', 50) + "\n"  + new string('c', 50);
+        string content = new string('a', 25) + "\n" + new string('b', 25) + "\n"  + new string('c', 25);
         Attachment a = new Attachment("BigAttachment", content, false);
 
         var request = requestBuilder
@@ -31,8 +31,9 @@ public class TestInputOverflowExceptionSplitText
 
         var result = request.Complete();
 
-        string expected = String.Join("-", content.Split("\n"));
+        string expected = "BigAttachment: \n" + String.Join("-", content.Split("\n"));
 
+        Console.WriteLine(result.RawOutput);
         Assert.That(result.RawOutput, Is.EqualTo(expected));
     }
 }

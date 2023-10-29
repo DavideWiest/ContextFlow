@@ -19,16 +19,22 @@ public class LLMRequestAsync : LLMRequestBase
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 
-        if (RequestConfig.ValidateNumInputTokensBeforeRequest)
-        {
-            RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
-        }
 
         RequestResultAsync result;
 
         try
         {
+            if (RequestConfig.ValidateNumInputTokensBeforeRequest)
+            {
+                RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
+            }
+
             result = await TryLoadResult() ?? await GetResultFromLLMAsync();
+
+            if (result.FinishReason == FinishReason.Overflow && RequestConfig.ThrowExceptionOnOutputOverflow)
+            {
+                throw new OutputOverflowException("Output-overflow occured [RequestConfig.ThrowExceptionOnOutputOverflow=true]");
+            }
         }
         catch (Exception e)
         {
@@ -62,8 +68,8 @@ public class LLMRequestAsync : LLMRequestBase
         
         result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
-        if (RequestConfig.RaiseExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
-            throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [RaiseExceptionOnOutputOverflow=true]");
+        if (RequestConfig.ThrowExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
+            throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [ThrowExceptionOnOutputOverflow=true]");
         
         
         return result;

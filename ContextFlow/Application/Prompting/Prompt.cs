@@ -13,7 +13,7 @@ namespace ContextFlow.Application.Prompting;
 public class Prompt
 {
 
-    protected string PromptAction;
+    public string PromptAction { get; protected set; }
 
     public List<Attachment> Attachments { get; } = new();
 

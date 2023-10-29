@@ -1,17 +1,36 @@
-﻿using ContextFlow.Application.Storage;
+﻿using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Storage;
 using ContextFlow.Application.Strategy;
 
 namespace ContextFlow.Application.Request;
 
-public class RequestConfig : RequestConfigBase
+public class RequestConfig : RequestConfigBase<RequestConfig>
 {
     public List<IFailStrategy> FailStrategies { get; private set; } = new();
     public RequestLoader? RequestLoader { get; private set; }
     public RequestSaver? RequestSaver { get; private set; }
 
-    public RequestConfig UsingFailStrategy(IFailStrategy failStrategy)
+    public RequestConfig AddFailStrategy(IFailStrategy failStrategy)
     {
         FailStrategies.Add(failStrategy);
+        return this;
+    }
+
+    public RequestConfig AddFailStrategyToTop(IFailStrategy failStrategy)
+    {
+        FailStrategies.Insert(0, failStrategy);
+        return this;
+    }
+
+    public RequestConfig ResetFailStrategies()
+    {
+        FailStrategies.Clear();
+        return this;
+    }
+
+    public RequestConfig RemoveSelectedFailStrategies(Func<IFailStrategy, bool> predicate)
+    {
+        FailStrategies = FailStrategies.Where(x => predicate(x)).ToList();
         return this;
     }
 
@@ -34,6 +53,6 @@ public class RequestConfig : RequestConfigBase
         string requestSaver = RequestSaver != null ? RequestSaver.GetType().Name : "null";
         string tokenizer = Tokenizer != null ? Tokenizer.GetType().Name : "null";
 
-        return $"RequestConfig(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, RaiseExceptionOnOutputOverflow={RaiseExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
+        return $"RequestConfig(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, ThrowExceptionOnOutputOverflow={ThrowExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
     }
 }

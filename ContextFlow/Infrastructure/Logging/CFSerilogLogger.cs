@@ -10,8 +10,8 @@ public class CFSerilogLogger : CFLogger
     .MinimumLevel.Debug()
 #endif
     .WriteTo.File("Logs/log_.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
     .CreateLogger();
-
 
     public override void Debug(string messageTemplate, params object[] propertyValues)
     {

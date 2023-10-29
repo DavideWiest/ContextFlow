@@ -3,44 +3,44 @@ using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request;
 
-public abstract class RequestConfigBase
+public abstract class RequestConfigBase<T> where T : RequestConfigBase<T>
 {
     public CFLogger Logger { get; private set; } = new CFSerilogLogger();
 
     public bool ValidateNumInputTokensBeforeRequest { get; private set; } = false;
-    public bool RaiseExceptionOnOutputOverflow { get; set; } = false;
+    public bool ThrowExceptionOnOutputOverflow { get; set; } = false;
 
     public LLMTokenizer? Tokenizer { get; private set; } = null;
 
-    public RequestConfigBase UsingTokenizer(LLMTokenizer? tokenizer)
+    public T UsingTokenizer(LLMTokenizer? tokenizer)
     {
         Tokenizer = tokenizer;
-        return this;
+        return (T)this;
     }
 
-    public RequestConfigBase ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
+    public T ActivateCheckNumTokensBeforeRequest(LLMTokenizer tokenizer)
     {
         ValidateNumInputTokensBeforeRequest = true;
         Tokenizer = tokenizer;
-        return this;
+        return (T)this;
     }
 
-    public RequestConfigBase DeactivateCheckNumTokensBeforeRequest()
+    public T DeactivateCheckNumTokensBeforeRequest()
     {
         ValidateNumInputTokensBeforeRequest = false;
-        return this;
+        return (T)this;
     }
 
-    public RequestConfigBase UsingRaiseExceptionOnOutputOverflow(bool raiseExceptionOnOutputOverflow)
+    public T UsingRaiseExceptionOnOutputOverflow(bool raiseExceptionOnOutputOverflow)
     {
-        RaiseExceptionOnOutputOverflow = raiseExceptionOnOutputOverflow;
-        return this;
+        ThrowExceptionOnOutputOverflow = raiseExceptionOnOutputOverflow;
+        return (T)this;
     }
 
-    public RequestConfigBase UsingLogger(CFLogger log)
+    public T UsingLogger(CFLogger log)
     {
         Logger = log;
-        return this;
+        return (T)this;
     }
 
     public override abstract string ToString();

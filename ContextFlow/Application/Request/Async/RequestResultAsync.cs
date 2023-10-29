@@ -22,7 +22,7 @@ public class RequestResultAsync : RequestResult
     {
     }
 
-    public ParsedRequestResultAsync<T> Parse<T>(ToObjectConverter<T> converter)
+    public ParsedRequestResultAsync<T> ParseToAsync<T>(ToObjectConverter<T> converter)
     {
         ParsedRequestResultAsync<T> parsedResult = new(this, converter.Convert(RawOutput));
         return parsedResult;

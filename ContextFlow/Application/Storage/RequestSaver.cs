@@ -33,7 +33,8 @@ public class JsonRequestSaver : RequestSaver
                 {
                     {key2, new Dictionary<string, object> 
                         {
-                            { "request", request },
+                            { "prompt", request.Prompt },
+                            { "llmconfig", request.LLMConfig },
                             { "response", result },
                             { "timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
                         } 
@@ -46,7 +47,11 @@ public class JsonRequestSaver : RequestSaver
         if (File.Exists(FileName))
         {
             var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
-            if (!existingData.ContainsKey(key2))
+            if (existingData == null)
+            {
+                existingData = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
+            }
+            if (!existingData.ContainsKey(key1))
             {
                 existingData[key1] = new Dictionary<string, Dictionary<string, object>>();
             } 

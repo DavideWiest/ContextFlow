@@ -15,12 +15,12 @@ public class TestLLMFailStrategyRetryNewContext
                 
     
     [Test]
-    public void TestRetrySameCtx()
+    public void TestRetryNewCtx()
     {
         LLMRequest request = requestBuilder
-            .UsingLLMConnection(new ThrowThenSayHiConnectionAfterEvent((prompt, llmconf) => prompt.Contains("Now don't fail")))
-            .UsingRequestConfig(new RequestConfig().UsingFailStrategy(
-                new LLMFailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Now don't fail")))
+            .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(
+                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Now don't fail")))
             )
             .Build();
 
@@ -39,9 +39,9 @@ public class TestLLMFailStrategyRetryNewContext
     public void TestRetryNewCtxExceedMaxRetries()
     {
         LLMRequest request = requestBuilder
-            .UsingLLMConnection(new ThrowThenSayHiConnectionAfterEvent((prompt, llmconf) => prompt.Contains("Now don't fail")))
-            .UsingRequestConfig(new RequestConfig().UsingFailStrategy(
-                new LLMFailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Fail")))
+            .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(
+                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Fail")))
             )
             .Build();
 

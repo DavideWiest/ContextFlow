@@ -1,5 +1,7 @@
 ﻿using ContextFlow.Application.Request;
+using ContextFlow.Domain;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ContextFlow.Application.Storage;
 
@@ -34,13 +36,12 @@ public class JsonRequestLoader : RequestLoader
 
         // Load data from the JSON file
         var data = LoadDataFromFile();
-
+        
         if (data == null)
             return false;
-
         if (data.ContainsKey(key1))
         {
-            if ((!ConsiderLLMConfig && data.Count > 0) || data.ContainsKey(key2))
+            if ((!ConsiderLLMConfig && data[key1].Count > 0) || data[key1].ContainsKey(key2))
             {
                 return true;
             }
@@ -69,7 +70,7 @@ public class JsonRequestLoader : RequestLoader
             request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
         // Data found for the given key
-        return (RequestResult)data[key1][LLMConfigKey]["response"];
+        return ((JObject)data[key1][LLMConfigKey]["response"]).ToObject<WritableRequestResult>()!.ToRequestResultAsync();
     }
 
     private Dictionary<string, Dictionary<string, Dictionary<string, object>>>? LoadDataFromFile()
@@ -84,4 +85,5 @@ public class JsonRequestLoader : RequestLoader
             return null;
         }
     }
+
 }

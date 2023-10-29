@@ -17,21 +17,20 @@ public class LLMRequestBuilderTest
     LLMConfig llmconf = new("gpt-3.5-turbo");
     Prompt prompt = new("Say hi");
 
-    LLMRequestBuilder builder = new LLMRequestBuilder();
 
     [SetUp]
     public void Setup()
     {
-        builder
-            .UsingPrompt(prompt)
-            .UsingLLMConfig(llmconf);
+
     }
 
     [Test]
     public void TestBuilder()
     {
         var requestManual = new LLMRequest(prompt, llmconf, con, requestConfig);
-        var requestFromBuilder = builder
+        var requestFromBuilder = new LLMRequestBuilder()
+            .UsingPrompt(prompt)
+            .UsingLLMConfig(llmconf)
             .UsingLLMConnection(con)
             .UsingRequestConfig(requestConfig)
             .Build();
@@ -46,7 +45,9 @@ public class LLMRequestBuilderTest
     public void TestBuilderAsync()
     {
         var requestManual = new LLMRequestAsync(prompt, llmconf, conAsync, requestConfigAsync);
-        var requestFromBuilder = builder
+        var requestFromBuilder = new LLMRequestBuilder()
+            .UsingPrompt(prompt)
+            .UsingLLMConfig(llmconf)
             .UsingLLMConnection(conAsync)
             .UsingRequestConfig(requestConfigAsync)
             .BuildAsync();
@@ -144,13 +145,14 @@ public class LLMRequestBuilderTest
 
     public LLMRequestBuilder BuilderWithoutItem(string itemToIgnore)
     {
+        var builder = new LLMRequestBuilder();
         if (itemToIgnore != "prompt")
             builder.UsingPrompt(prompt);
         if (itemToIgnore != "llmConfig")
             builder.UsingLLMConfig(llmconf);
         if (itemToIgnore != "connection")
             builder.UsingLLMConnection(con);
-        if (itemToIgnore != "connectioAsync")
+        if (itemToIgnore != "connectionAsync")
             builder.UsingLLMConnection(conAsync);
         if (itemToIgnore != "requestConfig")
             builder.UsingRequestConfig(requestConfig);

@@ -23,6 +23,9 @@ public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategy
     public override RequestResult ExecuteStrategy(LLMRequest request, OutputOverflowException e)
     {
         request.UsingOutputLimitAttachment(TokenToWordRatio, MarginOfSafetyMul);
+        request = new LLMRequestBuilder(request)
+            .UsingRequestConfig(request.RequestConfig.AddFailStrategyToTop(new FailStrategyThrowException<OutputOverflowException>()))
+            .Build();
         return request.Complete();
     }
 }

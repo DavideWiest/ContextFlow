@@ -23,7 +23,7 @@ public class TestLLMFailStrategyRetrySameContext
     {
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowThenSayHiConnectionAfterN(2))
-            .UsingRequestConfig(new RequestConfig().UsingFailStrategy(new LLMFailStrategyRetrySameSettings(2)))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMException>(2)))
             .Build();
 
         try
@@ -41,8 +41,8 @@ public class TestLLMFailStrategyRetrySameContext
     public void TestRetrySameCtxExceedMaxRetries()
     {
         LLMRequest request = requestBuilder
-            .UsingLLMConnection(new ThrowThenSayHiConnectionAfterN(3))
-            .UsingRequestConfig(new RequestConfig().UsingFailStrategy(new LLMFailStrategyRetrySameSettings(2)))
+            .UsingLLMConnection(new ThrowThenSayHiConnectionAfterN(4))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMException>(2)))
             .Build();
 
         try
