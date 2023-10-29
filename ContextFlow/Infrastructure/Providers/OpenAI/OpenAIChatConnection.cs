@@ -1,34 +1,33 @@
 ﻿using OpenAI_API;
 
-namespace ContextFlow.Infrastructure.Providers.OpenAI.Async;
+namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
 using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
-using OpenAI_API.Completions;
-using Serilog;
+using OpenAI_API.Chat;
 
-public class OpenAICompletionConnectionAsync : LLMConnectionAsync
+public class OpenAIChatConnection : LLMConnection
 {
     readonly OpenAIAPI api;
 
-    public OpenAICompletionConnectionAsync(string apiKey)
+    public OpenAIChatConnection(string apiKey)
     {
         api = new(apiKey);
     }
 
-    public OpenAICompletionConnectionAsync()
+    public OpenAIChatConnection()
     {
         // uses default, env ("OPENAI_API_KEY"), or config file
         api = new();
     }
 
-    protected override async Task<RequestResult> CallAPIAsync(string input, LLMConfig conf, CFLogger log)
+    protected override RequestResult CallAPI(string input, LLMConfig conf, CFLogger log)
     {
         try
         {
-            return OpenAIUtil.CompletionResultToRequestResult(await GetCompletionResultAsync(input, conf));
+            return OpenAIUtil.ChatResultToRequestResult(GetChatResultSync(input, conf));
         }
         catch (Exception e)
         {
@@ -37,8 +36,9 @@ public class OpenAICompletionConnectionAsync : LLMConnectionAsync
         }
     }
 
-    private async Task<CompletionResult> GetCompletionResultAsync(string input, LLMConfig conf)
+    private ChatResult GetChatResultSync(string input, LLMConfig conf)
     {
-        return await OpenAIUtil.GetCompletionResult(api, input, conf);
+        return OpenAIUtil.GetChatResult(api, input, conf).GetAwaiter().GetResult();
     }
+
 }

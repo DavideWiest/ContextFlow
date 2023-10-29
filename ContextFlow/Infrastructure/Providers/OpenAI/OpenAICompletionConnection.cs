@@ -11,7 +11,7 @@ using Serilog;
 
 public class OpenAICompletionConnection : LLMConnection
 {
-    OpenAIAPI api;
+    readonly OpenAIAPI api;
 
     public OpenAICompletionConnection(string apiKey)
     {

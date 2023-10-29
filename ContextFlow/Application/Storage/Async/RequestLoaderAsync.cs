@@ -20,8 +20,8 @@ public abstract class RequestLoaderAsync
 
 public class JsonRequestLoaderAsync : RequestLoaderAsync
 {
-    private string FileName;
-    private RequestHasher RequestHasher;
+    private readonly string FileName;
+    private readonly RequestHasher RequestHasher;
     public bool ConsiderLLMConfig { get; set; }
 
     public JsonRequestLoaderAsync(string fileName, bool considerLLMConfig=true)

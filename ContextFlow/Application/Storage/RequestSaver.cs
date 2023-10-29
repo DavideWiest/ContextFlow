@@ -13,7 +13,7 @@ public abstract class RequestSaver
 public class JsonRequestSaver : RequestSaver
 {
     private readonly string FileName;
-    private RequestHasher RequestHasher;
+    private readonly RequestHasher RequestHasher;
 
     public JsonRequestSaver(string fileName)
     {

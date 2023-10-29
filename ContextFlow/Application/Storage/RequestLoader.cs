@@ -20,8 +20,8 @@ public abstract class RequestLoader
 
 public class JsonRequestLoader : RequestLoader
 {
-    private string FileName;
-    private RequestHasher RequestHasher = new();
+    private readonly string FileName;
+    private readonly RequestHasher RequestHasher = new();
     public bool ConsiderLLMConfig { get; set; }
 
     public JsonRequestLoader(string fileName, bool considerLLMConfig = true)

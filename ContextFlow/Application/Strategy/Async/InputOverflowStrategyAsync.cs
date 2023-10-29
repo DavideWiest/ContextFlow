@@ -9,9 +9,9 @@ namespace ContextFlow.Application.Strategy.Async;
 
 public class InputOverflowStrategySplitTextAsync : FailStrategyAsync<InputOverflowException>
 {
-    private TextSplitter Splitter;
-    private TextMerger Merger;
-    private string SplitAttachmentName;
+    private readonly TextSplitter Splitter;
+    private readonly TextMerger Merger;
+    private readonly string SplitAttachmentName;
 
     public InputOverflowStrategySplitTextAsync(TextSplitter splitter, TextMerger merger, string splitAttachmentName)
     {

@@ -13,9 +13,9 @@ public abstract class InputOverflowStrategy : FailStrategy<InputOverflowExceptio
 
 public class InputOverflowStrategySplitText : InputOverflowStrategy
 {
-    private TextSplitter Splitter;
-    private TextMerger Merger;
-    private string SplitAttachmentName;
+    private readonly TextSplitter Splitter;
+    private readonly TextMerger Merger;
+    private readonly string SplitAttachmentName;
 
     public InputOverflowStrategySplitText(TextSplitter splitter, TextMerger merger, string splitAttachmentName)
     {

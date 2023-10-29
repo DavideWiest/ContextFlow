@@ -11,7 +11,7 @@ using Serilog;
 
 public class OpenAIChatConnectionAsync : LLMConnectionAsync
 {
-    OpenAIAPI api;
+    readonly OpenAIAPI api;
 
     public OpenAIChatConnectionAsync(string apiKey)
     {
