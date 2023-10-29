@@ -94,13 +94,19 @@ public class LLMRequestBuilder
 
     public bool ConfigurationIsComplete(out IEnumerable<string> missingElements, bool forAsyncClass)
     {
+        var missingElementsDict = GetElementDefinitionDict(forAsyncClass);
+
+        missingElements = missingElementsDict.Keys.Where(k => missingElementsDict[k]);
+        return missingElements.ToList().Count == 0;
+    }
+
+    private Dictionary<string, bool> GetElementDefinitionDict(bool forAsyncClass)
+    {
         var missingElementsDict = new Dictionary<string, bool>();
         missingElementsDict["Prompt"] = Prompt == null;
         missingElementsDict["LLMConfig"] = LLMConfig == null;
         missingElementsDict["LLMConnection"] = (forAsyncClass ? LLMConnectionAsync == null : LLMConnection == null);
         missingElementsDict["RequestConfig"] = (forAsyncClass ? RequestConfigAsync == null : RequestConfig == null);
-
-        missingElements = missingElementsDict.Keys.Where(k => missingElementsDict[k]);
-        return missingElements.ToList().Count == 0;
+        return missingElementsDict;
     }
 }

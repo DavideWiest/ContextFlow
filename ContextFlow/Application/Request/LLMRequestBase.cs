@@ -21,7 +21,7 @@ public abstract class LLMRequestBase
 
         int availableTokenSpace = LLMConfig.MaxTotalTokens - LLMConfig.MaxInputTokens;
         int availableWords = (int)Math.Floor(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
-        Prompt.UsingAttachmentInline("Output length", $"The output must be under {availableWords} words long");
+        Prompt.UsingAttachment(new Attachment("Output length", $"The output must be under {availableWords} words long", true));
         return this;
     }
 }

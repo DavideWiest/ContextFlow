@@ -1,6 +1,7 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Result;
 using Newtonsoft.Json;
+using OpenAI_API.Moderation;
 
 namespace ContextFlow.Application.Storage;
 
@@ -28,38 +29,12 @@ public class JsonRequestSaver : RequestSaver
         request.RequestConfig.Logger.Information("Storing request with prompt-key {promptKey} and llmconfig-key {llmconfigKey}", key1, key2);
 
         // Create a dictionary with the request and response
-        var data = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>
-        {
-            {key1, new Dictionary<string, Dictionary<string, object>>
-                {
-                    {key2, new Dictionary<string, object> 
-                        {
-                            { "prompt", request.Prompt },
-                            { "llmconfig", request.LLMConfig },
-                            { "response", result },
-                            { "timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
-                        } 
-                    }
-                }
-            }
-        };
+        var data = SaverUtil.CreateFileStructureFromData(key1, key2, request, result);
 
         // Load existing data if the file already exists
         if (File.Exists(FileName))
         {
-            var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
-            if (existingData == null)
-            {
-                existingData = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
-            }
-            if (!existingData.ContainsKey(key1))
-            {
-                existingData[key1] = new Dictionary<string, Dictionary<string, object>>();
-            } 
-
-            existingData[key1][key2] = data[key1][key2]; // Merge or overwrite data with the same key
-
-            data = existingData;
+            data = SaverUtil.MergeDataWithExisting(FileName, data, key1, key2);
         } else
         {
             request.RequestConfig.Logger.Debug("File {fileName} does not seem to exist. Creating it now.", FileName);

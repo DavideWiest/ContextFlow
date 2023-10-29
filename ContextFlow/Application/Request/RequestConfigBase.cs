@@ -42,6 +42,4 @@ public abstract class RequestConfigBase<T> where T : RequestConfigBase<T>
         Logger = log;
         return (T)this;
     }
-
-    public override abstract string ToString();
 }

@@ -44,14 +44,4 @@ public class RequestConfigAsync : RequestConfigBase<RequestConfigAsync>
         RequestLoaderAsync = requestLoader;
         return this;
     }
-
-    public override string ToString()
-    {
-        string failStrategies = string.Join(", ", FailStrategies.Select(fs => fs.GetType().Name));
-        string requestLoader = RequestLoaderAsync != null ? RequestLoaderAsync.GetType().Name : "null";
-        string requestSaver = RequestSaverAsync != null ? RequestSaverAsync.GetType().Name : "null";
-        string tokenizer = Tokenizer != null ? Tokenizer.GetType().Name : "null";
-
-        return $"RequestConfigAsync(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, ThrowExceptionOnOutputOverflow={ThrowExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
-    }
 }

@@ -15,13 +15,18 @@ public class FormattablePrompt : Prompt
 
     private Formatter Formatter;
 
-    public FormattablePrompt(string action, bool throwExceptionOnUnfilled = true) : base(action)
+    public FormattablePrompt(string action) : base(action)
+    {
+        Formatter = new SmartFormatterFmtr();
+    }
+
+    public FormattablePrompt(string action, bool throwExceptionOnUnfilled) : base(action)
     {
         ThowExceptionOnUnfilled = throwExceptionOnUnfilled;
         Formatter = new SmartFormatterFmtr();
     }
 
-    public FormattablePrompt(string action, Formatter formatter, bool thowExceptionOnUnfilled = true) : base(action)
+    public FormattablePrompt(string action, Formatter formatter, bool thowExceptionOnUnfilled) : base(action)
     {
         ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
         Formatter = formatter;
@@ -59,8 +64,7 @@ public class FormattablePrompt : Prompt
 
     public void Validate()
     {
-        List<string> undefinedPlaceholderValues;
-        IsValid(out undefinedPlaceholderValues);
+        IsValid(out List<string> undefinedPlaceholderValues);
 
         if (undefinedPlaceholderValues.Count > 0 && ThowExceptionOnUnfilled)
         {

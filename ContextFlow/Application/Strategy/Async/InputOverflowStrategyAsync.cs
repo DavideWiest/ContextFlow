@@ -47,8 +47,30 @@ public class InputOverflowStrategySplitTextAsync : FailStrategyAsync<InputOverfl
             .Complete());
         }
 
-        RequestResult[] results = await Task.WhenAll(resultTasks);
+        RequestResult[] results = await CompleteAllFragmentRequests(request, attachmentContentFragments);
 
-        return new RequestResult(Merger.Merge(results.Select(r => r.RawOutput).ToList()), results[0].FinishReason);
+        return MergeResultsBack(results);
     }
+
+    private async Task<RequestResult[]> CompleteAllFragmentRequests(LLMRequestAsync request, IEnumerable<string> attachmentContentFragments)
+    {
+        List<Task<RequestResult>> resultTasks = new();
+
+        foreach (var fragment in attachmentContentFragments)
+        {
+            resultTasks.Add(new LLMRequestBuilder(request)
+            .UsingPrompt(request.Prompt.UpsertingAttachment(new Attachment(SplitAttachmentName, fragment, true)))
+            .UsingRequestConfig(request.RequestConfig.AddFailStrategyToTop(new FailStrategyThrowExceptionAsync<InputOverflowException>()))
+            .BuildAsync()
+            .Complete());
+        }
+
+        return await Task.WhenAll(resultTasks);
+    }
+
+    private RequestResult MergeResultsBack(IEnumerable<RequestResult> results)
+    {
+        return new RequestResult(Merger.Merge(results.Select(r => r.RawOutput).ToList()), results.ToList()[0].FinishReason);
+    }
+
 }

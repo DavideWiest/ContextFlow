@@ -2,6 +2,7 @@
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Application.Prompting;
 using ContextFlow.Application.Result;
+using OpenAI_API.Moderation;
 
 namespace ContextFlow.Application.Request;
 
@@ -39,14 +40,7 @@ public class LLMRequest : LLMRequestBase
         }
         catch (Exception e)
         {
-            RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResult? possibleResult = UseFailStrategies(e);
-            if (possibleResult == null)
-            {
-                RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
-                throw;
-            }
-            result = possibleResult;
+            result = UseFailStrategiesWrapper(e);
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
@@ -73,6 +67,18 @@ public class LLMRequest : LLMRequestBase
             throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [ThrowExceptionOnOutputOverflow=true]");
         
         return result;
+    }
+
+    private RequestResult UseFailStrategiesWrapper(Exception e)
+    {
+        RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
+        RequestResult? possibleResult = UseFailStrategies(e);
+        if (possibleResult == null)
+        {
+            RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
+            throw e;
+        }
+        return possibleResult;
     }
 
     private RequestResult? UseFailStrategies(Exception e)

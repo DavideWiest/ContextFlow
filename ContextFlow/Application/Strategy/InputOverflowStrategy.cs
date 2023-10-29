@@ -40,6 +40,13 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
 
         request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + string.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
 
+        List<RequestResult> results = CompleteAllFragmentRequests(request, attachmentContentFragments);
+
+        return MergeResultsBack(results);
+    }
+
+    private List<RequestResult> CompleteAllFragmentRequests(LLMRequest request, IEnumerable<string> attachmentContentFragments)
+    {
         List<RequestResult> results = new List<RequestResult>();
         foreach (var fragment in attachmentContentFragments)
         {
@@ -49,6 +56,11 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
             .Build()
             .Complete());
         }
+        return results;
+    }
+
+    private RequestResult MergeResultsBack(List<RequestResult> results)
+    {
         return new RequestResult(Merger.Merge(results.Select(r => r.RawOutput).ToList()), results[0].FinishReason);
     }
 }

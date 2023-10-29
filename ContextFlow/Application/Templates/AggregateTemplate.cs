@@ -19,7 +19,7 @@ public class AggregateTemplate : CFTemplate
     {
         foreach (var piece in TextPieces)
         {
-            prompt.UsingAttachment(null, piece);
+            prompt.UsingAttachment(new Attachment(null, piece, false));
         }
         return prompt;
     }

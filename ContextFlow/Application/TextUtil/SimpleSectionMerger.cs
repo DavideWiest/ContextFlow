@@ -34,23 +34,12 @@ public class SimpleSectionMerger : TextMerger
 
         foreach (var input in inputs)
         {
-            string taggedInput = input;
-
-            foreach (var identifier in SectionIdentifiersWithJoinStrings.Keys)
-            {
-                taggedInput = taggedInput.Replace(identifier, StartIdentifier + identifier + EndIdentifier);
-            }
+            string taggedInput = TagIdentifiers(input);
 
             // Find all existing sections using their identifiers
             foreach (var section in taggedInput.Split(StartIdentifier))
             {
-                if (!SectionIdentifiersWithJoinStrings.Keys.Any(section.StartsWith))
-                    continue;
-
-                if (!groupedSections.ContainsKey(section.Split(EndIdentifier)[0]))
-                    groupedSections[section.Split(EndIdentifier)[0]] = new List<string>();
-
-                groupedSections[section.Split(EndIdentifier)[0]].Add(section.Split(EndIdentifier)[1].Trim());
+                groupedSections = UpdateGroupedSections(groupedSections, section);
             }
         }
 
@@ -64,5 +53,27 @@ public class SimpleSectionMerger : TextMerger
 
         // Convert the resulting sections into a single string
         return string.Join(" ", mergedSections);
+    }
+
+    private Dictionary<string, List<string>> UpdateGroupedSections(Dictionary<string, List<string>> groupedSections, string section)
+    {
+        if (SectionIdentifiersWithJoinStrings.Keys.Any(section.StartsWith))
+        {
+            if (!groupedSections.ContainsKey(section.Split(EndIdentifier)[0]))
+                groupedSections[section.Split(EndIdentifier)[0]] = new List<string>();
+
+            groupedSections[section.Split(EndIdentifier)[0]].Add(section.Split(EndIdentifier)[1].Trim());
+        }
+
+        return groupedSections;
+    }
+
+    private string TagIdentifiers(string input)
+    {
+        foreach (var identifier in SectionIdentifiersWithJoinStrings.Keys)
+        {
+            input = input.Replace(identifier, StartIdentifier + identifier + EndIdentifier);
+        }
+        return input;
     }
 }

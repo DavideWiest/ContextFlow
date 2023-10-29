@@ -6,6 +6,8 @@ using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
+using OpenAI_API.Completions;
+using Serilog;
 
 public class OpenAICompletionConnectionAsync : LLMConnectionAsync
 {
@@ -26,13 +28,17 @@ public class OpenAICompletionConnectionAsync : LLMConnectionAsync
     {
         try
         {
-            var result = await OpenAIUtil.GetCompletionResult(api, input, conf, log);
-            return OpenAIUtil.CompletionResultToRequestResult(result);
+            return OpenAIUtil.CompletionResultToRequestResult(await GetCompletionResultAsync(input, conf, log));
         }
         catch (Exception e)
         {
             log.Error($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
             throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
+    }
+
+    private async Task<CompletionResult> GetCompletionResultAsync(string input, LLMConfig conf, CFLogger log)
+    {
+        return await OpenAIUtil.GetCompletionResult(api, input, conf, log);
     }
 }

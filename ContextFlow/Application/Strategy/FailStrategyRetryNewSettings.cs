@@ -41,8 +41,7 @@ public class FailStrategyRetryNewSettings<TException> : FailStrategy<TException>
         return new LLMRequestBuilder(request)
             .UsingPrompt(Prompt ?? request.Prompt)
             .UsingLLMConfig(LLMConf ?? request.LLMConfig)
-            .UsingRequestConfig(RequestConf ?? request.RequestConfig)
-            .UsingRequestConfig(request.RequestConfig.AddFailStrategyToTop(
+            .UsingRequestConfig((RequestConf ?? request.RequestConfig).AddFailStrategyToTop(
                 nextFailStrategy
             ))
             .Build().Complete();

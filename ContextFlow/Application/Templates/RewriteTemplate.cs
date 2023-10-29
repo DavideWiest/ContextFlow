@@ -1,9 +1,4 @@
 ﻿using ContextFlow.Application.Prompting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Templates;
 
@@ -22,8 +17,8 @@ public class RewriteTemplate : CFTemplate
 
     protected override Prompt ConfigurePrompt(Prompt prompt)
     {
-        prompt.UsingAttachmentInline("Target style", TargetStyle);
-        prompt.UsingAttachment("Text", InputText);
+        prompt.UsingAttachment(new Attachment("Target style", TargetStyle, true));
+        prompt.UsingAttachment(new Attachment("Text", InputText, false));
 
         return prompt;
     }

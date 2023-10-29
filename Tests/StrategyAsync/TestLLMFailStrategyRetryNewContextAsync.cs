@@ -21,7 +21,7 @@ public class TestLLMFailStrategyRetryNewContextAsync
         LLMRequestAsync request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnectionAsync((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfigAsync().AddFailStrategy(
-                new FailStrategyRetryNewSettingsAsync<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Now don't fail")))
+                new FailStrategyRetryNewSettingsAsync<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Now don't fail", true))))
             )
             .BuildAsync();
 
@@ -42,7 +42,7 @@ public class TestLLMFailStrategyRetryNewContextAsync
         LLMRequestAsync request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfigAsync().AddFailStrategy(
-                new FailStrategyRetryNewSettingsAsync<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Fail")))
+                new FailStrategyRetryNewSettingsAsync<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Fail", true))))
             )
             .BuildAsync();
 

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tests.Fakes;
+using Tests.Fakes.Async;
 using System.Reflection;
 
 namespace Tests.Sample;

@@ -1,29 +1,33 @@
 ﻿namespace ContextFlow.Application.TextUtil;
 
 using ContextFlow.Infrastructure.Providers;
+using SmartFormat.Core.Output;
 
 public class HierarchichalTextSplitter: TextSplitter
 {
 
-    private readonly List<string> SplitIdentifierHierarchy;
-    private readonly List<string> IdentifiersToAddToBeginnings;
+    private readonly List<string> SplitIdentifierHierarchy = new();
+    private readonly List<string> IdentifiersToAddToBeginnings = new();
     private readonly int MaxStringTokens;
     private LLMTokenizer Tokenizer;
 
     public HierarchichalTextSplitter(LLMTokenizer tokenizer, int maxStringTokens, IEnumerable<string> splitIdentifierHierarchy, IEnumerable<string> identifiersToAddToBeginnings)
     {
         Tokenizer = tokenizer;
-        SplitIdentifierHierarchy = new();
         SplitIdentifierHierarchy.AddRange(splitIdentifierHierarchy);
 
+        Validate();
+
+        IdentifiersToAddToBeginnings.AddRange(identifiersToAddToBeginnings);
+        MaxStringTokens = maxStringTokens;
+    }
+
+    private void Validate()
+    {
         if (SplitIdentifierHierarchy.ToList().Count == 0)
         {
             throw new InvalidDataException("SplitIdentifierHierarchy must have at least one value");
         }
-
-        IdentifiersToAddToBeginnings = new();
-        IdentifiersToAddToBeginnings.AddRange(identifiersToAddToBeginnings);
-        MaxStringTokens = maxStringTokens;
     }
 
     public override List<string> Split(string input)
@@ -38,14 +42,7 @@ public class HierarchichalTextSplitter: TextSplitter
 
         if (!splittableInput.Contains(SplitIdentifierHierarchy[splitIdentifierIdx]))
         {
-            if (splitIdentifierIdx + 1 < SplitIdentifierHierarchy.Count)
-            {
-                return Split(input, splitIdentifierIdx + 1);
-            }
-            else
-            {
-                throw new InvalidDataException("Cannot split string further with given split-identifiers. Add an empty string to the end of the identifier to ensure its split.");
-            }
+            return SplitWithNextIdentifier(input, splitIdentifierIdx);
         }
 
         List<string> substrs = new();
@@ -64,6 +61,18 @@ public class HierarchichalTextSplitter: TextSplitter
             }
         }
         return substrs;
+    }
+
+    protected List<string> SplitWithNextIdentifier(string input, int splitIdentifierIdx)
+    {
+        if (splitIdentifierIdx + 1 < SplitIdentifierHierarchy.Count)
+        {
+            return Split(input, splitIdentifierIdx + 1);
+        }
+        else
+        {
+            throw new InvalidDataException("Cannot split string further with given split-identifiers. Add an empty string to the end of the identifier to ensure its split.");
+        }
     }
 
     protected List<string> SplitWithCurrentSplitIdentifier(string input, int splitIdentifierIdx)
@@ -93,18 +102,21 @@ public class HierarchichalTextSplitter: TextSplitter
 
         List<string> output = new List<string>();
 
-        if (Measure(substr1) <= MaxStringTokens) { output.Add(substr1); } 
-        else { output.AddRange(SplitWithCurrentSplitIdentifier(substr1, splitIdentifierIdx)); }
-
-        if (Measure(substr2) <= MaxStringTokens) { output.Add(substr2); }
-        else { output.AddRange(SplitWithCurrentSplitIdentifier(substr2, splitIdentifierIdx)); }
+        output.AddRange(GetQualifiedSubstrings(substr1, splitIdentifierIdx));
+        output.AddRange(GetQualifiedSubstrings(substr2, splitIdentifierIdx));
 
         return output;
     }
 
-    protected int FindClosestSubStrToMiddle(string input, int splitIdentifierIdx)
+    private List<string> GetQualifiedSubstrings(string substr, int splitIdentifierIdx)
     {
-        var commaIndices = input.Select((c, i) => input.Substring(i).StartsWith(SplitIdentifierHierarchy[splitIdentifierIdx]) ? i : -1).Where(i => i >= 0).ToList();
+        if (Measure(substr) <= MaxStringTokens) { return new() { substr }; }
+        else { return SplitWithCurrentSplitIdentifier(substr, splitIdentifierIdx); }
+    }
+
+    private int FindClosestSubStrToMiddle(string input, int splitIdentifierIdx)
+    {
+        var commaIndices = GetCommaIndices(input, splitIdentifierIdx);
 
         if (!commaIndices.Any())
             return -1;
@@ -114,7 +126,12 @@ public class HierarchichalTextSplitter: TextSplitter
         return commaIndices.OrderBy(idx => Math.Abs(idx - middleIndex)).First();
     }
 
-    protected IEnumerable<string> CharacterSplitByTokenNum(string s)
+    private List<int> GetCommaIndices(string input, int splitIdentifierIdx)
+    {
+        return input.Select((c, i) => input.Substring(i).StartsWith(SplitIdentifierHierarchy[splitIdentifierIdx]) ? i : -1).Where(i => i >= 0).ToList();
+    }
+
+    private IEnumerable<string> CharacterSplitByTokenNum(string s)
     {
         for (var i = 0; i < s.Length; i += MaxStringTokens)
             yield return s.Substring(i, Math.Min(MaxStringTokens, s.Length - i));

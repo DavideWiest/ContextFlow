@@ -46,13 +46,5 @@ public class RequestConfig : RequestConfigBase<RequestConfig>
         return this;
     }
 
-    public override string ToString()
-    {
-        string failStrategies = string.Join(", ", FailStrategies.Select(fs => fs.GetType().Name));
-        string requestLoader = RequestLoader != null ? RequestLoader.GetType().Name : "null";
-        string requestSaver = RequestSaver != null ? RequestSaver.GetType().Name : "null";
-        string tokenizer = Tokenizer != null ? Tokenizer.GetType().Name : "null";
 
-        return $"RequestConfig(FailStrategies=[{failStrategies}], Logger={Logger.GetType().Name}, RequestLoader={requestLoader}, RequestSaver={requestSaver}, ValidateNumInputTokensBeforeRequest={ValidateNumInputTokensBeforeRequest}, ThrowExceptionOnOutputOverflow={ThrowExceptionOnOutputOverflow}, Tokenizer={tokenizer})";
-    }
 }

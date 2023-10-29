@@ -42,8 +42,7 @@ public class FailStrategyRetryNewSettingsAsync<TException> : FailStrategyAsync<T
         return await new LLMRequestBuilder(request)
             .UsingPrompt(Prompt ?? request.Prompt)
             .UsingLLMConfig(LLMConf ?? request.LLMConfig)
-            .UsingRequestConfig(RequestConf ?? request.RequestConfig)
-            .UsingRequestConfig(request.RequestConfig.AddFailStrategyToTop(
+            .UsingRequestConfig((RequestConf ?? request.RequestConfig).AddFailStrategyToTop(
                 nextFailStrategy
             ))
             .BuildAsync().Complete();

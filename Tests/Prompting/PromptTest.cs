@@ -22,8 +22,8 @@ public class PromptTest
     {
         var prompt = baseTestPrompt
             .Clone()
-            .UsingAttachment("Test attachment", "-> Test attachment Content")
-            .UsingAttachmentInline("Attachment 2", "Inline");
+            .UsingAttachment(new Attachment("Test attachment", "-> Test attachment Content", false))
+            .UsingAttachment(new Attachment("Attachment 2", "Inline", true));
         Assert.That(prompt.ToPlainText(), Is.EqualTo("Test test\n\nTest attachment: \n-> Test attachment Content\n\nAttachment 2: Inline"));
     }
 

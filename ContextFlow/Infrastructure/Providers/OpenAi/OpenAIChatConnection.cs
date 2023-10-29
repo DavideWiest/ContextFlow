@@ -6,6 +6,7 @@ using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
+using OpenAI_API.Chat;
 
 public class OpenAIChatConnection : LLMConnection
 {
@@ -26,14 +27,18 @@ public class OpenAIChatConnection : LLMConnection
     {
         try
         {
-            var result = OpenAIUtil.GetChatResult(api, input, conf, log).GetAwaiter().GetResult();
-            return OpenAIUtil.ChatResultToRequestResult(result);
+            return OpenAIUtil.ChatResultToRequestResult(GetChatResultSync(input, conf, log));
         }
         catch (Exception e)
         {
             log.Error($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
             throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
+    }
+
+    private ChatResult GetChatResultSync(string input, LLMConfig conf, CFLogger log)
+    {
+        return OpenAIUtil.GetChatResult(api, input, conf, log).GetAwaiter().GetResult();
     }
 
 }

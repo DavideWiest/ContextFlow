@@ -33,41 +33,21 @@ public class Prompt
         return this;
     }
 
-    public Prompt UsingAttachment(string? name, string content)
-    {
-        Attachments.Add(new Attachment(name, content, false));
-        return this;
-    }
-
-    public Prompt UsingAttachmentInline(string? name, string content)
-    {
-        Attachments.Add(new Attachment(name, content, true));
-        return this;
-    }
-
-    public Prompt UsingAttachment<T>(string? name, T content, ToStringConverter<T> converter)
-    {
-        Attachments.Add(new Attachment(name, converter.Convert(content), false));
-        return this;
-    }
-
-    public Prompt UsingAttachmentInline<T>(string? name, T content, ToStringConverter<T> converter)
-    {
-        Attachments.Add(new Attachment(name, converter.Convert(content), true));
-        return this;
-    }
-
     public Prompt UpsertingAttachment(Attachment attachment)
     {
-        var a = Attachments.FirstOrDefault(a => a.Name == attachment.Name);
-        if (a != null)
+        var existingAttachment = Attachments.FirstOrDefault(a => a.Name == attachment.Name);
+
+        if (existingAttachment != null)
         {
-            a.Content = attachment.Content;
+            // Update the existing attachment's content.
+            existingAttachment.Content = attachment.Content;
         }
         else
         {
+            // No existing attachment with the same name; add the new one.
             UsingAttachment(attachment);
         }
+
         return this;
     }
 

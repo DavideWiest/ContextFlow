@@ -17,8 +17,8 @@ public class SummarizeTemplate : CFTemplate
 
     protected override Prompt ConfigurePrompt(Prompt prompt)
     {
-        prompt.UsingAttachmentInline("Length", TargetLength);
-        prompt.UsingAttachment("Text", InputText);
+        prompt.UsingAttachment(new Attachment("Length", TargetLength, true));
+        prompt.UsingAttachment(new Attachment("Text", InputText, false));
         
         return prompt;
     }

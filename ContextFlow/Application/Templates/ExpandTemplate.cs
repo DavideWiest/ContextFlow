@@ -16,8 +16,8 @@ public class ExpandTemplate : CFTemplate
 
     protected override Prompt ConfigurePrompt(Prompt prompt)
     {
-        prompt.UsingAttachmentInline("Target length", TargetLength);
-        prompt.UsingAttachment("Text", InputText);
+        prompt.UsingAttachment(new Attachment("Target length", TargetLength, true));
+        prompt.UsingAttachment(new Attachment("Text", InputText, false));
 
         return prompt;
     }

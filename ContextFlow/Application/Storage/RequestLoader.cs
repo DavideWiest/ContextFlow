@@ -71,8 +71,9 @@ public class JsonRequestLoader : RequestLoader
             request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
         // Data found for the given key
-        return ((JObject)data[key1][LLMConfigKey]["response"]).ToObject<WritableRequestResult>()!.ToRequestResult();
+        return LoaderUtil.ConvertToRequestResult(data[key1][LLMConfigKey]["response"]);
     }
+
 
     private Dictionary<string, Dictionary<string, Dictionary<string, object>>>? LoadDataFromFile()
     {

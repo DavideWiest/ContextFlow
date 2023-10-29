@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application.Request.Async;
+using System.Collections;
 
 namespace ContextFlow.Application.Result.Actions;
 
@@ -37,13 +38,18 @@ public class ParsedRequestResultActionsAsync<T>
 
     public async Task<(IEnumerable<RequestResult> Passed, IEnumerable<RequestResult> Failed)> ThenBranchingConditionalAsync(Func<RequestResult, bool> asyncPredicate, Func<ParsedRequestResult<T>, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
-        var results = await Task.WhenAll(funcForNextRequest(ParsedResult).Select(async r => await r.Complete()));
+        var results = await CompleteAllRequests(funcForNextRequest);
         return ActionsUtil.Partition(results, asyncPredicate);
     }
 
     public async Task<(IEnumerable<RequestResult> Passed, IEnumerable<RequestResult> Failed)> ThenBranchingConditionalAsync(Func<RequestResult, Task<bool>> asyncPredicate, Func<ParsedRequestResult<T>, IEnumerable<LLMRequestAsync>> funcForNextRequest)
     {
-        var results = await Task.WhenAll(funcForNextRequest(ParsedResult).Select(async r => await r.Complete()));
+        var results = await CompleteAllRequests(funcForNextRequest);
         return await ActionsUtil.PartitionAsync(results, asyncPredicate);
+    }
+
+    private async Task<IEnumerable<RequestResult>> CompleteAllRequests(Func<ParsedRequestResult<T>, IEnumerable<LLMRequestAsync>> funcForNextRequest)
+    {
+        return await Task.WhenAll(funcForNextRequest(ParsedResult).Select(async r => await r.Complete()));
     }
 }

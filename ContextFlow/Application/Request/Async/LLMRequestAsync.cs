@@ -2,6 +2,7 @@
 using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
+using OpenAI_API.Moderation;
 
 namespace ContextFlow.Application.Request.Async;
 
@@ -39,14 +40,7 @@ public class LLMRequestAsync : LLMRequestBase
         }
         catch (Exception e)
         {
-            RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResult? possibleResult = await UseFailStrategiesAsync(e);
-            if (possibleResult == null)
-            {
-                RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
-                throw;
-            }
-            result = possibleResult;
+            result = await UseFailStrategiesWrapperAsync(e);
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
@@ -73,6 +67,18 @@ public class LLMRequestAsync : LLMRequestBase
             throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [ThrowExceptionOnOutputOverflow=true]");
         
         
+        return result;
+    }
+
+    private async Task<RequestResult> UseFailStrategiesWrapperAsync(Exception e)
+    {
+        RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
+        RequestResult? result = await UseFailStrategiesAsync(e);
+        if (result == null)
+        {
+            RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
+            throw e;
+        }
         return result;
     }
 

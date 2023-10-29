@@ -36,13 +36,18 @@ internal static class OpenAIUtil
             FrequencyPenalty = conf.FrequencyPenalty,
             TopP = conf.TopP,
             NumChoicesPerMessage = conf.NumOutputs,
-            Messages = new ChatMessage[]
+            Messages = GetChatMessages(input, conf)
+        };
+        return await api.Chat.CreateChatCompletionAsync(chatRequest);
+    }
+
+    private static ChatMessage[] GetChatMessages(string input, LLMConfig conf)
+    {
+        return new ChatMessage[]
             {
                 new ChatMessage(ChatMessageRole.System, conf.SystemMessage),
                 new ChatMessage(ChatMessageRole.User, input)
-            }
-        };
-        return await api.Chat.CreateChatCompletionAsync(chatRequest);
+            };
     }
 
     public static async Task<CompletionResult> GetCompletionResult(OpenAIAPI api, string input, LLMConfig conf, CFLogger log)

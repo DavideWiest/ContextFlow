@@ -20,7 +20,7 @@ public class TestLLMFailStrategyRetryNewContext
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfig().AddFailStrategy(
-                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Now don't fail")))
+                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Now don't fail", true))))
             )
             .Build();
 
@@ -41,7 +41,7 @@ public class TestLLMFailStrategyRetryNewContext
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfig().AddFailStrategy(
-                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachmentInline("Info", "Fail")))
+                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Fail", true))))
             )
             .Build();
 

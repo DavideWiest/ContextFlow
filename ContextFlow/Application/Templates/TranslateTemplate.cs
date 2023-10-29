@@ -1,10 +1,4 @@
 ﻿using ContextFlow.Application.Prompting;
-using ContextFlow.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Templates;
 
@@ -23,8 +17,8 @@ public class TranslateTemplate : CFTemplate
 
     protected override Prompt ConfigurePrompt(Prompt prompt)
     {
-        prompt.UsingAttachmentInline("Target language", TargetLanguage);
-        prompt.UsingAttachment("Input text", InputText);
+        prompt.UsingAttachment(new Attachment("Target language", TargetLanguage, true));
+        prompt.UsingAttachment(new Attachment("Input text", InputText, false));
         
         return prompt;
     }
