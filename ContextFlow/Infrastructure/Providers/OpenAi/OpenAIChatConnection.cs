@@ -10,7 +10,7 @@ using OpenAI_API.Chat;
 
 public class OpenAIChatConnection : LLMConnection
 {
-    OpenAIAPI api;
+    readonly OpenAIAPI api;
 
     public OpenAIChatConnection(string apiKey)
     {
