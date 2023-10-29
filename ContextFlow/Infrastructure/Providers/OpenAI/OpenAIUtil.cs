@@ -25,7 +25,7 @@ internal static class OpenAIUtil
         return new RequestResult(output, finish);
     }
 
-    public static async Task<ChatResult> GetChatResult(OpenAIAPI api, string input, LLMConfig conf, CFLogger log)
+    public static async Task<ChatResult> GetChatResult(OpenAIAPI api, string input, LLMConfig conf)
     {
         var chatRequest = new ChatRequest()
         {
@@ -50,7 +50,7 @@ internal static class OpenAIUtil
             };
     }
 
-    public static async Task<CompletionResult> GetCompletionResult(OpenAIAPI api, string input, LLMConfig conf, CFLogger log)
+    public static async Task<CompletionResult> GetCompletionResult(OpenAIAPI api, string input, LLMConfig conf)
     {
         var chatRequest = new CompletionRequest(
             input,
@@ -68,14 +68,11 @@ internal static class OpenAIUtil
 
     public static FinishReason ToCFFinishReason(string finishReasonResponse)
     {
-        switch (finishReasonResponse)
+        return finishReasonResponse switch
         {
-            case "stop":
-                return FinishReason.Stop;
-            case "length":
-                return FinishReason.Overflow;
-            default:
-                return FinishReason.Unknown;
-        }
+            "stop" => FinishReason.Stop,
+            "length" => FinishReason.Overflow,
+            _ => FinishReason.Unknown,
+        };
     }
 }

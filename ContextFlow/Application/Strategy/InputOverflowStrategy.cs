@@ -26,19 +26,18 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
 
     public override RequestResult ExecuteStrategy(LLMRequest request, InputOverflowException e)
     {
-        request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
-        request.RequestConfig.Logger.Debug("However, InputOverflowExceptions may still occur if the rest of the prompt plus any one fragment of the attachment has too many tokens.");
+        request.RequestConfig.Logger.Debug("Info: InputOverflowExceptions may still occur if the rest of the prompt plus any one fragment of the attachment has too many tokens.");
 
         var attachment = request.Prompt.Attachments.FirstOrDefault(a => a.Name == SplitAttachmentName);
         if (attachment == null)
         {
-            request.RequestConfig.Logger.Error($"Attachment with the name {SplitAttachmentName} does not exist. Unable to split it up.");
+            request.RequestConfig.Logger.Error("Attachment with the name {SplitAttachmentName} does not exist. Unable to split it up.", SplitAttachmentName);
             throw new InvalidOperationException($"Attachment with the name {SplitAttachmentName} does not exist. Unable to split it up.");
         }
 
         var attachmentContentFragments = Splitter.Split(attachment.Content);
 
-        request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + string.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
+        request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + "{splitattachment}" + "\n--- SPLIT ATTACHMENT ---\n", string.Join("\n---\n", attachmentContentFragments));
 
         List<RequestResult> results = CompleteAllFragmentRequests(request, attachmentContentFragments);
 
@@ -47,7 +46,7 @@ public class InputOverflowStrategySplitText : InputOverflowStrategy
 
     private List<RequestResult> CompleteAllFragmentRequests(LLMRequest request, IEnumerable<string> attachmentContentFragments)
     {
-        List<RequestResult> results = new List<RequestResult>();
+        List<RequestResult> results = new();
         foreach (var fragment in attachmentContentFragments)
         {
             results.Add(new LLMRequestBuilder(request)

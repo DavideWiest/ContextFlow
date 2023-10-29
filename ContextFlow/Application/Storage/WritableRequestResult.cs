@@ -6,7 +6,7 @@ namespace ContextFlow.Application.Storage;
 
 public class WritableRequestResult
 {
-    public string RawOutput { get; set; }
+    public string RawOutput { get; set; } = default!;
     public FinishReason FinishReason { get; set; }
     public ResultAdditionalData? AdditionalData { get; set; } = null;
 

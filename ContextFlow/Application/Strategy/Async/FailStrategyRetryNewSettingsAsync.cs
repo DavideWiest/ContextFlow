@@ -15,7 +15,7 @@ public class FailStrategyRetryNewSettingsAsync<TException> : FailStrategyAsync<T
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
 
-    public FailStrategyRetryNewSettingsAsync(int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfigAsync? newRequestConf = null, Prompt? newPrompt = null)
+    public FailStrategyRetryNewSettingsAsync(int maxRetries = 1, LLMConfig? newLLMConf = null, RequestConfigAsync? newRequestConf = null, Prompt? newPrompt = null)
     {
         LLMConf = newLLMConf;
         RequestConf = newRequestConf;
@@ -23,7 +23,7 @@ public class FailStrategyRetryNewSettingsAsync<TException> : FailStrategyAsync<T
         MaxRetries = maxRetries;
     }
 
-    public FailStrategyRetryNewSettingsAsync(int retryCount, int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfigAsync? newRequestConf = null, Prompt? newPrompt = null) : this(maxRetries, newLLMConf, newRequestConf, newPrompt)
+    public FailStrategyRetryNewSettingsAsync(int retryCount, int maxRetries = 1, LLMConfig? newLLMConf = null, RequestConfigAsync? newRequestConf = null, Prompt? newPrompt = null) : this(maxRetries, newLLMConf, newRequestConf, newPrompt)
     {
         RetryCount = retryCount;
 

@@ -10,12 +10,12 @@ public class FailStrategyRetrySameSettings<TException> : FailStrategy<TException
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
 
-    public FailStrategyRetrySameSettings(int maxRetries = 3)
+    public FailStrategyRetrySameSettings(int maxRetries = 1)
     {
         MaxRetries = maxRetries;
     }
 
-    public FailStrategyRetrySameSettings(int retryCount, int maxRetries = 3) : this(maxRetries)
+    public FailStrategyRetrySameSettings(int retryCount, int maxRetries = 1) : this(maxRetries)
     {
         RetryCount = retryCount;
     }

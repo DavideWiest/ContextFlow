@@ -20,10 +20,10 @@ public abstract class FailStrategyAsync<TException> : IFailStrategyAsync where T
     {
         if (e is TException typedException)
         {
-            request.RequestConfig.Logger.Information($"{GetType().Name} handling the Exception {e.GetType().Name}.");
+            request.RequestConfig.Logger.Information("{failstrategyname} handling the Exception {exceptionname}.", GetType().Name, e.GetType().Name);
             return await ExecuteStrategy(request, typedException);
         }
-        request.RequestConfig.Logger.Debug($"{GetType().Name} not handling the Exception {e.GetType().Name} - Not of the specified type");
+        request.RequestConfig.Logger.Debug("{failstrategyname} not handling the Exception {exceptionname} - Not of the specified type", GetType().Name, e.GetType().Name);
         return null;
     }
 

@@ -43,7 +43,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             return false;
         if (data.ContainsKey(key1))
         {
-            if ((!ConsiderLLMConfig && data[key1].Count > 0) || data[key1].ContainsKey(key2))
+            if (data[key1].ContainsKey(key2) || (!ConsiderLLMConfig && data[key1].Count > 0))
             {
                 return true;
             }
@@ -61,14 +61,14 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
 
         request.RequestConfig.Logger.Information("Loading the match in {fileName}, with prompt-key {promptKey}, with llmconfig-key {llmconfigKey}", FileName, key1, key2);
 
-        if (!ConsiderLLMConfig)
-        {
-            request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
-        }
-
         if (data == null)
         {
             throw new InvalidOperationException($"Could not load from file {FileName}");
+        }
+
+        if (!ConsiderLLMConfig)
+        {
+            request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
 
         string LLMConfigKey = ConsiderLLMConfig ? key2 : data[key1].Keys.First();

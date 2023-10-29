@@ -28,17 +28,17 @@ public class OpenAICompletionConnection : LLMConnection
     {
         try
         {
-            return OpenAIUtil.CompletionResultToRequestResult(GetCompletionResultSync(input, conf, log));
+            return OpenAIUtil.CompletionResultToRequestResult(GetCompletionResultSync(input, conf));
         }
         catch (Exception e)
         {
-            log.Error($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
+            log.Error("Failed to get the output from the LLM. Exception: {exceptionname}: {exceptionmessage}", e.GetType().Name, e.Message);
             throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
     }
 
-    private CompletionResult GetCompletionResultSync(string input, LLMConfig conf, CFLogger log)
+    private CompletionResult GetCompletionResultSync(string input, LLMConfig conf)
     {
-        return OpenAIUtil.GetCompletionResult(api, input, conf, log).GetAwaiter().GetResult();
+        return OpenAIUtil.GetCompletionResult(api, input, conf).GetAwaiter().GetResult();
     }
 }

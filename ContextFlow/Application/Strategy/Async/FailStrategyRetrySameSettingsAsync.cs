@@ -10,12 +10,12 @@ public class FailStrategyRetrySameSettingsAsync<TException> : FailStrategyAsync<
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
 
-    public FailStrategyRetrySameSettingsAsync(int maxRetries = 3)
+    public FailStrategyRetrySameSettingsAsync(int maxRetries = 1)
     {
         MaxRetries = maxRetries;
     }
 
-    public FailStrategyRetrySameSettingsAsync(int retryCount, int maxRetries = 3) : this(maxRetries)
+    public FailStrategyRetrySameSettingsAsync(int retryCount, int maxRetries = 1) : this(maxRetries)
     {
         RetryCount = retryCount;
     }

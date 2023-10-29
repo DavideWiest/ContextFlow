@@ -27,18 +27,18 @@ public class OpenAIChatConnection : LLMConnection
     {
         try
         {
-            return OpenAIUtil.ChatResultToRequestResult(GetChatResultSync(input, conf, log));
+            return OpenAIUtil.ChatResultToRequestResult(GetChatResultSync(input, conf));
         }
         catch (Exception e)
         {
-            log.Error($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
+            log.Error("Failed to get the output from the LLM. Exception: {exceptionname}: {exceptionmessage}", e.GetType().Name, e.Message);
             throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
     }
 
-    private ChatResult GetChatResultSync(string input, LLMConfig conf, CFLogger log)
+    private ChatResult GetChatResultSync(string input, LLMConfig conf)
     {
-        return OpenAIUtil.GetChatResult(api, input, conf, log).GetAwaiter().GetResult();
+        return OpenAIUtil.GetChatResult(api, input, conf).GetAwaiter().GetResult();
     }
 
 }

@@ -14,7 +14,7 @@ public class FailStrategyRetryNewSettings<TException> : FailStrategy<TException>
     public int MaxRetries { get; }
     public int RetryCount { get; } = 1;
 
-    public FailStrategyRetryNewSettings(int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null)
+    public FailStrategyRetryNewSettings(int maxRetries = 1, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null)
     {
         LLMConf = newLLMConf;
         RequestConf = newRequestConf;
@@ -22,7 +22,7 @@ public class FailStrategyRetryNewSettings<TException> : FailStrategy<TException>
         MaxRetries = maxRetries;
     }
 
-    public FailStrategyRetryNewSettings(int retryCount, int maxRetries = 3, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null) : this(maxRetries, newLLMConf, newRequestConf, newPrompt)
+    public FailStrategyRetryNewSettings(int retryCount, int maxRetries = 1, LLMConfig? newLLMConf = null, RequestConfig? newRequestConf = null, Prompt? newPrompt = null) : this(maxRetries, newLLMConf, newRequestConf, newPrompt)
     {
         RetryCount = retryCount;
 

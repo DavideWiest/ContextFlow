@@ -33,10 +33,9 @@ internal static class SaverUtil
     public static Dictionary<string, Dictionary<string, Dictionary<string, object>>> MergeDataWithExisting(string FileName, Dictionary<string, Dictionary<string, Dictionary<string, object>>> data, string key1, string key2)
     {
         var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
-        if (existingData == null)
-        {
-            existingData = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
-        }
+        
+        existingData ??= new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
+        
         if (!existingData.ContainsKey(key1))
         {
             existingData[key1] = new Dictionary<string, Dictionary<string, object>>();

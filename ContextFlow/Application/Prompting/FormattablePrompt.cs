@@ -9,8 +9,8 @@ public class FormattablePrompt : Prompt
     /// Will throw an exception if the prompt is invalid. A prompt is invalid if:
     /// - not all placeholders have a corresponding value to be replaced with
     /// </summary>
-    private bool ThowExceptionOnUnfilled = true;
-
+    private bool readonly ThowExceptionOnUnfilled = true;
+        z
     private Dictionary<string, object> FormatParameters = new();
 
     private Formatter Formatter;

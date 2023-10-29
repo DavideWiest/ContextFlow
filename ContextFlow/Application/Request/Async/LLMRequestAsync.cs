@@ -19,7 +19,7 @@ public class LLMRequestAsync : LLMRequestBase
 
     public async Task<RequestResult> Complete()
     {
-        RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
+        RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + "{rawprompt}" + "\n--- RAW PROMPT ---\n", Prompt.ToPlainText());
 
 
         RequestResult result;
@@ -43,7 +43,7 @@ public class LLMRequestAsync : LLMRequestBase
             result = await UseFailStrategiesWrapperAsync(e);
         }
 
-        RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + result.RawOutput + "\n--- RAW OUTPUT ---\n");
+        RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + "{rawoutput}" + "\n--- RAW OUTPUT ---\n", result.RawOutput);
 
         return result;
     }
@@ -72,7 +72,7 @@ public class LLMRequestAsync : LLMRequestBase
 
     private async Task<RequestResult> UseFailStrategiesWrapperAsync(Exception e)
     {
-        RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
+        RequestConfig.Logger.Error("Caught Error {exceptionname} when trying to get response: {exceptionmsg}", nameof(e), e.Message);
         RequestResult? result = await UseFailStrategiesAsync(e);
         if (result == null)
         {

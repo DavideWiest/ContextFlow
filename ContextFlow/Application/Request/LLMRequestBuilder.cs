@@ -102,11 +102,13 @@ public class LLMRequestBuilder
 
     private Dictionary<string, bool> GetElementDefinitionDict(bool forAsyncClass)
     {
-        var missingElementsDict = new Dictionary<string, bool>();
-        missingElementsDict["Prompt"] = Prompt == null;
-        missingElementsDict["LLMConfig"] = LLMConfig == null;
-        missingElementsDict["LLMConnection"] = (forAsyncClass ? LLMConnectionAsync == null : LLMConnection == null);
-        missingElementsDict["RequestConfig"] = (forAsyncClass ? RequestConfigAsync == null : RequestConfig == null);
+        var missingElementsDict = new Dictionary<string, bool>
+        {
+            ["Prompt"] = Prompt == null,
+            ["LLMConfig"] = LLMConfig == null,
+            ["LLMConnection"] = (forAsyncClass ? LLMConnectionAsync == null : LLMConnection == null),
+            ["RequestConfig"] = (forAsyncClass ? RequestConfigAsync == null : RequestConfig == null)
+        };
         return missingElementsDict;
     }
 }

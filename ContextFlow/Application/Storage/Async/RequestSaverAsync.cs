@@ -12,7 +12,7 @@ public abstract class RequestSaverAsync
 public class JsonRequestSaverAsync : RequestSaverAsync
 {
     private readonly string FileName;
-    private RequestHasher RequestHasher;
+    private readonly RequestHasher RequestHasher;
 
     public JsonRequestSaverAsync(string fileName)
     {
