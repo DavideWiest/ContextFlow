@@ -5,16 +5,22 @@ using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request;
 
+/// <summary>
+/// The class that executes the request. All parameters are injected through the constructor.
+/// Has its own builder called LLMRequestBuilder
+/// </summary>
 public class LLMRequest : LLMRequestBase
 {
     public LLMConnection LLMConnection { get; }
     public RequestConfig RequestConfig { get; }
+
 
     public LLMRequest(Prompt prompt, LLMConfig llmconf, LLMConnection llmcon, RequestConfig requestconf) : base(prompt, llmconf)
     {
         LLMConnection = llmcon;
         RequestConfig = requestconf;
     }
+
 
     public RequestResult Complete()
     {

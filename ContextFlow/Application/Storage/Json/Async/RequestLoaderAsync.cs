@@ -42,7 +42,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             return false;
         if (data.ContainsKey(key1))
         {
-            if (data[key1].ContainsKey(key2) || !ConsiderLLMConfig && data[key1].Count > 0)
+            if ((!ConsiderLLMConfig && data[key1].Count > 0) || data[key1].ContainsKey(key2))
             {
                 return true;
             }

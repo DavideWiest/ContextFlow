@@ -5,17 +5,32 @@ using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request.Async;
 
+/// <summary>
+/// The async version of LLMRequest
+/// </summary>
 public class LLMRequestAsync : LLMRequestBase
 {
     public LLMConnectionAsync LLMConnection { get; }
     public RequestConfigAsync RequestConfig { get; }
 
+    /// <summary>
+    /// Initialize the LLMRequest. It is recommended to do this through the LLMRequestBuilder-class.
+    /// </summary>
+    /// <param name="prompt"></param>
+    /// <param name="llmconf"></param>
+    /// <param name="llmcon"></param>
+    /// <param name="requestConfig"></param>
     public LLMRequestAsync(Prompt prompt, LLMConfig llmconf, LLMConnectionAsync llmcon, RequestConfigAsync requestConfig) : base(prompt, llmconf)
     {
         LLMConnection = llmcon;
         RequestConfig = requestConfig;
     }
 
+    /// <summary>
+    /// Executes the request by passing the prompt and the LLM-configuration into the connection.
+    /// </summary>
+    /// <returns>A result object</returns>
+    /// <exception cref="OutputOverflowException"></exception>
     public async Task<RequestResult> Complete()
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + "{rawprompt}" + "\n--- RAW PROMPT ---\n", Prompt.ToPlainText());

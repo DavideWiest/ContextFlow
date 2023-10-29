@@ -5,8 +5,20 @@ internal class ActionsUtil
 {
     public static (IEnumerable<T> Passed, IEnumerable<T> Failed) Partition<T>(IEnumerable<T> source, Func<T, bool> predicate)
     {
-        List<T> trueList = source.Where(x => predicate(x)).ToList();
-        List<T> falseList = source.Where(x => !trueList.Contains(x)).ToList();
+        var trueList = new List<T>();
+        var falseList = new List<T>();
+
+        foreach (var item in source)
+        {
+            if (predicate(item))
+            {
+                trueList.Add(item);
+            }
+            else
+            {
+                falseList.Add(item);
+            }
+        }
 
         return (trueList, falseList);
     }

@@ -70,13 +70,20 @@ public class LLMRequestBuilder
         return this;
     }
 
+    /// <summary>
+    /// Will return the built LLMRequest after validating that the required parameters have been set.
+    /// </summary>
+    /// <returns></returns>
     public LLMRequest Build()
     {
         Validate(false);
 
         return new LLMRequest(Prompt!, LLMConfig!, LLMConnection!, RequestConfig!);
     }
-
+    /// <summary>
+    /// Will return the built LLMRequestAsync after validating that the required parameters have been set.
+    /// </summary>
+    /// <returns></returns>
     public LLMRequestAsync BuildAsync()
     {
         Validate(true);
@@ -92,6 +99,12 @@ public class LLMRequestBuilder
         }
     }
 
+    /// <summary>
+    /// Checks if all the necessary parameters have been set
+    /// </summary>
+    /// <param name="missingElements"></param>
+    /// <param name="forAsyncClass">If the request class is supposed to be async or not</param>
+    /// <returns></returns>
     public bool ConfigurationIsComplete(out IEnumerable<string> missingElements, bool forAsyncClass)
     {
         var missingElementsDict = GetElementDefinitionDict(forAsyncClass);
