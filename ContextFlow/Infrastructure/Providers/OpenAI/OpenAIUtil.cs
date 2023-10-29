@@ -4,8 +4,8 @@ using OpenAI_API.Chat;
 using OpenAI_API.Models;
 using OpenAI_API;
 using OpenAI_API.Completions;
-using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
@@ -23,20 +23,6 @@ internal static class OpenAIUtil
         string output = result.Completions[0].ToString();
         FinishReason finish = ToCFFinishReason(result.Completions[0].FinishReason);
         return new RequestResult(output, finish);
-    }
-
-    public static RequestResultAsync ChatResultToRequestResultAsync(ChatResult result)
-    {
-        string output = result.Choices[0].ToString();
-        FinishReason finish = ToCFFinishReason(result.Choices[0].FinishReason);
-        return new RequestResultAsync(output, finish);
-    }
-
-    public static RequestResultAsync CompletionResultToRequestResultAsync(CompletionResult result)
-    {
-        string output = result.Completions[0].ToString();
-        FinishReason finish = ToCFFinishReason(result.Completions[0].FinishReason);
-        return new RequestResultAsync(output, finish);
     }
 
     public static async Task<ChatResult> GetChatResult(OpenAIAPI api, string input, LLMConfig conf, CFLogger log)

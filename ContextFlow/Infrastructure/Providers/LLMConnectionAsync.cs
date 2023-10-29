@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Domain;
+using ContextFlow.Application.Result;
 
 namespace ContextFlow.Infrastructure.Providers;
 
@@ -8,9 +9,9 @@ using ContextFlow.Infrastructure.Logging;
 public abstract class LLMConnectionAsync
 {
 
-    protected abstract Task<RequestResultAsync> CallAPIAsync(string input, LLMConfig conf, CFLogger log);
+    protected abstract Task<RequestResult> CallAPIAsync(string input, LLMConfig conf, CFLogger log);
 
-    public async Task<RequestResultAsync> GetResponseAsync(string input, LLMConfig conf, CFLogger log)
+    public async Task<RequestResult> GetResponseAsync(string input, LLMConfig conf, CFLogger log)
     {
         try { 
             return await CallAPIAsync(input, conf, log);

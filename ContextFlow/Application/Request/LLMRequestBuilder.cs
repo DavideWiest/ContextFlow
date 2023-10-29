@@ -86,8 +86,7 @@ public class LLMRequestBuilder
 
     protected void Validate(bool forAsyncClass = false)
     {
-        IEnumerable<string> missingElements;
-        if (!ConfigurationIsComplete(out missingElements, forAsyncClass))
+        if (!ConfigurationIsComplete(out IEnumerable<string> missingElements, forAsyncClass))
         {
             throw new InvalidOperationException("Cannot build LLMRequest yet. Missing elements to configure (Use Using... Methods: " + string.Join(", ", missingElements));
         }

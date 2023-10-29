@@ -1,6 +1,7 @@
 ﻿using ContextFlow.Application.Prompting;
 using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 
 namespace ContextFlow.Application.Strategy.Async;
@@ -20,7 +21,7 @@ public class FailStrategyRetrySameSettingsAsync<TException> : FailStrategyAsync<
         RetryCount = retryCount;
     }
 
-    public override async Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, TException e)
+    public override async Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, TException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
@@ -62,7 +63,7 @@ public class FailStrategyRetryNewSettingsAsync<TException> : FailStrategyAsync<T
         }
     }
 
-    public override async Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, TException e)
+    public override async Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, TException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy (Retry-count={RetryCount})");
 
@@ -91,7 +92,7 @@ public class FailStrategyThrowExceptionAsync<TException> : FailStrategyAsync<TEx
         InfoMessage = infoMessage;
     }
 
-    public override async Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, TException e)
+    public override async Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, TException e)
     {
         if (InfoMessage != null)
         {

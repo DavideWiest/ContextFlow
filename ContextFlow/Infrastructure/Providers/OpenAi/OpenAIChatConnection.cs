@@ -2,7 +2,7 @@
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 
-using ContextFlow.Application.Request;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;

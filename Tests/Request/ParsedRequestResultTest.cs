@@ -3,6 +3,7 @@ using ContextFlow.Application.Request.Async;
 using Tests.Fakes;
 using Tests.Util;
 using Tests.Sample;
+using ContextFlow.Application.Result;
 
 namespace Tests.Request;
 
@@ -10,21 +11,21 @@ namespace Tests.Request;
 public class ParsedRequestResultTest
 {
     ParsedRequestResult<StringWrapper> result;
-    ParsedRequestResultAsync<StringWrapper> resultAsync;
+    ParsedRequestResult<StringWrapper> resultAsync;
 
     string[] input = new string[] { "yes", "no", "yes", "no", "yes" };
 
     [SetUp]
     public async Task Setup()
     {
-        result = SampleRequests.sampleRequest.Complete().Parse(x => new StringWrapper(x.RawOutput));
-        resultAsync = (await SampleRequests.sampleRequestAsync.Complete()).Parse(x => new StringWrapper(x.RawOutput));
+        result = SampleRequests.sampleRequest.Complete().Actions.Parse(x => new StringWrapper(x.RawOutput));
+        resultAsync = (await SampleRequests.sampleRequestAsync.Complete()).Actions.Parse(x => new StringWrapper(x.RawOutput));
     }
 
     [Test]
     public void TestBranchingConditional()
     {
-        var (passed, failed) = result.ThenBranchingConditional(x => x.RawOutput.StartsWith("yes"),
+        var (passed, failed) = result.Actions.ThenBranchingConditional(x => x.RawOutput.StartsWith("yes"),
             x => GetOutput());
 
         Assert.That(
@@ -54,7 +55,7 @@ public class ParsedRequestResultTest
     public async Task TestBranchingConditionalAsync()
     {
 
-        var (passed, failed) = await resultAsync.ThenBranchingConditionalAsync(x => x.RawOutput.StartsWith("yes"),
+        var (passed, failed) = await resultAsync.AsyncActions.ThenBranchingConditionalAsync(async x => x.RawOutput.StartsWith("yes"),
             x => GetOutputForAsync());
 
         Assert.That(

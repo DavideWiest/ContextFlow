@@ -1,21 +1,22 @@
-﻿using ContextFlow.Application.Request;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
+
 namespace ContextFlow.Application.Strategy.Async;
 
 public interface IFailStrategyAsync
 {
-    public Task<RequestResultAsync?> HandleExceptionAsync(LLMRequestAsync request, Exception e);
+    public Task<RequestResult?> HandleExceptionAsync(LLMRequestAsync request, Exception e);
 }
 
 public abstract class FailStrategyAsync<TException> : IFailStrategyAsync where TException : Exception
 {
-    public async Task<RequestResultAsync?> HandleExceptionAsync(LLMRequestAsync request, Exception e)
+    public async Task<RequestResult?> HandleExceptionAsync(LLMRequestAsync request, Exception e)
     {
         if (e is TException typedException)
         {
@@ -26,5 +27,5 @@ public abstract class FailStrategyAsync<TException> : IFailStrategyAsync where T
         return null;
     }
 
-    public abstract Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, TException e);
+    public abstract Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, TException e);
 }

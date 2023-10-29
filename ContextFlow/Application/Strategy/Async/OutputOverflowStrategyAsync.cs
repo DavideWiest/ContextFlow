@@ -1,5 +1,6 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 namespace ContextFlow.Application.Strategy.Async;
 
@@ -15,7 +16,7 @@ public class OutputOverflowStrategyRestrictOutputLengthAsync : FailStrategyAsync
         MarginOfSafetyMul = marginOfSafetyMul;
     }
 
-    public override async Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, OutputOverflowException e)
+    public override async Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, OutputOverflowException e)
     {
         request.UsingOutputLimitAttachment(TokenToWordRatio, MarginOfSafetyMul);
         request = new LLMRequestBuilder(request)

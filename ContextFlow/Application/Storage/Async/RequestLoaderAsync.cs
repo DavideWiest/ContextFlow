@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -6,7 +7,7 @@ namespace ContextFlow.Application.Storage.Async;
 
 public abstract class RequestLoaderAsync
 {
-    public async Task<RequestResultAsync?> LoadMatchIfExistsAsync(LLMRequestAsync request)
+    public async Task<RequestResult?> LoadMatchIfExistsAsync(LLMRequestAsync request)
     {
         bool matchExists = await MatchExistsAsync(request);
         request.RequestConfig.Logger.Information("Trying to load the result of the current request - Match exists: {matchExists}", matchExists);
@@ -14,7 +15,7 @@ public abstract class RequestLoaderAsync
     }
 
     public abstract Task<bool> MatchExistsAsync(LLMRequestAsync request);
-    public abstract Task<RequestResultAsync> LoadMatchAsync(LLMRequestAsync request);
+    public abstract Task<RequestResult> LoadMatchAsync(LLMRequestAsync request);
 }
 
 public class JsonRequestLoaderAsync : RequestLoaderAsync
@@ -50,7 +51,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
         return false;
     }
 
-    public override async Task<RequestResultAsync> LoadMatchAsync(LLMRequestAsync request)
+    public override async Task<RequestResult> LoadMatchAsync(LLMRequestAsync request)
     {
         // Generate the key based on the request's Prompt, and generate the key based on LLMConfig
         (string key1, string key2) = RequestHasher.GenerateKeys(request);
@@ -66,7 +67,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
         // Data found for the given key
-        return ((JObject)data[key1][LLMConfigKey]["response"]).ToObject<WritableRequestResult>()!.ToRequestResultAsync();
+        return ((JObject)data[key1][LLMConfigKey]["response"]).ToObject<WritableRequestResult>()!.ToRequestResult();
     }
 
     private async Task<Dictionary<string, Dictionary<string, Dictionary<string, object>>>?> LoadDataFromFileAsync()

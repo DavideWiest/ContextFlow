@@ -3,6 +3,7 @@ using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Prompting;
 using ContextFlow.Application.TextUtil;
 using ContextFlow.Domain;
+using ContextFlow.Application.Result;
 
 namespace ContextFlow.Application.Strategy.Async;
 
@@ -19,7 +20,7 @@ public class InputOverflowStrategySplitTextAsync : FailStrategyAsync<InputOverfl
         SplitAttachmentName = splitAttachmentName;
     }
 
-    public override async Task<RequestResultAsync> ExecuteStrategy(LLMRequestAsync request, InputOverflowException e)
+    public override async Task<RequestResult> ExecuteStrategy(LLMRequestAsync request, InputOverflowException e)
     {
         request.RequestConfig.Logger.Debug($"{GetType().Name} executing its strategy: Splitting attachment {SplitAttachmentName} and merging the outputs later on.");
         request.RequestConfig.Logger.Debug("However, InputOverflowExceptions may still occur if the rest of the prompt plus any one fragment of the attachment has too many tokens.");
@@ -35,7 +36,7 @@ public class InputOverflowStrategySplitTextAsync : FailStrategyAsync<InputOverfl
 
         request.RequestConfig.Logger.Debug("\n--- SPLIT ATTACHMENT ---\n" + string.Join("\n---\n", attachmentContentFragments) + "\n--- SPLIT ATTACHMENT ---\n");
 
-        List<Task<RequestResultAsync>> resultTasks = new();
+        List<Task<RequestResult>> resultTasks = new();
 
         foreach (var fragment in attachmentContentFragments)
         {
@@ -46,8 +47,8 @@ public class InputOverflowStrategySplitTextAsync : FailStrategyAsync<InputOverfl
             .Complete());
         }
 
-        RequestResultAsync[] results = await Task.WhenAll(resultTasks);
+        RequestResult[] results = await Task.WhenAll(resultTasks);
 
-        return new RequestResultAsync(Merger.Merge(results.Select(r => r.RawOutput).ToList()), results[0].FinishReason);
+        return new RequestResult(Merger.Merge(results.Select(r => r.RawOutput).ToList()), results[0].FinishReason);
     }
 }

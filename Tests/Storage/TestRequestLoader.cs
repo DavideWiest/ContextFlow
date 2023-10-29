@@ -1,8 +1,8 @@
-﻿using ContextFlow.Application.Request;
-using ContextFlow.Application.Request.Async;
+﻿using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Storage.Async;
 using ContextFlow.Application.Storage;
 using Tests.Sample;
+using ContextFlow.Application.Result;
 
 namespace Tests.Storage;
 
@@ -38,8 +38,8 @@ public class TestRequestLoader
     public async Task TestMatchExistsAndLoadMatchAsync()
     {
         bool matchexists = await loaderAsync.MatchExistsAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync result = await loaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
+        RequestResult result = await loaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
+        RequestResult comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
         Assert.That(matchexists, Is.True);
         Assert.That(result.RawOutput == comparisonResult.RawOutput && result.FinishReason == comparisonResult.FinishReason);
     }
@@ -48,8 +48,8 @@ public class TestRequestLoader
     public async Task TestMatchExistsAndLoadMatchInsensitiveAsync()
     {
         bool matchexists = await insensitiveLoaderAsync.MatchExistsAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync result = await insensitiveLoaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
-        RequestResultAsync comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
+        RequestResult result = await insensitiveLoaderAsync.LoadMatchAsync(SampleRequests.sampleRequestAsync);
+        RequestResult comparisonResult = await SampleRequests.sampleRequestAsync.Complete();
         Assert.That(matchexists, Is.True);
         Assert.That(result.RawOutput == comparisonResult.RawOutput && result.FinishReason == comparisonResult.FinishReason);
     }

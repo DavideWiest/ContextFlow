@@ -1,6 +1,7 @@
 ﻿using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Application.Prompting;
+using ContextFlow.Application.Result;
 
 namespace ContextFlow.Application.Request;
 

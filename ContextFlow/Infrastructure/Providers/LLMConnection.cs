@@ -2,7 +2,7 @@
 
 namespace ContextFlow.Infrastructure.Providers;
 
-using ContextFlow.Application.Request;
+using ContextFlow.Application.Result;
 using ContextFlow.Infrastructure.Logging;
 
 public abstract class LLMConnection

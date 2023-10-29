@@ -1,4 +1,5 @@
 ﻿using ContextFlow.Application.Prompting;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
 
@@ -15,12 +16,12 @@ public class LLMRequestAsync : LLMRequestBase
         RequestConfig = requestConfig;
     }
 
-    public async Task<RequestResultAsync> Complete()
+    public async Task<RequestResult> Complete()
     {
         RequestConfig.Logger.Debug("\n--- RAW PROMPT ---\n" + Prompt.ToPlainText() + "\n--- RAW PROMPT ---\n");
 
 
-        RequestResultAsync result;
+        RequestResult result;
 
         try
         {
@@ -39,7 +40,7 @@ public class LLMRequestAsync : LLMRequestBase
         catch (Exception e)
         {
             RequestConfig.Logger.Error($"Caught Error {nameof(e)} when trying to get response: {e.Message}");
-            RequestResultAsync? possibleResult = await UseFailStrategiesAsync(e);
+            RequestResult? possibleResult = await UseFailStrategiesAsync(e);
             if (possibleResult == null)
             {
                 RequestConfig.Logger.Error("Configured fail-strategies were unable to handle the exception");
@@ -53,7 +54,7 @@ public class LLMRequestAsync : LLMRequestBase
         return result;
     }
 
-    private async Task<RequestResultAsync?> TryLoadResult()
+    private async Task<RequestResult?> TryLoadResult()
     {
         if (RequestConfig.RequestLoaderAsync != null)
         {
@@ -62,9 +63,9 @@ public class LLMRequestAsync : LLMRequestBase
         return null;
     }
 
-    private async Task<RequestResultAsync> GetResultFromLLMAsync()
+    private async Task<RequestResult> GetResultFromLLMAsync()
     {
-        RequestResultAsync result;
+        RequestResult result;
         
         result = await LLMConnection.GetResponseAsync(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
@@ -75,7 +76,7 @@ public class LLMRequestAsync : LLMRequestBase
         return result;
     }
 
-    private async Task<RequestResultAsync?> UseFailStrategiesAsync(Exception e)
+    private async Task<RequestResult?> UseFailStrategiesAsync(Exception e)
     {
         foreach (var strategy in RequestConfig.FailStrategies)
         {

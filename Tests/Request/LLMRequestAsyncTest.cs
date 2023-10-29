@@ -1,7 +1,7 @@
 ﻿
 using ContextFlow.Application.Prompting;
-using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Infrastructure.Providers.OpenAI;
@@ -27,7 +27,7 @@ public class LLMRequestAsyncTest
     [Test]
     public async Task TestAsyncHi()
     {
-        RequestResultAsync res = await new LLMRequestAsync(new Prompt("Say \"Hi\"."), llmconfCompletions, llmconHiAsync, requestconfAsync).Complete();
+        RequestResult res = await new LLMRequestAsync(new Prompt("Say \"Hi\"."), llmconfCompletions, llmconHiAsync, requestconfAsync).Complete();
         Assert.That(res.RawOutput.ToLower().StartsWith("hi"));
     }
 

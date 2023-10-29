@@ -1,11 +1,12 @@
 ﻿using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using Newtonsoft.Json;
 
 namespace ContextFlow.Application.Storage.Async;
 
 public abstract class RequestSaverAsync
 {
-    public abstract Task SaveRequestAsync(LLMRequestAsync request, RequestResultAsync result);
+    public abstract Task SaveRequestAsync(LLMRequestAsync request, RequestResult result);
 }
 
 public class JsonRequestSaverAsync : RequestSaverAsync
@@ -19,7 +20,7 @@ public class JsonRequestSaverAsync : RequestSaverAsync
         RequestHasher = new RequestHasher();
     }
 
-    public override async Task SaveRequestAsync(LLMRequestAsync request, RequestResultAsync result)
+    public override async Task SaveRequestAsync(LLMRequestAsync request, RequestResult result)
     {
         // Generate a unique key for the saved data
         (string key1, string key2) = RequestHasher.GenerateKeys(request);

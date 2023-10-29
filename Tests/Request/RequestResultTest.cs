@@ -1,5 +1,6 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using Tests.Fakes;
@@ -11,7 +12,7 @@ namespace Tests.Request;
 public class RequestResultTest
 {
     RequestResult result;
-    RequestResultAsync resultAsync;
+    RequestResult resultAsync;
 
     string[] input = new string[] { "yes", "no", "yes", "no", "yes" };
 
@@ -25,7 +26,7 @@ public class RequestResultTest
     [Test]
     public void TestBranchingConditional()
     {
-        var (passed, failed) = result.ThenBranchingConditional(x => x.RawOutput.StartsWith("yes"),
+        var (passed, failed) = result.Actions.ThenBranchingConditional(x => x.RawOutput.StartsWith("yes"),
             x => GetOutput());
 
         Assert.That(
@@ -55,7 +56,7 @@ public class RequestResultTest
     public async Task TestBranchingConditionalAsync()
     {
         
-        var (passed, failed) = await resultAsync.ThenBranchingConditionalAsync(x => x.RawOutput.StartsWith("yes"),
+        var (passed, failed) = await resultAsync.AsyncActions.ThenBranchingConditionalAsync(x => x.RawOutput.StartsWith("yes"),
             x => GetOutputForAsync());
 
         Assert.That(
