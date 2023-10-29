@@ -1,8 +1,7 @@
-﻿using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Providers;
-using ContextFlow.Application.Prompting;
+﻿using ContextFlow.Application.Prompting;
 using ContextFlow.Application.Result;
-using OpenAI_API.Moderation;
+using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request;
 
@@ -60,12 +59,12 @@ public class LLMRequest : LLMRequestBase
     private RequestResult GetResultFromLLM()
     {
         RequestResult result;
-        
+
         result = LLMConnection.GetResponse(Prompt.ToPlainText(), LLMConfig, RequestConfig.Logger);
 
         if (RequestConfig.ThrowExceptionOnOutputOverflow && result.FinishReason == FinishReason.Overflow)
             throw new OutputOverflowException("An overflow occured - The LLM was not able to finish its output [ThrowExceptionOnOutputOverflow=true]");
-        
+
         return result;
     }
 

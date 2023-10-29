@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ContextFlow.Application.TextUtil;
+﻿namespace ContextFlow.Application.TextUtil;
 
 /// <summary>
 /// Merger that can be used in an overflowstrategy, which merges first-level sections together, using the given identifiers (the substring, e.g. a heading)

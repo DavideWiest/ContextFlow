@@ -9,11 +9,11 @@ public class FormattablePrompt : Prompt
     /// Will throw an exception if the prompt is invalid. A prompt is invalid if:
     /// - not all placeholders have a corresponding value to be replaced with
     /// </summary>
-    private bool readonly ThowExceptionOnUnfilled = true;
-        z
+    private readonly bool ThowExceptionOnUnfilled = true;
+        
     private Dictionary<string, object> FormatParameters = new();
 
-    private Formatter Formatter;
+    private readonly Formatter Formatter;
 
     public FormattablePrompt(string action) : base(action)
     {
@@ -31,7 +31,7 @@ public class FormattablePrompt : Prompt
         ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
         Formatter = formatter;
     }
-    
+
     public FormattablePrompt UsingValue(string placeholder, string value)
     {
         FormatParameters[placeholder] = value;

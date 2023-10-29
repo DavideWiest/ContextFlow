@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SmartFormat;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using SmartFormat;
 
 namespace ContextFlow.Infrastructure.Formatter;
 
 
 
-internal class SmartFormatterFmtr: Formatter
+internal class SmartFormatterFmtr : Formatter
 {
     SmartFormatter formatter = Smart.CreateDefaultSmartFormat();
 

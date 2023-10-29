@@ -2,12 +2,11 @@
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI.Async;
 
-using ContextFlow.Domain;
 using ContextFlow.Application.Result;
+using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 using OpenAI_API.Chat;
-using Serilog;
 
 public class OpenAIChatConnectionAsync : LLMConnectionAsync
 {

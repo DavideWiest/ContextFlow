@@ -1,13 +1,8 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Result;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ContextFlow.Application.Storage;
+namespace ContextFlow.Application.Storage.Json;
 
 internal static class SaverUtil
 {
@@ -33,9 +28,9 @@ internal static class SaverUtil
     public static Dictionary<string, Dictionary<string, Dictionary<string, object>>> MergeDataWithExisting(string FileName, Dictionary<string, Dictionary<string, Dictionary<string, object>>> data, string key1, string key2)
     {
         var existingData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, object>>>>(File.ReadAllText(FileName));
-        
+
         existingData ??= new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
-        
+
         if (!existingData.ContainsKey(key1))
         {
             existingData[key1] = new Dictionary<string, Dictionary<string, object>>();

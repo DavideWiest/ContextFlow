@@ -2,7 +2,7 @@
 using ContextFlow.Application.Result;
 using Newtonsoft.Json;
 
-namespace ContextFlow.Application.Storage.Async;
+namespace ContextFlow.Application.Storage.Json.Async;
 
 public abstract class RequestSaverAsync
 {

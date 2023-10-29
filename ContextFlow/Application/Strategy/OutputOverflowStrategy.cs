@@ -1,7 +1,6 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Result;
 using ContextFlow.Domain;
-using System;
 namespace ContextFlow.Application.Strategy;
 
 public abstract class OutputOverflowStrategyAsync : FailStrategy<OutputOverflowException>
@@ -15,7 +14,7 @@ public class OutputOverflowStrategyRestrictOutputLength : OutputOverflowStrategy
     private readonly double MarginOfSafetyMul;
 
     public OutputOverflowStrategyRestrictOutputLength() { }
-    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio=4, double marginOfSafetyMul=0.75)
+    public OutputOverflowStrategyRestrictOutputLength(int tokenToWordRatio = 4, double marginOfSafetyMul = 0.75)
     {
         TokenToWordRatio = tokenToWordRatio;
         MarginOfSafetyMul = marginOfSafetyMul;

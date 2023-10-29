@@ -7,7 +7,6 @@ using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
 using ContextFlow.Infrastructure.Providers;
 using OpenAI_API.Completions;
-using Serilog;
 
 public class OpenAICompletionConnection : LLMConnection
 {

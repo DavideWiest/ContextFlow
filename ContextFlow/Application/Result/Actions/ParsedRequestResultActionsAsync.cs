@@ -1,5 +1,4 @@
 ﻿using ContextFlow.Application.Request.Async;
-using System.Collections;
 
 namespace ContextFlow.Application.Result.Actions;
 
@@ -7,7 +6,7 @@ public class ParsedRequestResultActionsAsync<T>
 {
     public ParsedRequestResult<T> ParsedResult;
 
-    public ParsedRequestResultActionsAsync(ParsedRequestResult<T> parsedResult)
+    internal ParsedRequestResultActionsAsync(ParsedRequestResult<T> parsedResult)
     {
         ParsedResult = parsedResult;
     }

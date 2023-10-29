@@ -1,10 +1,8 @@
-﻿using ContextFlow.Application.Request;
-using ContextFlow.Domain;
-using ContextFlow.Application.Prompting;
-using System;
-using System.Collections.Generic;
+﻿using ContextFlow.Application.Prompting;
+using ContextFlow.Application.Request;
 using ContextFlow.Application.Strategy;
 using ContextFlow.Application.TextUtil;
+using ContextFlow.Domain;
 using Tests.Fakes;
 
 namespace Tests.Strategy;
@@ -22,7 +20,7 @@ public class TestInputOverflowExceptionSplitText
     [Test]
     public void TestStrategy()
     {
-        string content = new string('a', 25) + "\n" + new string('b', 25) + "\n"  + new string('c', 25);
+        string content = new string('a', 25) + "\n" + new string('b', 25) + "\n" + new string('c', 25);
         Attachment a = new Attachment("BigAttachment", content, false);
 
         var request = requestBuilder

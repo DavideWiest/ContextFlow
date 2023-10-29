@@ -10,7 +10,7 @@ public class OutputOverflowStrategyRestrictOutputLengthAsync : FailStrategyAsync
     private readonly double MarginOfSafetyMul;
 
     public OutputOverflowStrategyRestrictOutputLengthAsync() { }
-    public OutputOverflowStrategyRestrictOutputLengthAsync(int tokenToWordRatio=4, double marginOfSafetyMul=0.75)
+    public OutputOverflowStrategyRestrictOutputLengthAsync(int tokenToWordRatio = 4, double marginOfSafetyMul = 0.75)
     {
         TokenToWordRatio = tokenToWordRatio;
         MarginOfSafetyMul = marginOfSafetyMul;

@@ -1,8 +1,8 @@
 namespace Tests.Infrastructure;
 
-using ContextFlow.Infrastructure.Providers.OpenAI;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Logging;
+using ContextFlow.Infrastructure.Providers.OpenAI;
 
 public class OpenAIConnectionTest
 {

@@ -1,11 +1,9 @@
-﻿using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Logging;
-using OpenAI_API.Chat;
-using OpenAI_API.Models;
+﻿using ContextFlow.Application.Result;
+using ContextFlow.Domain;
 using OpenAI_API;
+using OpenAI_API.Chat;
 using OpenAI_API.Completions;
-using ContextFlow.Application.Request.Async;
-using ContextFlow.Application.Result;
+using OpenAI_API.Models;
 
 namespace ContextFlow.Infrastructure.Providers.OpenAI;
 

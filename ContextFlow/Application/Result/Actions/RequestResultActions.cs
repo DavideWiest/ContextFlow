@@ -1,10 +1,5 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.TextUtil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Result.Actions;
 
@@ -12,7 +7,7 @@ public class RequestResultActions
 {
     protected RequestResult Result { get; }
 
-    public RequestResultActions(RequestResult result)
+    internal RequestResultActions(RequestResult result)
     {
         Result = result;
     }

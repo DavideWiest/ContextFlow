@@ -29,11 +29,11 @@ public class RequestResultTest
             x => GetOutput());
 
         Assert.That(
-            string.Join(",", passed.Select(x => x.RawOutput).ToArray()), 
+            string.Join(",", passed.Select(x => x.RawOutput).ToArray()),
             Is.EqualTo(string.Join(",", input.Where(x => x.StartsWith("yes")).ToArray()))
         );
         Assert.That(
-            string.Join(",", failed.Select(x => x.RawOutput).ToArray()), 
+            string.Join(",", failed.Select(x => x.RawOutput).ToArray()),
             Is.EqualTo(string.Join(",", input.Where(x => !x.StartsWith("yes")).ToArray()))
         );
     }
@@ -44,9 +44,9 @@ public class RequestResultTest
         foreach (int i in Enumerable.Range(0, input.Length))
         {
             yield return new LLMRequest(
-                SampleRequests.sampleRequest.Prompt, 
+                SampleRequests.sampleRequest.Prompt,
                 SampleRequests.sampleRequest.LLMConfig,
-                con, 
+                con,
                 SampleRequests.sampleRequest.RequestConfig);
         }
     }
@@ -54,7 +54,7 @@ public class RequestResultTest
     [Test]
     public async Task TestBranchingConditionalAsync()
     {
-        
+
         var (passed, failed) = await resultAsync.AsyncActions.ThenBranchingConditionalAsync(x => x.RawOutput.StartsWith("yes"),
             x => GetOutputForAsync());
 

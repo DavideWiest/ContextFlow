@@ -15,7 +15,8 @@ public abstract class LLMConnection
         try
         {
             return CallAPI(input, conf, log);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.Error("Failed to get the output from the LLM. Exception: {exceptionname}: {exceptionmessage}", e.GetType().Name, e.Message);
             throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");

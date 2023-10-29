@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace ContextFlow.Application.TextUtil;
+﻿namespace ContextFlow.Application.TextUtil;
 
 using ContextFlow.Infrastructure.Providers;
-using SmartFormat.Core.Output;
 
-public class HierarchichalTextSplitter: TextSplitter
+public class HierarchichalTextSplitter : TextSplitter
 {
 
     private readonly List<string> SplitIdentifierHierarchy = new();
@@ -39,7 +36,7 @@ public class HierarchichalTextSplitter: TextSplitter
 
     public List<string> Split(string input, int splitIdentifierIdx)
     {
-        string splittableInput = input.StartsWith(SplitIdentifierHierarchy[splitIdentifierIdx]) ? 
+        string splittableInput = input.StartsWith(SplitIdentifierHierarchy[splitIdentifierIdx]) ?
            input[SplitIdentifierHierarchy[splitIdentifierIdx].Length..] : input;
 
         if (!splittableInput.Contains(SplitIdentifierHierarchy[splitIdentifierIdx]))
@@ -97,7 +94,7 @@ public class HierarchichalTextSplitter: TextSplitter
         string substr1 = string.Concat(inputStartsWithIdentifier && IdentifiersToAddToBeginnings.Contains(SplitIdentifierHierarchy[splitIdentifierIdx])
             ? SplitIdentifierHierarchy[splitIdentifierIdx] : "", input.AsSpan(0, middleIndex));
 
-        string substr2 = 
+        string substr2 =
             (IdentifiersToAddToBeginnings.Contains(SplitIdentifierHierarchy[splitIdentifierIdx])
             ? SplitIdentifierHierarchy[splitIdentifierIdx] : "")
             + input[(middleIndex + SplitIdentifierHierarchy[splitIdentifierIdx].Length)..];

@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using ContextFlow.Application.TextUtil;
-using ContextFlow.Infrastructure.Formatter;
-
-namespace ContextFlow.Application.Prompting;
+﻿namespace ContextFlow.Application.Prompting;
 
 public class Prompt
 {

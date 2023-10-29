@@ -1,9 +1,8 @@
 ﻿using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace ContextFlow.Application.Storage.Async;
+namespace ContextFlow.Application.Storage.Json.Async;
 
 public abstract class RequestLoaderAsync
 {
@@ -24,7 +23,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
     private readonly RequestHasher RequestHasher;
     public bool ConsiderLLMConfig { get; set; }
 
-    public JsonRequestLoaderAsync(string fileName, bool considerLLMConfig=true)
+    public JsonRequestLoaderAsync(string fileName, bool considerLLMConfig = true)
     {
         FileName = fileName;
         RequestHasher = new RequestHasher();
@@ -43,7 +42,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             return false;
         if (data.ContainsKey(key1))
         {
-            if (data[key1].ContainsKey(key2) || (!ConsiderLLMConfig && data[key1].Count > 0))
+            if (data[key1].ContainsKey(key2) || !ConsiderLLMConfig && data[key1].Count > 0)
             {
                 return true;
             }

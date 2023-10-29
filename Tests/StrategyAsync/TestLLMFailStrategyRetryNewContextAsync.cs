@@ -1,8 +1,8 @@
-﻿using ContextFlow.Application.Request;
+﻿using ContextFlow.Application.Prompting;
+using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Strategy.Async;
 using ContextFlow.Domain;
-using ContextFlow.Application.Prompting;
 using Tests.Fakes;
 using Tests.Fakes.Async;
 using Tests.Sample;
@@ -14,7 +14,7 @@ public class TestLLMFailStrategyRetryNewContextAsync
     LLMRequestBuilder requestBuilder = new LLMRequestBuilder()
                 .UsingPrompt(SampleRequests.sampleRequest.Prompt)
                 .UsingLLMConfig(SampleRequests.sampleRequest.LLMConfig);
-                
+
     [Test]
     public async Task TestRetryNewCtx()
     {

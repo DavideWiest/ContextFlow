@@ -1,5 +1,4 @@
 ﻿using ContextFlow.Application.Request;
-using ContextFlow.Application.Request.Async;
 
 namespace ContextFlow.Application.Result.Actions;
 
@@ -10,7 +9,7 @@ public class ParsedRequestResultActions<T>
 {
     public ParsedRequestResult<T> ParsedResult;
 
-    public ParsedRequestResultActions(ParsedRequestResult<T> requestresult)
+    internal ParsedRequestResultActions(ParsedRequestResult<T> requestresult)
     {
         ParsedResult = requestresult;
     }

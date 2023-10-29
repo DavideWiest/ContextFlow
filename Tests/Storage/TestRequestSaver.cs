@@ -1,11 +1,6 @@
-﻿
-using ContextFlow.Application.Prompting;
-using ContextFlow.Application.Request.Async;
-using ContextFlow.Application.Request;
-using ContextFlow.Application.Storage.Async;
+﻿using ContextFlow.Application.Storage.Json;
 using ContextFlow.Application.Storage;
-using ContextFlow.Domain;
-using Tests.Fakes;
+using ContextFlow.Application.Storage.Json.Async;
 using Tests.Sample;
 
 namespace Tests.Storage;
@@ -30,7 +25,7 @@ public class TestRequestSaver
     {
         saver.SaveRequest(SampleRequests.sampleRequest, SampleRequests.sampleRequest.Complete());
         Assert.That(
-            File.ReadAllText(SampleRequests.sampleRequestCorrectResultFile).Split("timestamp")[0], 
+            File.ReadAllText(SampleRequests.sampleRequestCorrectResultFile).Split("timestamp")[0],
             Is.EqualTo(File.ReadAllText(testFile1).Split("timestamp")[0]));
     }
 
@@ -39,7 +34,7 @@ public class TestRequestSaver
     {
         await saverAsync.SaveRequestAsync(SampleRequests.sampleRequestAsync, await SampleRequests.sampleRequestAsync.Complete());
         Assert.That(
-            File.ReadAllText(SampleRequests.sampleRequestCorrectResultFile).Split("timestamp")[0], 
+            File.ReadAllText(SampleRequests.sampleRequestCorrectResultFile).Split("timestamp")[0],
             Is.EqualTo(File.ReadAllText(testFile1).Split("timestamp")[0]));
     }
 

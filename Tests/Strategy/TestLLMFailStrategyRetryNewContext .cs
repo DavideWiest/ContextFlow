@@ -1,7 +1,7 @@
-﻿using ContextFlow.Application.Request;
+﻿using ContextFlow.Application.Prompting;
+using ContextFlow.Application.Request;
 using ContextFlow.Application.Strategy;
 using ContextFlow.Domain;
-using ContextFlow.Application.Prompting;
 using Tests.Fakes;
 using Tests.Sample;
 
@@ -12,8 +12,8 @@ public class TestLLMFailStrategyRetryNewContext
     LLMRequestBuilder requestBuilder = new LLMRequestBuilder()
                 .UsingPrompt(SampleRequests.sampleRequest.Prompt)
                 .UsingLLMConfig(SampleRequests.sampleRequest.LLMConfig);
-                
-    
+
+
     [Test]
     public void TestRetryNewCtx()
     {

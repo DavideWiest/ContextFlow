@@ -1,6 +1,6 @@
 ﻿using ContextFlow.Application.Prompting;
-using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Request;
+using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Strategy.Async;
 using ContextFlow.Domain;
 

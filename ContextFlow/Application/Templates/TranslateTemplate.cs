@@ -19,7 +19,7 @@ public class TranslateTemplate : CFTemplate
     {
         prompt.UsingAttachment(new Attachment("Target language", TargetLanguage, true));
         prompt.UsingAttachment(new Attachment("Input text", InputText, false));
-        
+
         return prompt;
     }
 }

@@ -1,11 +1,6 @@
 ﻿using ContextFlow.Application.Request;
 using ContextFlow.Application.Strategy;
 using ContextFlow.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tests.Fakes;
 using Tests.Sample;
 
@@ -16,7 +11,7 @@ public class TestLLMFailStrategyRetrySameContext
     LLMRequestBuilder requestBuilder = new LLMRequestBuilder()
                 .UsingPrompt(SampleRequests.sampleRequest.Prompt)
                 .UsingLLMConfig(SampleRequests.sampleRequest.LLMConfig);
-                
+
 
     [Test]
     public void TestRetrySameCtx()

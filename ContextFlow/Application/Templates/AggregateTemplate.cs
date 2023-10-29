@@ -1,6 +1,4 @@
 ﻿using ContextFlow.Application.Prompting;
-using ContextFlow.Application.Templates.Util;
-using ContextFlow.Domain;
 
 namespace ContextFlow.Application.Templates;
 

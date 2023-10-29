@@ -1,7 +1,7 @@
-﻿using ContextFlow.Domain;
-using ContextFlow.Infrastructure.Providers;
-using ContextFlow.Application.Prompting;
+﻿using ContextFlow.Application.Prompting;
 using ContextFlow.Application.Request.Async;
+using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Request;
 

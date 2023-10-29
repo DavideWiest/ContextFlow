@@ -66,7 +66,8 @@ public class LLMRequestBuilderTest
         {
             BuilderWithoutItem("prompt").Build();
             Assert.Fail();
-        } catch (InvalidOperationException)
+        }
+        catch (InvalidOperationException)
         {
             Assert.Pass();
         }

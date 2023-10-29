@@ -1,7 +1,6 @@
 ﻿namespace Tests.TextUtil;
 
 using ContextFlow.Application.TextUtil;
-using ContextFlow.Domain;
 
 public class ConverterTest
 {

@@ -1,9 +1,4 @@
 ﻿using ContextFlow.Application.Request.Async;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextFlow.Application.Result.Actions;
 
@@ -12,7 +7,7 @@ public class RequestResultActionsAsync
 
     protected RequestResult Result { get; }
 
-    public RequestResultActionsAsync(RequestResult result)
+    internal RequestResultActionsAsync(RequestResult result)
     {
         Result = result;
     }

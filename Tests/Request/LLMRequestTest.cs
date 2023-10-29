@@ -1,12 +1,10 @@
 ﻿
 using ContextFlow.Application.Prompting;
 using ContextFlow.Application.Request;
-using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
 using ContextFlow.Domain;
 using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Infrastructure.Providers.OpenAI;
-using ContextFlow.Infrastructure.Providers.OpenAI.Async;
 using Tests.Fakes;
 
 namespace Tests.Request;
@@ -54,7 +52,8 @@ public class LLMRequestTest
         {
             new LLMRequest(new Prompt("test"), llmconfCompletions, new OutputOverFlowConnection(), new RequestConfig().UsingRaiseExceptionOnOutputOverflow(true)).Complete();
             Assert.Fail();
-        } catch (OutputOverflowException)
+        }
+        catch (OutputOverflowException)
         {
             Assert.Pass();
         }

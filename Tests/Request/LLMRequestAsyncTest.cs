@@ -51,7 +51,8 @@ public class LLMRequestAsyncTest
         {
             await new LLMRequestAsync(new Prompt("test"), llmconfCompletions, new OutputOverFlowConnectionAsync(), new RequestConfigAsync().UsingRaiseExceptionOnOutputOverflow(true)).Complete();
             Assert.Fail();
-        } catch (OutputOverflowException)
+        }
+        catch (OutputOverflowException)
         {
             Assert.Pass();
         }

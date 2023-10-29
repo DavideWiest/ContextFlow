@@ -19,7 +19,7 @@ public class SummarizeTemplate : CFTemplate
     {
         prompt.UsingAttachment(new Attachment("Length", TargetLength, true));
         prompt.UsingAttachment(new Attachment("Text", InputText, false));
-        
+
         return prompt;
     }
 }

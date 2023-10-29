@@ -1,9 +1,9 @@
 ﻿using ContextFlow.Application.Prompting;
-using ContextFlow.Domain;
 using ContextFlow.Application.Request;
 using ContextFlow.Application.Request.Async;
-using ContextFlow.Infrastructure.Providers;
 using ContextFlow.Application.Templates.Util;
+using ContextFlow.Domain;
+using ContextFlow.Infrastructure.Providers;
 
 namespace ContextFlow.Application.Templates;
 
@@ -11,7 +11,7 @@ public abstract class CFTemplate
 {
     public abstract string Action { get; }
 
-    public LLMRequest GetLLMRequest(LLMConnection con, string modelName, int maxTotalTokens=1024)
+    public LLMRequest GetLLMRequest(LLMConnection con, string modelName, int maxTotalTokens = 1024)
     {
         return new LLMRequestBuilder()
             .UsingPrompt(GetPrompt())
