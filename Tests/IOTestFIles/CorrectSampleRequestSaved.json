@@ -19,7 +19,9 @@
       "response": {
         "RawOutput": "Hi",
         "FinishReason": 1,
-        "AdditionalData": null
+        "AdditionalData": null,
+        "Actions": {},
+        "AsyncActions": {}
       },
       "timestamp": "2023-10-28 22:18:07"
     }

@@ -12,12 +12,7 @@ internal static class SaverUtil
         {
             {key1, new Dictionary<string, Dictionary<string, object>>
                 {
-                    {key2, new Dictionary<string, object>
-                        {
-                            { "response", result },
-                            { "timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
-                        }
-                    }
+                    {key2, new Dictionary<string, object>()}
                 }
             }
         };
@@ -27,6 +22,8 @@ internal static class SaverUtil
             dict[key1][key2]["prompt"] = request.Prompt;
             dict[key1][key2]["llmconfig"] = request.LLMConfig;
         }
+        dict[key1][key2]["response"] = result;
+        dict[key1][key2]["timestamp"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         return dict;
     }

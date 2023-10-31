@@ -10,7 +10,7 @@ public class TestRequestSaver
 {
     static readonly string testFile1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderStorageTest.json";
     static readonly string testFile2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderAsyncStorageTest.json";
-    readonly RequestSaver saver = new JsonRequestSaver(testFile1);
+    readonly RequestSaver saver = new JsonRequestSaver(testFile1, true);
     readonly RequestSaverAsync saverAsync = new JsonRequestSaverAsync(testFile2, true);
 
     [OneTimeTearDown]
