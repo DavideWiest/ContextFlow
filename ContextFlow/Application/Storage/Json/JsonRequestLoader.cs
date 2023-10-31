@@ -58,11 +58,12 @@ public class JsonRequestLoader : RequestLoader
             throw new InvalidOperationException($"Could not load from file {FileName}");
         }
 
+        string LLMConfigKey = ConsiderLLMConfig ? key2 : data[key1].Keys.First();
+
         if (!ConsiderLLMConfig)
         {
             request.RequestConfig.Logger.Information("Picking the first available option with this prompt-key as ConsiderLLMConfig is set to false. This option has llmconfig-key {llmconfigkey}", data[key1].Keys.First());
         }
-        string LLMConfigKey = ConsiderLLMConfig ? key2 : data[key1].Keys.First();
         // Data found for the given key
         return LoaderUtil.ConvertToRequestResult(data[key1][LLMConfigKey]["response"]);
     }

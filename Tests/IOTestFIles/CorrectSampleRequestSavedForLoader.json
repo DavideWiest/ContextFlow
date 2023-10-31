@@ -1,0 +1,29 @@
+{
+  "532EAABD9574880DBF76B9B8CC00832C20A6EC113D682299550D7A6E0F345E25": {
+    "7C20B43C8FFC8572E7631F5EA98AF42DBC53C654D17672B5BFA0910F03EB0170": {
+      "prompt": {
+        "PromptAction": "Test",
+        "Attachments": []
+      },
+      "llmconfig": {
+        "ModelName": "gpt-3.5-turbo",
+        "SystemMessage": "You are a helpful assistant.",
+        "MaxTotalTokens": 100,
+        "MaxInputTokens": 50,
+        "Temperature": 0.3,
+        "TopP": 1.0,
+        "FrequencyPenalty": 0.0,
+        "PresencePenalty": 0.0,
+        "NumOutputs": 1
+      },
+      "response": {
+        "RawOutput": "Hi",
+        "FinishReason": 1,
+        "AdditionalData": null,
+        "Actions": {},
+        "AsyncActions": {}
+      },
+      "timestamp": "2023-10-28 22:18:07"
+    }
+  }
+}
