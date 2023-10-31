@@ -37,7 +37,7 @@ jobs:
             -v $(pwd)/Tests:/app \
             -v $(pwd)/TestResults:/results \
             nunit/nunit3-reporting \
-            nunit3-console YourTestProject.dll --result=/results/test-results.xml
+            nunit3-console ContextFlow/bin/Debug/ContextFlow.dll --result=/results/test-results.xml
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
