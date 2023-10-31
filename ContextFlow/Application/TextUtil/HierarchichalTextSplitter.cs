@@ -12,7 +12,7 @@ public class HierarchichalTextSplitter : TextSplitter
     private readonly List<string> SplitIdentifierHierarchy = new();
     private readonly List<string> IdentifiersToAddToBeginnings = new();
     private readonly int MaxStringTokens;
-    private LLMTokenizer Tokenizer;
+    private readonly LLMTokenizer Tokenizer;
 
     /// <summary>
     /// 

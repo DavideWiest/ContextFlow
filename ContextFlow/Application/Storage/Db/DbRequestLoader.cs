@@ -10,7 +10,6 @@ namespace ContextFlow.Application.Storage.Db;
 public class DbRequestLoader : RequestLoader
 {
     private readonly DbContext _context;
-    private readonly RequestHasher RequestHasher = new();
     public bool ConsiderLLMConfig { get; set; }
 
     public DbRequestLoader(DbContext context, bool considerLLMConfig = true)

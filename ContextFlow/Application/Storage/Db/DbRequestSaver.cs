@@ -10,7 +10,6 @@ namespace ContextFlow.Application.Storage.Db;
 public class DbRequestSaver : RequestSaver
 {
     private readonly DbContext _context;
-    private readonly RequestHasher RequestHasher = new();
 
     public DbRequestSaver(DbContext context)
     {

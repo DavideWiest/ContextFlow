@@ -34,9 +34,4 @@ public class CFSerilogLogger : CFLogger
     {
         SLogger.Error(messageTemplate, propertyValues);
     }
-
-    public override void Fatal(string messageTemplate, params object[] propertyValues)
-    {
-        SLogger.Fatal(messageTemplate, propertyValues);
-    }
 }

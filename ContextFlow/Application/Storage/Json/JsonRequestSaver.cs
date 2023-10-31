@@ -10,13 +10,11 @@ namespace ContextFlow.Application.Storage.Json;
 public class JsonRequestSaver : RequestSaver
 {
     private readonly string FileName;
-    private readonly RequestHasher RequestHasher;
     private readonly bool StoreKeysPlainlyToo;
 
     public JsonRequestSaver(string fileName, bool storeKeysPlainlyToo=false)
     {
         FileName = fileName;
-        RequestHasher = new RequestHasher();
         StoreKeysPlainlyToo = storeKeysPlainlyToo;
     }
 

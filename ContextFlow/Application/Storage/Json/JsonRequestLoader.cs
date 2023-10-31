@@ -10,7 +10,6 @@ namespace ContextFlow.Application.Storage.Json;
 public class JsonRequestLoader : RequestLoader
 {
     private readonly string FileName;
-    private readonly RequestHasher RequestHasher = new();
     public bool ConsiderLLMConfig { get; set; }
 
     public JsonRequestLoader(string fileName, bool considerLLMConfig = true)

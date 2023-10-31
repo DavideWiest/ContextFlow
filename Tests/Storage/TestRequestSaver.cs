@@ -2,16 +2,16 @@
 using ContextFlow.Application.Storage;
 using ContextFlow.Application.Storage.Async.Json;
 using Tests.Sample;
+using ContextFlow.Application.Storage.Async;
 
 namespace Tests.Storage;
 
 public class TestRequestSaver
 {
-    static string testFile1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderStorageTest.json";
-    static string testFile2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderAsyncStorageTest.json";
-
-    RequestSaver saver = new JsonRequestSaver(testFile1);
-    RequestSaverAsync saverAsync = new JsonRequestSaverAsync(testFile2);
+    static readonly string testFile1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderStorageTest.json";
+    static readonly string testFile2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "/IOTestFiles/LoaderAsyncStorageTest.json";
+    readonly RequestSaver saver = new JsonRequestSaver(testFile1);
+    readonly RequestSaverAsync saverAsync = new JsonRequestSaverAsync(testFile2, true);
 
     [OneTimeTearDown]
     public void Cleanup()

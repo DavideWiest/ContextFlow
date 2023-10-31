@@ -8,13 +8,11 @@ namespace ContextFlow.Application.Storage.Async.Json;
 public class JsonRequestLoaderAsync : RequestLoaderAsync
 {
     private readonly string FileName;
-    private readonly RequestHasher RequestHasher;
     public bool ConsiderLLMConfig { get; set; }
 
     public JsonRequestLoaderAsync(string fileName, bool considerLLMConfig = true)
     {
         FileName = fileName;
-        RequestHasher = new RequestHasher();
         ConsiderLLMConfig = considerLLMConfig;
     }
 

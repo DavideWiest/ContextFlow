@@ -1,13 +1,14 @@
 ﻿using SmartFormat;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace ContextFlow.Infrastructure.Formatter;
 
 
 
-internal class SmartFormatterFmtr : CFFormatter
+public partial class SmartFormatterFmtr : CFFormatter
 {
-    SmartFormatter formatter = Smart.CreateDefaultSmartFormat();
+    private readonly SmartFormatter formatter = Smart.CreateDefaultSmartFormat();
 
     public override string Format(string str, Dictionary<string, object> data)
     {
@@ -16,20 +17,13 @@ internal class SmartFormatterFmtr : CFFormatter
 
     public override List<string> GetUndefinedPlaceholderValues(string str, Dictionary<string, object> placeholderValues)
     {
-        var placeholderMatches = Regex.Matches(str, @"\{([^{}\s]+)\}");
-        var unreplacedPlaceholders = new List<string>();
-
-        foreach (Match match in placeholderMatches)
-        {
-            string placeholder = match.Groups[1].Value;
-
-            // Check if the placeholder exists in the placeholderValues
-            if (!placeholderValues.ContainsKey(placeholder))
-            {
-                unreplacedPlaceholders.Add(placeholder);
-            }
-        }
-
-        return unreplacedPlaceholders;
+        var placeholderMatches = PlaceHolderMatchRegex().Matches(str);
+        return (from Match match in placeholderMatches
+                let placeholder = match.Groups[1].Value // Check if the placeholder exists in the placeholderValues
+                where !placeholderValues.ContainsKey(placeholder)
+                select placeholder).ToList();
     }
+
+    [GeneratedRegex("\\{([^{}\\s]+)\\}")]
+    private static partial Regex PlaceHolderMatchRegex();
 }

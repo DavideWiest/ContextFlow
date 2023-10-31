@@ -1,7 +1,7 @@
 ﻿using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
 
-namespace ContextFlow.Application.Storage;
+namespace ContextFlow.Application.Storage.Async;
 
 /// <summary>
 /// Async version of RequestLoader
