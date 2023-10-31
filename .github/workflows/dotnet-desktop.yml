@@ -61,5 +61,3 @@ jobs:
       - name: Set Workflow Status
         if: failure()
         run: echo "Tests failed"
-        if: failure() == false
-        run: echo "Tests passed"
