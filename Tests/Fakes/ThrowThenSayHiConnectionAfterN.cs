@@ -20,7 +20,7 @@ public class ThrowThenSayHiConnectionAfterN : LLMConnection
         i++;
         if (i <= nThrow)
         {
-            throw new LLMException("Standard exception of ThrowThenSayHiConnectionAfterN");
+            throw new LLMConnectionException("Standard exception of ThrowThenSayHiConnectionAfterN");
         }
         return new RequestResult("Hi", FinishReason.Stop);
     }

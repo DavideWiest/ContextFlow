@@ -16,7 +16,7 @@ public class FormattablePrompt : Prompt
     
     private Dictionary<string, object> FormatParameters = new();
 
-    private readonly Formatter Formatter;
+    private readonly CFFormatter Formatter;
 
     public FormattablePrompt(string action) : base(action)
     {
@@ -32,7 +32,7 @@ public class FormattablePrompt : Prompt
         Formatter = new SmartFormatterFmtr();
     }
 
-    public FormattablePrompt(string action, Formatter formatter, bool thowExceptionOnUnfilled) : base(action)
+    public FormattablePrompt(string action, CFFormatter formatter, bool thowExceptionOnUnfilled) : base(action)
     {
         ThowExceptionOnUnfilled = thowExceptionOnUnfilled;
         Formatter = formatter;

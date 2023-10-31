@@ -15,10 +15,25 @@ public abstract class ResultAdditionalData
 /// </summary>
 public class RequestResult
 {
+    /// <summary>
+    /// The unmodified otput of the LLM-request
+    /// </summary>
     public string RawOutput { get; }
+    /// <summary>
+    /// The reason why the LLM had to stop its response
+    /// </summary>
     public FinishReason FinishReason { get; }
+    /// <summary>
+    /// Any additional data returned from the LLMConnection. This must be an implementation of the abstract class ResultAdditionalData
+    /// </summary>
     public ResultAdditionalData? AdditionalData { get; } = null;
+    /// <summary>
+    /// Synchronous actions based on the result
+    /// </summary>
     public RequestResultActions Actions { get; }
+    /// <summary>
+    /// Asynchronous action based on the result
+    /// </summary>
     public RequestResultActionsAsync AsyncActions { get; }
 
     public RequestResult(string rawOutput, FinishReason finishReason)

@@ -4,15 +4,20 @@ using Newtonsoft.Json;
 
 namespace ContextFlow.Application.Storage.Json;
 
+/// <summary>
+/// Loads RequestResults from a JSON file. It can store the unhashed prompt and LLM-configuration plainly, which can be useful for logging, if you set storeKeysPlainlyToo to true in the constructor.
+/// </summary>
 public class JsonRequestSaver : RequestSaver
 {
     private readonly string FileName;
     private readonly RequestHasher RequestHasher;
+    private readonly bool StoreKeysPlainlyToo;
 
-    public JsonRequestSaver(string fileName)
+    public JsonRequestSaver(string fileName, bool storeKeysPlainlyToo=false)
     {
         FileName = fileName;
         RequestHasher = new RequestHasher();
+        StoreKeysPlainlyToo = storeKeysPlainlyToo;
     }
 
     public override void SaveRequest(LLMRequest request, RequestResult result)
@@ -23,7 +28,7 @@ public class JsonRequestSaver : RequestSaver
         request.RequestConfig.Logger.Information("Storing request with prompt-key {promptKey} and llmconfig-key {llmconfigKey}", key1, key2);
 
         // Create a dictionary with the request and response
-        var data = SaverUtil.CreateFileStructureFromData(key1, key2, request, result);
+        var data = SaverUtil.CreateFileStructureFromData(key1, key2, request, result, StoreKeysPlainlyToo);
 
         // Load existing data if the file already exists
         if (File.Exists(FileName))

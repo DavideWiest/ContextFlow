@@ -2,9 +2,9 @@
 
 namespace ContextFlow.Application.Storage.Db;
 
+
 internal static class DbRequestUtil
 {
-
     public static void Validate(DbContext context)
     {
         Type entityTypeToCheck = typeof(DbSavableRequest);

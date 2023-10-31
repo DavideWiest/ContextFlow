@@ -6,16 +6,14 @@ namespace ContextFlow.Application.Storage.Json;
 
 internal static class SaverUtil
 {
-    public static Dictionary<string, Dictionary<string, Dictionary<string, object>>> CreateFileStructureFromData(string key1, string key2, LLMRequestBase request, RequestResult result)
+    public static Dictionary<string, Dictionary<string, Dictionary<string, object>>> CreateFileStructureFromData(string key1, string key2, LLMRequestBase request, RequestResult result, bool storeKeysPlainlyToo)
     {
-        return new Dictionary<string, Dictionary<string, Dictionary<string, object>>>
+        var dict =  new Dictionary<string, Dictionary<string, Dictionary<string, object>>>
         {
             {key1, new Dictionary<string, Dictionary<string, object>>
                 {
                     {key2, new Dictionary<string, object>
                         {
-                            { "prompt", request.Prompt },
-                            { "llmconfig", request.LLMConfig },
                             { "response", result },
                             { "timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
                         }
@@ -23,6 +21,14 @@ internal static class SaverUtil
                 }
             }
         };
+
+        if (storeKeysPlainlyToo)
+        {
+            dict[key1][key2]["prompt"] = request.Prompt;
+            dict[key1][key2]["llmconfig"] = request.LLMConfig;
+        }
+
+        return dict;
     }
 
     public static Dictionary<string, Dictionary<string, Dictionary<string, object>>> MergeDataWithExisting(string FileName, Dictionary<string, Dictionary<string, Dictionary<string, object>>> data, string key1, string key2)

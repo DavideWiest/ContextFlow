@@ -18,7 +18,7 @@ public class TestLLMFailStrategyRetrySameContextAsync
     {
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowThenSayHiConnectionAfterN(2))
-            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMException>(2)))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMConnectionException>(2)))
             .Build();
 
         try
@@ -26,7 +26,7 @@ public class TestLLMFailStrategyRetrySameContextAsync
             request.Complete();
             Assert.Pass();
         }
-        catch (LLMException)
+        catch (LLMConnectionException)
         {
             Assert.Fail();
         }
@@ -37,7 +37,7 @@ public class TestLLMFailStrategyRetrySameContextAsync
     {
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowThenSayHiConnectionAfterN(4))
-            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMException>(2)))
+            .UsingRequestConfig(new RequestConfig().AddFailStrategy(new FailStrategyRetrySameSettings<LLMConnectionException>(2)))
             .Build();
 
         try
@@ -45,7 +45,7 @@ public class TestLLMFailStrategyRetrySameContextAsync
             request.Complete();
             Assert.Fail();
         }
-        catch (LLMException)
+        catch (LLMConnectionException)
         {
             Assert.Pass();
         }

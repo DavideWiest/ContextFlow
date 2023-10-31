@@ -1,8 +1,13 @@
 ﻿using ContextFlow.Application.Result;
 using ContextFlow.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContextFlow.Application.Storage.Db;
 
+/// <summary>
+/// The data class that is used to save and load RequestResults to and from a database context.
+/// </summary>
+[PrimaryKey(nameof(PromptHash), nameof(LLMConfigHash))]
 public class DbSavableRequest
 {
     public string PromptHash = default!;

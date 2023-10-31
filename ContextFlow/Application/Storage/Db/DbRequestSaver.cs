@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContextFlow.Application.Storage.Db;
 
-
+/// <summary>
+/// Uses a DbContext to save requests. The DbContext must contain DbSavableRequest to be compatible.
+/// </summary>
 public class DbRequestSaver : RequestSaver
 {
     private readonly DbContext _context;

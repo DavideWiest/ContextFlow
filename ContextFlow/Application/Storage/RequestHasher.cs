@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ContextFlow.Application.Storage;
 
+/// <summary>
+/// Creates hashes for 1) the prompt, and 2) the LLM-configuration. Use this class inside custom implementations of RequestLoader/RequestSaver.
+/// </summary>
 public class RequestHasher
 {
     public Tuple<string, string> GenerateKeys(LLMRequestBase request)

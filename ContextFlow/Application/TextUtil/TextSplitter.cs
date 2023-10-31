@@ -1,5 +1,8 @@
 ﻿namespace ContextFlow.Application.TextUtil;
 
+/// <summary>
+/// Splits text up
+/// </summary>
 public abstract class TextSplitter
 {
     public abstract IEnumerable<string> Split(string text);

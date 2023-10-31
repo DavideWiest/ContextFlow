@@ -9,6 +9,6 @@ public class AlwaysThrowLLMExceptionConnection : LLMConnection
 {
     protected override RequestResult CallAPI(string prompt, LLMConfig config, CFLogger logger)
     {
-        throw new LLMException("Standard exception of AlwaysThrowLLMExceptionConnection");
+        throw new LLMConnectionException("Standard exception of AlwaysThrowLLMExceptionConnection");
     }
 }

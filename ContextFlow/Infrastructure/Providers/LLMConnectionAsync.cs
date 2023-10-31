@@ -5,6 +5,9 @@ namespace ContextFlow.Infrastructure.Providers;
 
 using ContextFlow.Infrastructure.Logging;
 
+/// <summary>
+/// The asynchronous connection that handles requests to the LLM
+/// </summary>
 public abstract class LLMConnectionAsync
 {
 
@@ -19,7 +22,7 @@ public abstract class LLMConnectionAsync
         catch (Exception e)
         {
             log.Error("Failed to get the output from the LLM. Exception: {exceptionname}: {exceptionmessage}", e.GetType().Name, e.Message);
-            throw new LLMException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
+            throw new LLMConnectionException($"Failed to get the output from the LLM. Exception: {e.GetType().Name}: {e.Message}");
         }
     }
 }

@@ -1,5 +1,9 @@
 ﻿namespace ContextFlow.Application.TextUtil;
 
+/// <summary>
+/// Converts an object into a string
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public abstract class ToStringConverter<T>
 {
     public abstract string Convert(T obj);

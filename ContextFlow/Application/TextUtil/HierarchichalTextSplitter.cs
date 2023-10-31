@@ -2,6 +2,10 @@
 
 using ContextFlow.Infrastructure.Providers;
 
+/// <summary>
+/// A TextSplitter implementation that halves text based on a tokenizer until the maximum has been reached. 
+/// It splits the text up hierarchically, meaning it will use the current identifier fully before splitting by the next one.
+/// </summary>
 public class HierarchichalTextSplitter : TextSplitter
 {
 
@@ -10,7 +14,14 @@ public class HierarchichalTextSplitter : TextSplitter
     private readonly int MaxStringTokens;
     private LLMTokenizer Tokenizer;
 
-    public HierarchichalTextSplitter(LLMTokenizer tokenizer, int maxStringTokens, IEnumerable<string> splitIdentifierHierarchy, IEnumerable<string> identifiersToAddToBeginnings)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tokenizer">The tokenizer used</param>
+    /// <param name="maxStringTokens">The maximum tokens per text part</param>
+    /// <param name="splitIdentifierHierarchy">An ordered list of identifers to split by.</param>
+    /// <param name="identifiersToAddToBeginnings">A subset of the identifier-hierarchy, which denotes which identifiers will be added to the beginning of a text-part after splitting by that identifier</param>
+    public HierarchichalTextSplitter(LLMTokenizer tokenizer, int maxStringTokens, List<string> splitIdentifierHierarchy, List<string> identifiersToAddToBeginnings)
     {
         Tokenizer = tokenizer;
         SplitIdentifierHierarchy.AddRange(splitIdentifierHierarchy);
@@ -29,12 +40,17 @@ public class HierarchichalTextSplitter : TextSplitter
         }
     }
 
+    /// <summary>
+    /// Splits the text up
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     public override List<string> Split(string input)
     {
         return Split(input, 0);
     }
 
-    public List<string> Split(string input, int splitIdentifierIdx)
+    protected List<string> Split(string input, int splitIdentifierIdx)
     {
         string splittableInput = input.StartsWith(SplitIdentifierHierarchy[splitIdentifierIdx]) ?
            input[SplitIdentifierHierarchy[splitIdentifierIdx].Length..] : input;

@@ -1,6 +1,6 @@
 ﻿using ContextFlow.Application.Storage.Json;
 using ContextFlow.Application.Storage;
-using ContextFlow.Application.Storage.Json.Async;
+using ContextFlow.Application.Storage.Async.Json;
 using Tests.Sample;
 
 namespace Tests.Storage;

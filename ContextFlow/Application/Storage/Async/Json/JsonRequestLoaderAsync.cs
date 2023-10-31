@@ -1,21 +1,9 @@
 ﻿using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
+using ContextFlow.Application.Storage.Json;
 using Newtonsoft.Json;
 
-namespace ContextFlow.Application.Storage.Json.Async;
-
-public abstract class RequestLoaderAsync
-{
-    public async Task<RequestResult?> LoadMatchIfExistsAsync(LLMRequestAsync request)
-    {
-        bool matchExists = await MatchExistsAsync(request);
-        request.RequestConfig.Logger.Information("Trying to load the result of the current request - Match exists: {matchExists}", matchExists);
-        return matchExists ? await LoadMatchAsync(request) : null;
-    }
-
-    public abstract Task<bool> MatchExistsAsync(LLMRequestAsync request);
-    public abstract Task<RequestResult> LoadMatchAsync(LLMRequestAsync request);
-}
+namespace ContextFlow.Application.Storage.Async.Json;
 
 public class JsonRequestLoaderAsync : RequestLoaderAsync
 {
@@ -42,7 +30,7 @@ public class JsonRequestLoaderAsync : RequestLoaderAsync
             return false;
         if (data.ContainsKey(key1))
         {
-            if ((!ConsiderLLMConfig && data[key1].Count > 0) || data[key1].ContainsKey(key2))
+            if (!ConsiderLLMConfig && data[key1].Count > 0 || data[key1].ContainsKey(key2))
             {
                 return true;
             }

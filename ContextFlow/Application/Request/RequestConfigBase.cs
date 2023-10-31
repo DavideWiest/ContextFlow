@@ -6,7 +6,7 @@ namespace ContextFlow.Application.Request;
 /// <summary>
 /// Abstract base-class which contains data and functionality that both RequestConfig and RequestConfigAsync use
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The higher-level class which implements RequestConfigBase. This type is the return type of the fluent-interface methods</typeparam>
 public abstract class RequestConfigBase<T> where T : RequestConfigBase<T>
 {
     public CFLogger Logger { get; private set; } = new CFSerilogLogger();
@@ -61,6 +61,11 @@ public abstract class RequestConfigBase<T> where T : RequestConfigBase<T>
         return (T)this;
     }
 
+    /// <summary>
+    /// Sets the logger that will be used when executing the request. This is the CFSerilogLogger by default.
+    /// </summary>
+    /// <param name="log">A CFLogger-based class. Implement this class to use a custom logger.</param>
+    /// <returns></returns>
     public T UsingLogger(CFLogger log)
     {
         Logger = log;

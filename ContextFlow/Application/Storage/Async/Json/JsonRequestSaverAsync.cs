@@ -1,13 +1,11 @@
 ﻿using ContextFlow.Application.Request.Async;
 using ContextFlow.Application.Result;
+using ContextFlow.Application.Storage.Json;
 using Newtonsoft.Json;
 
-namespace ContextFlow.Application.Storage.Json.Async;
+namespace ContextFlow.Application.Storage.Async.Json;
 
-public abstract class RequestSaverAsync
-{
-    public abstract Task SaveRequestAsync(LLMRequestAsync request, RequestResult result);
-}
+
 
 public class JsonRequestSaverAsync : RequestSaverAsync
 {

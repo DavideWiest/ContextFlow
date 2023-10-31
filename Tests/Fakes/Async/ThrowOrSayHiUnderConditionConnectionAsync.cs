@@ -18,7 +18,7 @@ public class ThrowOrSayHiUnderConditionConnectionAsync : LLMConnectionAsync
     {
         if (ErrorCondition(prompt, config))
         {
-            throw new LLMException("Standard exception of ThrowOrSayHiUnderConditionConnection");
+            throw new LLMConnectionException("Standard exception of ThrowOrSayHiUnderConditionConnection");
         }
         return new RequestResult("Hi", FinishReason.Stop);
     }

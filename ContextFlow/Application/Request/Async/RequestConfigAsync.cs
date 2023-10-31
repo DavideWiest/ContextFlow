@@ -1,10 +1,10 @@
-﻿using ContextFlow.Application.Storage.Json.Async;
+﻿using ContextFlow.Application.Storage.Async.Json;
 using ContextFlow.Application.Strategy.Async;
 
 namespace ContextFlow.Application.Request.Async;
 
 /// <summary>
-/// Configuration of a request. This configuration applies only to the LLMRequest/LLMRequestAsync class, not any others.
+/// Configuration of a request. This configuration applies only to the LLMRequestAsync class, not any others.
 /// </summary>
 public class RequestConfigAsync : RequestConfigBase<RequestConfigAsync>
 {

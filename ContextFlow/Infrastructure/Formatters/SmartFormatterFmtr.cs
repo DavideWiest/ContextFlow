@@ -5,7 +5,7 @@ namespace ContextFlow.Infrastructure.Formatter;
 
 
 
-internal class SmartFormatterFmtr : Formatter
+internal class SmartFormatterFmtr : CFFormatter
 {
     SmartFormatter formatter = Smart.CreateDefaultSmartFormat();
 

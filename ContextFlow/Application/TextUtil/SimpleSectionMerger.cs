@@ -8,13 +8,18 @@
 /// example usage:
 /// var merger = new SimpleSectionMerger(new() { { "A: ", "\n" }, { "B: ", " - " } }}
 /// string output = merger.Merge(new() { "A: apple apple B: banana banana", "B: pineapple A: strawberry B: avocado" })
-// "A: apple apple\nstrayberry B: banana banana - pineapple - avocado"
+/// "A: apple apple\nstrayberry B: banana banana - pineapple - avocado"
 /// </summary>
 public class SimpleSectionMerger : TextMerger
 {
     private readonly Dictionary<string, string> SectionIdentifiersWithJoinStrings;
     private readonly string StartIdentifier = "$§-=?&";
     private readonly string EndIdentifier = "&%=!-";
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sectionIdentifiersWithJoinStrings">A dictionary that contains the identifiers of a section, with the appropriate join-string with which the different parts of a section are merged</param>
     public SimpleSectionMerger(Dictionary<string, string> sectionIdentifiersWithJoinStrings)
     {
         SectionIdentifiersWithJoinStrings = sectionIdentifiersWithJoinStrings;

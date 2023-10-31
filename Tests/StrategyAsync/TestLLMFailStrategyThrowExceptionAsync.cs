@@ -21,7 +21,7 @@ public class TestLLMFailStrategyThrowExceptionAsync
             request.Complete();
             Assert.Fail();
         }
-        catch (LLMException)
+        catch (LLMConnectionException)
         {
             Assert.Pass();
         }

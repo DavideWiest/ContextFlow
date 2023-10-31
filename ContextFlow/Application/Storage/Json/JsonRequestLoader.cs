@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace ContextFlow.Application.Storage.Json;
 
+/// <summary>
+/// Loads RequestResults from a JSON file.
+/// </summary>
 public class JsonRequestLoader : RequestLoader
 {
     private readonly string FileName;

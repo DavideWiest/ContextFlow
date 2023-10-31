@@ -3,7 +3,7 @@
 namespace ContextFlow.Application.Request;
 
 /// <summary>
-/// Configuration of a request. This configuration applies only to the LLMRequest/LLMRequestAsync class, not any others.
+/// Configuration of a request. This configuration applies only to the LLMRequest class, not any others.
 /// </summary>
 public class RequestConfig : RequestConfigBase<RequestConfig>
 {

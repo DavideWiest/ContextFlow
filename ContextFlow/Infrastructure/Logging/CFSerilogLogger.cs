@@ -2,10 +2,12 @@
 namespace ContextFlow.Infrastructure.Logging;
 using Serilog;
 
-
+/// <summary>
+/// Contextflow interface of a serilog logger. The SLogger representing the serilog-logger can be overwritten in a child implementation to customize it.
+/// </summary>
 public class CFSerilogLogger : CFLogger
 {
-    private readonly ILogger SLogger = new LoggerConfiguration()
+    protected readonly ILogger SLogger = new LoggerConfiguration()
 #if DEBUG
     .MinimumLevel.Debug()
 #endif

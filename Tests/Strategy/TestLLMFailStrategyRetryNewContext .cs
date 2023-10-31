@@ -20,7 +20,7 @@ public class TestLLMFailStrategyRetryNewContext
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfig().AddFailStrategy(
-                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Now don't fail", true))))
+                new FailStrategyRetryNewSettings<LLMConnectionException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Now don't fail", true))))
             )
             .Build();
 
@@ -29,7 +29,7 @@ public class TestLLMFailStrategyRetryNewContext
             request.Complete();
             Assert.Pass();
         }
-        catch (LLMException)
+        catch (LLMConnectionException)
         {
             Assert.Fail();
         }
@@ -41,7 +41,7 @@ public class TestLLMFailStrategyRetryNewContext
         LLMRequest request = requestBuilder
             .UsingLLMConnection(new ThrowOrSayHiUnderConditionConnection((prompt, llmconf) => !prompt.Contains("Now don't fail")))
             .UsingRequestConfig(new RequestConfig().AddFailStrategy(
-                new FailStrategyRetryNewSettings<LLMException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Fail", true))))
+                new FailStrategyRetryNewSettings<LLMConnectionException>(1, null, null, new Prompt("say hi").UsingAttachment(new Attachment("Info", "Fail", true))))
             )
             .Build();
 
@@ -50,7 +50,7 @@ public class TestLLMFailStrategyRetryNewContext
             request.Complete();
             Assert.Fail();
         }
-        catch (LLMException)
+        catch (LLMConnectionException)
         {
             Assert.Pass();
         }
