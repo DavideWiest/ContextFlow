@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContextFlow", "ContextFlow\ContextFlow.csproj", "{0331E9A7-0E5E-4E76-BF41-273FA912D66F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{ED510674-E3FE-43CD-B182-E40D4F1E5D87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{ED510674-E3FE-43CD-B182-E40D4F1E5D87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{6795AF6D-9487-457F-8CC3-BB3659CE6140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{ED510674-E3FE-43CD-B182-E40D4F1E5D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED510674-E3FE-43CD-B182-E40D4F1E5D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED510674-E3FE-43CD-B182-E40D4F1E5D87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6795AF6D-9487-457F-8CC3-BB3659CE6140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6795AF6D-9487-457F-8CC3-BB3659CE6140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6795AF6D-9487-457F-8CC3-BB3659CE6140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6795AF6D-9487-457F-8CC3-BB3659CE6140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -37,6 +37,7 @@ public class LLMRequestAsync : LLMRequestBase
 
 
         RequestResult result;
+        bool loaded = true;
 
         try
         {
@@ -45,7 +46,16 @@ public class LLMRequestAsync : LLMRequestBase
                 RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
             }
 
-            result = await TryLoadResult() ?? await GetResultFromLLMAsync();
+            var possibleResult = await TryLoadResult();
+
+            if (possibleResult == null)
+            {
+                result = await GetResultFromLLMAsync();
+                loaded = false;
+            } else
+            {
+                result = possibleResult;
+            }
 
             if (result.FinishReason == FinishReason.Overflow && RequestConfig.ThrowExceptionOnOutputOverflow)
             {
@@ -55,6 +65,11 @@ public class LLMRequestAsync : LLMRequestBase
         catch (Exception e)
         {
             result = await UseFailStrategiesWrapperAsync(e);
+        }
+
+        if (!loaded)
+        {
+            await SaveResult(result);
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + "{rawoutput}" + "\n--- RAW OUTPUT ---\n", result.RawOutput);
@@ -69,6 +84,14 @@ public class LLMRequestAsync : LLMRequestBase
             return await RequestConfig.RequestLoaderAsync.LoadMatchIfExistsAsync(this);
         }
         return null;
+    }
+
+    private async Task SaveResult(RequestResult result)
+    {
+        if (RequestConfig.RequestSaverAsync != null)
+        {
+            await RequestConfig.RequestSaverAsync.SaveRequestAsync(this, result);
+        }
     }
 
     private async Task<RequestResult> GetResultFromLLMAsync()

@@ -14,6 +14,9 @@ public class HierarchichalTextSplitter : TextSplitter
     private readonly int MaxStringTokens;
     private readonly LLMTokenizer Tokenizer;
 
+    public static readonly List<string> MarkdownBasedHierarchy = new() { "# ", "## ", "### ", "#### ", "##### ", "###### ", "\n\n", "\n", ". ", ", ", "" };
+    public static readonly List<string> MarkdownBasedAddToBeginnings = new() { "# ", "## ", "### ", "#### ", "##### ", "###### ", ". " };
+
     /// <summary>
     /// 
     /// </summary>

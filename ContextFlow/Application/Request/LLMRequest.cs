@@ -28,6 +28,7 @@ public class LLMRequest : LLMRequestBase
 
 
         RequestResult result;
+        bool loaded = true;
 
         try
         {
@@ -36,7 +37,16 @@ public class LLMRequest : LLMRequestBase
                 RequestConfig.Tokenizer!.ValidateNumTokens(Prompt.ToPlainText(), LLMConfig.MaxInputTokens);
             }
 
-            result = TryLoadResult() ?? GetResultFromLLM();
+            var possibleResult = TryLoadResult();
+
+            if (possibleResult == null)
+            {
+                result = GetResultFromLLM();
+                loaded = false;
+            } else
+            {
+                result = possibleResult;
+            }
 
             if (result.FinishReason == FinishReason.Overflow && RequestConfig.ThrowExceptionOnOutputOverflow)
             {
@@ -46,6 +56,11 @@ public class LLMRequest : LLMRequestBase
         catch (Exception e)
         {
             result = UseFailStrategiesWrapper(e);
+        }
+
+        if (!loaded)
+        {
+            SaveResult(result);
         }
 
         RequestConfig.Logger.Debug("\n--- RAW OUTPUT ---\n" + "{rawoutput}" + "\n--- RAW OUTPUT ---\n", result.RawOutput);
@@ -60,6 +75,14 @@ public class LLMRequest : LLMRequestBase
             return RequestConfig.RequestLoader.LoadMatchIfExists(this);
         }
         return null;
+    }
+
+    private void SaveResult(RequestResult result)
+    {
+        if (RequestConfig.RequestSaver != null)
+        {
+            RequestConfig.RequestSaver.SaveRequest(this, result);
+        }
     }
 
     private RequestResult GetResultFromLLM()

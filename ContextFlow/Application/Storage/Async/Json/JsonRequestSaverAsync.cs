@@ -12,7 +12,7 @@ public class JsonRequestSaverAsync : RequestSaverAsync
     private readonly string FileName;
     private readonly bool StoreKeysPlainlyToo;
 
-    public JsonRequestSaverAsync(string fileName, bool storeKeysPlainlyToo)
+    public JsonRequestSaverAsync(string fileName, bool storeKeysPlainlyToo=true)
     {
         FileName = fileName;
         StoreKeysPlainlyToo = storeKeysPlainlyToo;

@@ -33,6 +33,12 @@ public class Attachment
         IsInline = isInline;
     }
 
+    public Attachment(string name, string content)
+    {
+        Name = name;
+        Content = content;
+    }
+
     public Attachment(string content, bool isInline)
     {
         Content = content;
