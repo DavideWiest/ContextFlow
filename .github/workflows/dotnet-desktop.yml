@@ -35,7 +35,7 @@ jobs:
           docker run --rm `
             --workdir /app `
             -v $(pwd)/Tests:/app `
-            -v $(pwd)/TestResults:/results `
+            -v $(pwd)/testresults:/results `
             nunit/nunit3-reporting `
             nunit3-console ContextFlow/bin/Debug/ContextFlow.dll --result=/results/test-results.xml
             
