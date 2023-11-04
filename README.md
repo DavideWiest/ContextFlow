@@ -8,8 +8,10 @@ ContextFlow is infrastructure that
 1. decouples different modules from their abstractions to make code more flexible and 
 2. provides easy ways to build complex prompt-pipelines through these abstractions
 
-### Download
+### Get Started
 - [Download](https://www.nuget.org/packages/ContextFlow/) the package from nuget: `NuGet\Install-Package ContextFlow -Version 1.0.0`
+- [Quickstart](https://github.com/DavideWiest/ContextFlow/wiki/Quickstart#walkthrough)
+- [See demo](https://github.com/DavideWiest/ContextFlow/tree/master/Demo)
 
 ### Principles of ContextFlow
 - Intuitive design
