@@ -31,33 +31,4 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Run NUnit Tests
-        run: |
-          docker run --rm `
-            --workdir /app `
-            -v "$(pwd)/Tests:/app" `
-            -v "$(pwd)/testresults:/results" `
-            nunit/nunit3-reporting `
-            nunit3-console ContextFlow/bin/Debug/ContextFlow.dll --result=/results/test-results.xml
-            
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: TestResults
-
-      - name: Check Test Results
-        run: |
-          $xml = [xml](Get-Content ./TestResults/test-results.xml)
-          $totalTests = [int]$xml.SelectSingleNode('//test-run').GetAttribute('total')
-          $passedTests = [int]$xml.SelectSingleNode('//test-run').GetAttribute('passed')
-          $failedTests = $totalTests - $passedTests
-          if ($failedTests -gt 0) {
-            Write-Host "Some tests failed."
-            exit 1
-          } else {
-            Write-Host "All tests passed."
-          }
-
-      - name: Set Workflow Status
-        if: failure()
-        run: echo "Tests failed"
+        run: dotnet test --no-build --verbosity normal Tests/
