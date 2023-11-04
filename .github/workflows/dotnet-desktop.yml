@@ -31,7 +31,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Run NUnit Tests
-        run: dotnet test --no-build --verbosity normal Tests/ > testresults.txt 2> testerrs.txt
+        run: dotnet test --no-build --verbosity normal Tests/ > testresults.txt
             
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
