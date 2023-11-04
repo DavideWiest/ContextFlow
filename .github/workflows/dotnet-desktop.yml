@@ -32,7 +32,3 @@ jobs:
 
       - name: Run NUnit Tests
         run: dotnet test --no-build --verbosity normal Tests/
-            
-        with:
-          name: test-results
-          path: testresults.txt
