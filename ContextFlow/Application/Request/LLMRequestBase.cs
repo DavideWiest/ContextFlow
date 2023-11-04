@@ -16,7 +16,7 @@ public abstract class LLMRequestBase
     }
 
     /// <summary>
-    /// Adds an attachment "Output length" that dictates the LLM that the output has to be under a calculated number of words.
+    /// Adds an attachment "Output length" that dictates the LLM that the output has to be below a calculated number of words.
     /// </summary>
     /// <param name="tokenToWordRatio">The ratio between words and tokens. 4 is a rough mean estimate, but it varies across languages.</param>
     /// <param name="marginOfSafetyMul">This will be multiplied to the word-count. Set it higher if the LLM has a higher chance of producing more tokens than it should.</param>
@@ -29,7 +29,7 @@ public abstract class LLMRequestBase
 
         int availableTokenSpace = LLMConfig.MaxTotalTokens - LLMConfig.MaxInputTokens;
         int availableWords = (int)Math.Floor(availableTokenSpace / tokenToWordRatio * marginOfSafetyMul);
-        Prompt.UsingAttachment(new Attachment("Output length", $"The output must be under {availableWords} words long", true));
+        Prompt.UsingAttachment(new Attachment("Output length", $"The output must be below {availableWords} words long", true));
         return this;
     }
 }

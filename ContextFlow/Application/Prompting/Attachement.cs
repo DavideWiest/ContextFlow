@@ -16,7 +16,7 @@ public class Attachment
     /// <summary>
     /// The name of the attachment. This is optional but recommended. Choose a name that makes the context clear for the LLM.
     /// </summary>
-    public string? Name { get; set; } = null;
+    public string Name { get; set; } = null;
     /// <summary>
     /// The content of the attachment. Must be a string.
     /// </summary>
@@ -26,7 +26,7 @@ public class Attachment
     /// </summary>
     public bool IsInline { get; set; } = false;
 
-    public Attachment(string? name, string content, bool isInline)
+    public Attachment(string name, string content, bool isInline)
     {
         Name = name;
         Content = content;

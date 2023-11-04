@@ -8,13 +8,13 @@ namespace Demo;
 
 public static class WriteAnArticle
 {
-    public static string Write(string topic)
+    public static string Write(string about)
     {
         // define the prompts that will be used below
-        var outlineprompt = new Prompt($"Write an outline for an article about {topic}.")
+        var outlineprompt = new Prompt($"Write an outline for an article about {about}.")
             .UsingOutputDescription("A simple unordered list consisting of headings");
 
-        var writeprompt = new Prompt($"Write a paragraph of appropriate length about following topic. Your text will be a part of an article about {topic}.");
+        var writeprompt = new Prompt($"Write a paragraph of appropriate length about following topic. Your text will be a part of an article about {about}.");
 
         // create a connection to the OpenAI API
         var con = new OpenAIChatConnection(); // With api-key: new OpenAIChatConnection("<api-key>");
