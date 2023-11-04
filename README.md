@@ -27,8 +27,7 @@ ContextFlow is infrastructure that
 
 # What is this good for?
 LLMs are only as useful as how well they are used. 
-
-As LLMs become more competent, the programmatic environment in which they operate must expand to fulfill different needs. 
+As LLMs become more competent, the programmatic environment in which they operate must expand to fulfill different needs. This project is supposed to make that easier.
 
 # How does ContextFlow organize interactions with LLMs?
 
