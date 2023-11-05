@@ -4,7 +4,7 @@
 
 ### What is this package
 
-It implements these concepts:
+ContextFlow is builds an abstraction above regular LLMs and enables more complex interaction with LLMs. It implements these concepts:
 - ***Prompt-Chaining*** (see the result action methods)
 - ***Prompt-Templating*** (see CFTemplate in the namespace `ContextFlow.Application.Templates`)
 
@@ -12,7 +12,7 @@ For more information about these concepts, read the following:
 - [What is prompt chaining](https://promptengineering.org/getting-started-with-prompt-chaining/)
 - [PromptChainer: Chaining Large Language Model Prompts through Visual Programming](https://arxiv.org/pdf/2203.06566.pdf)
 
-ContextFlow is infrastructure that builds an abstraction above regular LLMs and enables more complex interaction with LLMs.
+Contextflow ...
 1. decouples different modules from their abstractions to make code more flexible and 
 2. provides easy ways to build complex prompt-pipelines through these abstractions
 
