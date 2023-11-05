@@ -30,5 +30,9 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
+      - name: Set env vars
+        env: 
+          OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}'
+
       - name: Run NUnit Tests
-        run: dotnet test --no-build --verbosity normal Tests/
+        run: dotnet test --no-build --verbosity minimal Tests/
