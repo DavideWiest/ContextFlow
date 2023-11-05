@@ -1,8 +1,5 @@
 # ContextFlow
-
 [![.NET](https://github.com/DavideWiest/ContextFlow/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/DavideWiest/ContextFlow/actions/workflows/dotnet-desktop.yml)
-
-# What is this package
 
 ContextFlow is builds an abstraction above regular LLMs and enables more complex interaction with LLMs. It implements these concepts:
 - ***Prompt-Chaining*** (see the result action methods)
