@@ -1,6 +1,16 @@
 # ContextFlow
 [![.NET](https://github.com/DavideWiest/ContextFlow/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/DavideWiest/ContextFlow/actions/workflows/dotnet-desktop.yml)
 
+```cs
+RequestResult result = new LLMRequestBuilder()
+    .UsingPrompt(new Prompt("Give me a number from 1 to 10"))
+    .UsingLLMConfig(new LLMConfig("gpt-3.5-turbo"))
+    .UsingLLMConnection(new OpenAIChatConnection())
+    .UsingRequestConfig(new RequestConfig())
+    .Build()
+    .Complete();
+```
+
 ContextFlow is builds an abstraction above regular LLMs and enables more complex interaction with LLMs. It implements these concepts:
 - ***Prompt-Chaining*** (see the result action methods)
 - ***Prompt-Templating*** (see CFTemplate in the namespace `ContextFlow.Application.Templates`)
