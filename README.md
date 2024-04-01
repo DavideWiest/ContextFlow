@@ -40,8 +40,8 @@ Contextflow ...
 ### Architectural principles
 - Dependency injection whenever possible
 - Project-wide fluent interface
-- Abstract classes for replacable modules
-- Private when possible, protected when useful, publicly assessible when necessary
+- Abstract classes for replaceable modules
+- Private when possible, protected when useful, publicly accessible when necessary
 
 # What is this good for?
 LLMs are only as useful as how well they are used. 
