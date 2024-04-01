@@ -3,7 +3,7 @@
 
 ```cs
 RequestResult result = new LLMRequestBuilder()
-    .UsingPrompt(new Prompt("Give me a number from 1 to 10"))
+    .UsingPrompt(new Prompt("What is prompt chaining and how does it work?"))
     .UsingLLMConfig(new LLMConfig("gpt-3.5-turbo"))
     .UsingLLMConnection(new OpenAIChatConnection())
     .UsingRequestConfig(new RequestConfig())
