@@ -11,7 +11,7 @@ RequestResult result = new LLMRequestBuilder()
     .Complete();
 ```
 
-ContextFlow is builds an abstraction above regular LLMs and enables more complex interaction with LLMs. It implements these concepts:
+ContextFlow is builds an abstraction above regular LLMs and enables more complex interaction. It implements these concepts:
 - ***Prompt-Chaining*** (see the result action methods)
 - ***Prompt-Templating*** (see CFTemplate in the namespace `ContextFlow.Application.Templates`)
 
